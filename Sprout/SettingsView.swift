@@ -8,11 +8,21 @@
 import SwiftUI
 
 struct SettingsView: View {
+    
+    @Binding var colorScheme: ColorScheme
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
+        ZStack {
+            colorScheme == .dark ? Color(red: 250/255, green: 187/255, blue: 139/255).ignoresSafeArea() : Color(red: 244/255, green: 218/255, blue: 198/255).ignoresSafeArea()
+            
+        
+            Text("Customize your settings").foregroundColor(Color.black)
+        }
+
     }
 }
 
 #Preview {
-    SettingsView()
+    SettingsView(colorScheme: .constant(.light))
 }
