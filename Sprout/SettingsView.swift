@@ -15,7 +15,7 @@ struct SettingsView: View {
         
         ZStack {
             colorScheme == .dark ? Color(red: 250/255, green: 187/255, blue: 139/255).ignoresSafeArea() : Color(red: 244/255, green: 218/255, blue: 198/255).ignoresSafeArea()
-            
+
         
             Text("Customize your settings").foregroundColor(Color.black)
         }

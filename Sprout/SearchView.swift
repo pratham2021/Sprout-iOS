@@ -14,12 +14,7 @@ struct SearchView: View {
     var body: some View {
         
         ZStack {
-            if (colorScheme == .dark) {
-                Color(red: 250/255, green: 187/255, blue: 139/255).ignoresSafeArea()
-            }
-            else {
-                Color(red: 244/255, green: 218/255, blue: 198/255).ignoresSafeArea()
-            }
+            colorScheme == .dark ? Color(red: 250/255, green: 187/255, blue: 139/255).ignoresSafeArea() : Color(red: 244/255, green: 218/255, blue: 198/255).ignoresSafeArea()
             
             Text("Search and look through a collection of plants")
                 .foregroundColor(Color.black)
