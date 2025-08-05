@@ -1,9 +1,6 @@
-//
 //  SearchView.swift
 //  Sprout
-//
 //  Created by Pratham  Hebbar on 8/5/25.
-//
 
 import SwiftUI
 
@@ -21,9 +18,6 @@ struct SearchView: View {
                 .multilineTextAlignment(.center)
         }
         .background(colorScheme == .light ? Color(red: 250/255, green: 187/255, blue: 139/255).ignoresSafeArea() : Color(red: 244/255, green: 218/255, blue: 198/255).ignoresSafeArea())
-        
-        
-
     }
 }
 
