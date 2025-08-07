@@ -6,21 +6,28 @@ import SwiftUI
 
 struct SearchView: View {
     
-    @Binding var colorScheme: ColorScheme
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         
         ZStack {
-            colorScheme == .dark ? Color(red: 250/255, green: 187/255, blue: 139/255).ignoresSafeArea() : Color(red: 244/255, green: 218/255, blue: 198/255).ignoresSafeArea()
+            backgroundColor.ignoresSafeArea()
             
-            Text("Search and look through a collection of plants")
-                .foregroundColor(Color.black)
-                .multilineTextAlignment(.center)
+            Text("Search and look through a collection of plants").foregroundColor(textColor)
         }
-        .background(colorScheme == .light ? Color(red: 250/255, green: 187/255, blue: 139/255).ignoresSafeArea() : Color(red: 244/255, green: 218/255, blue: 198/255).ignoresSafeArea())
+    }
+    
+    private var backgroundColor: Color {
+        colorScheme == .dark
+            ? Color(red: 250/255, green: 187/255, blue: 139/255)
+            : Color(red: 244/255, green: 218/255, blue: 198/255)
+    }
+    
+    private var textColor: Color {
+        colorScheme == .dark ? .black : .black.opacity(0.8)
     }
 }
 
 #Preview {
-    SearchView(colorScheme: .constant(.light))
+    SearchView().preferredColorScheme(.light)
 }

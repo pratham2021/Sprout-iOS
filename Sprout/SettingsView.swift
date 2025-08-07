@@ -9,22 +9,30 @@ import SwiftUI
 
 struct SettingsView: View {
     
-    @Binding var colorScheme: ColorScheme
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         
         ZStack {
-            colorScheme == .dark ? Color(red: 250/255, green: 187/255, blue: 139/255).ignoresSafeArea() : Color(red: 244/255, green: 218/255, blue: 198/255).ignoresSafeArea()
+            backgroundColor.ignoresSafeArea()
             
-            
-
-        
-            Text("Customize your settings").foregroundColor(Color.black)
+            Text("Customize your settings").foregroundColor(textColor)
         }
 
+    }
+    
+    
+    private var backgroundColor: Color {
+        colorScheme == .dark
+        ? Color(red: 250/255, green: 187/255, blue: 139/255)
+        : Color(red: 244/255, green: 218/255, blue: 198/255)
+    }
+    
+    private var textColor: Color {
+        colorScheme == .dark ? .black : .black.opacity(0.8)
     }
 }
 
 #Preview {
-    SettingsView(colorScheme: .constant(.light))
+    SettingsView().preferredColorScheme(.light)
 }
