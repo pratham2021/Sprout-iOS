@@ -6,14 +6,25 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct ContentView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @State private var email = ""
     @State private var password = ""
+    @State private var userAuthenticated = false
     
     var body: some View {
+        if userAuthenticated {
+            MainView()
+        }
+        else {
+            content
+        }
+    }
+    
+    var content: some View {
         ZStack {
             backgroundColor
             
@@ -28,63 +39,87 @@ struct ContentView: View {
                             .padding(.horizontal, 16)
                             .padding(.top, screen.safeAreaInsets.top + (screen.size.height * 0.08))
                     
-                    VStack(spacing: 20) {
-                        TextField("Email", text: $email)
-                            .tint(textColor)
-                            .foregroundColor(textColor)
-                            .textFieldStyle(.plain)
-                            .placeholder(when: email.isEmpty) {
-                                Text("Email")
-                                    .foregroundColor(textColor)
-                                    .bold()
-                            }
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 12)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(textColor.opacity(0.3), lineWidth: 1)
-                            )
+                    VStack(spacing: 30) {
                         
-                        SecureField("Password", text: $password)
-                            .tint(textColor)
-                            .foregroundColor(textColor)
-                            .textFieldStyle(.plain)
-                            .placeholder(when: password.isEmpty) {
-                                Text("Password")
-                                    .foregroundColor(textColor)
-                                    .bold()
-                            }
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 12)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(textColor.opacity(0.3), lineWidth: 1)
-                            )
-                        
-                        Button("Log In") {
-                            if email.isEmpty || password.isEmpty {
-                                return
-                            }
+                        VStack(spacing: 0) {
+                            TextField("Email", text: $email)
+                                .tint(textColor)
+                                .foregroundColor(textColor)
+                                .textFieldStyle(.plain)
+                                .placeholder(when: email.isEmpty) {
+                                    Text("Email")
+                                        .foregroundColor(textColor)
+                                        .bold()
+                                }
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
                             
+                            Rectangle()
+                                .frame(width: .infinity, height: 1)
+                                .foregroundColor(textColor)
+                                .padding(.horizontal, 16)
                         }
-                        .foregroundColor(textColor)
-                        .frame(maxWidth: .infinity)
+                        
+                        VStack(spacing: 0) {
+                            SecureField("Password", text: $password)
+                                .tint(textColor)
+                                .foregroundColor(textColor)
+                                .textFieldStyle(.plain)
+                                .placeholder(when: password.isEmpty) {
+                                    Text("Password")
+                                        .foregroundColor(textColor)
+                                        .bold()
+                                }
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                            
+                            Rectangle()
+                                .frame(width: .infinity, height: 1)
+                                .foregroundColor(textColor)
+                                .padding(.horizontal, 16)
+                        }
+                        
+                        VStack {
+                            Button("Log In") {
+                                if email.isEmpty || password.isEmpty {
+                                    return
+                                }
+                                
+                                signIn()
+                            }
+                            .foregroundColor(textColor)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(textColor.opacity(0.3), lineWidth: 1)
+                            )
+                        }
                         .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(textColor.opacity(0.3), lineWidth: 1)
-                        )
                     }
                     .frame(maxWidth: min(screen.size.width * 0.9, 400))
                     
                     Spacer()
                 }
-                .frame(maxWidth: 350)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .onAppear {
+                    Auth.auth().addStateDidChangeListener { auth, user in
+                        if user != nil {
+                            userAuthenticated.toggle()
+                        }
+                    }
+                }
             }
         }
         .ignoresSafeArea()
+    }
+    
+    func signIn() {
+        Auth.auth().signIn(withEmail: email, password: password) { result, error in
+            if error != nil {
+                print(error!.localizedDescription)
+            }
+        }
     }
     
     private var backgroundColor: Color {
