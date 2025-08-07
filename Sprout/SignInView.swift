@@ -1,14 +1,11 @@
-//
-//  ContentView.swift
+//  SignInView.swift
 //  Sprout
-//
 //  Created by Pratham  Hebbar on 8/7/25.
-//
 
 import SwiftUI
 import FirebaseAuth
 
-struct ContentView: View {
+struct SignInView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @State private var email = ""
@@ -149,5 +146,5 @@ extension View {
 }
 
 #Preview {
-    ContentView()
+    SignInView()
 }

@@ -28,7 +28,7 @@ struct SproutApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SignInView()
         }
     }
 }
