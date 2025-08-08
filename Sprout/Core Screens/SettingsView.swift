@@ -21,12 +21,10 @@ struct SettingsView: View {
                 backgroundColor.ignoresSafeArea()
                 
                 List {
-                    Text(firstSectionTitle.prefix(1).uppercased() + firstSectionTitle.dropFirst().lowercased())
+                    Section(header: Text(firstSectionTitle.prefix(1).uppercased() + firstSectionTitle.dropFirst().lowercased())
                         .foregroundColor(textColor)
                         .font(.headline)
-                        .padding(.top, 10)
-                    
-                    Section(header: EmptyView()) {
+                    ) {
                         HStack {
                             Text("\(user.initials)")
                                 .font(.title)
@@ -45,18 +43,16 @@ struct SettingsView: View {
                                 
                                 Text("\(user.email)")
                                     .font(.footnote)
-                                    .accentColor(textColor)
+                                    .foregroundColor(textColor)
                             }
                         }
                     }
                     .listRowBackground(sectionColor)
                     .cornerRadius(15)
                     
-                    Text(secondSectionTitle.prefix(1).uppercased() + secondSectionTitle.dropFirst().lowercased())
+                    Section(header: Text(secondSectionTitle.prefix(1).uppercased() + secondSectionTitle.dropFirst().lowercased())
                         .foregroundColor(textColor)
-                        .font(.headline)
-                    
-                    Section(header: EmptyView()) {
+                        .font(.headline)) {
                         Button {
                             viewModel.signOut()
                         } label: {
