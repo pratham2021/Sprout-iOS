@@ -11,46 +11,43 @@ struct MainView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @State private var selectedTab = 0
-    
+       
 
     var body: some View {
-        TabView(selection: $selectedTab) {
-            SavedView()
-                .tabItem {
-                    Image(systemName: "square.and.arrow.down")
-                    Text("Saved")
-                }
-                .tag(0)
-
-            SearchView()
-                .tabItem {
-                    Image(systemName: "text.page.badge.magnifyingglass")
-                    Text("Search")
-                }
-                .tag(1)
-
-            SettingsView()
-                .tabItem {
-                    Image(systemName: "gear")
-                    Text("Settings")
-                }
-                .tag(2)
-        }
-        .tint(tabTintColor)
-        .toolbarBackground(tabBarBackgroundColor, for: .tabBar)
-        .toolbarBackground(.visible, for: .tabBar)
-        .onAppear {
-            updateTabBarAppearance(for: colorScheme)
-        }
-        .onChange(of: colorScheme) { _, newColorScheme in
-            updateTabBarAppearance(for: newColorScheme)
-        }
+           TabView(selection: $selectedTab) {
+               Tab("Saved", systemImage: "square.and.arrow.down", value: 0) {
+                   SavedView()
+               }
+               
+               Tab("Search", systemImage: "text.page.badge.magnifyingglass", value: 1) {
+                   SearchView()
+               }
+               
+               Tab("Settings", systemImage: "gear", value: 2) {
+                   SettingsView()
+               }
+           }
+           .tint(tabTintColor)
+           .toolbarBackground(tabBarBackgroundColor, for: .tabBar)
+           .toolbarBackground(.visible, for: .tabBar)
+           .onAppear {
+               DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                   updateTabBarAppearance(for: colorScheme)
+               }
+               
+               DispatchQueue.main.async {
+                   updateTabBarAppearance(for: colorScheme)
+               }
+           }
+           .onChange(of: colorScheme) { _, newColorScheme in
+               updateTabBarAppearance(for: newColorScheme)
+           }
     }
 
     var tabTintColor: Color {
-         colorScheme == .dark
-         ? Color(red: 92/255, green: 157/255, blue: 82/255)
-         : Color(red: 48/255, green: 91/255, blue: 38/255)
+        colorScheme == .dark
+        ? Color(red: 92/255, green: 157/255, blue: 82/255)
+        : Color(red: 48/255, green: 91/255, blue: 38/255)
     }
 
     var tabBarBackgroundColor: Color {
@@ -67,7 +64,7 @@ struct MainView: View {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = backgroundColor
-           
+              
         appearance.stackedLayoutAppearance.normal.iconColor = unselectedColor
         appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: unselectedColor]
 
@@ -77,17 +74,17 @@ struct MainView: View {
                 updateTabBarsInView(window, with: appearance)
             }
         }
-           
+              
         UITabBar.appearance().standardAppearance = appearance
         UITabBar.appearance().scrollEdgeAppearance = appearance
     }
-       
+          
     private func updateTabBarsInView(_ view: UIView, with appearance: UITabBarAppearance) {
         if let tabBar = view as? UITabBar {
             tabBar.standardAppearance = appearance
             tabBar.scrollEdgeAppearance = appearance
         }
-           
+              
         for subview in view.subviews {
             updateTabBarsInView(subview, with: appearance)
         }

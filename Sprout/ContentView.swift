@@ -14,12 +14,13 @@ struct ContentView: View {
     var body: some View {
         Group {
             if viewModel.userSession != nil {
-                MainView()
+                MainView().transition(.opacity)
             }
             else {
-                LoginView()
+                LoginView().transition(.opacity)
             }
         }
+        .animation(.easeInOut(duration: 0.3), value: viewModel.userSession != nil)
     }
 }
 
