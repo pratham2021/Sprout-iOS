@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE24E9D12E464E3E00280EA4 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = DE24E9D02E464E3E00280EA4 /* FirebaseFirestoreCombine-Community */; };
 		DE8B972E2E44FE5B0052C6BD /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = DE8B972D2E44FE5B0052C6BD /* FirebaseCore */; };
 		DEBDB7282E44F0200037341F /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = DEBDB7272E44F0200037341F /* FirebaseAuth */; };
 		DEFA79372E4501E800B4A451 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = DEBDB7292E44F0200037341F /* FirebaseFirestore */; };
@@ -30,6 +31,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DEFA79372E4501E800B4A451 /* FirebaseFirestore in Frameworks */,
+				DE24E9D12E464E3E00280EA4 /* FirebaseFirestoreCombine-Community in Frameworks */,
 				DEBDB7282E44F0200037341F /* FirebaseAuth in Frameworks */,
 				DE8B972E2E44FE5B0052C6BD /* FirebaseCore in Frameworks */,
 			);
@@ -85,6 +87,7 @@
 				DEBDB7272E44F0200037341F /* FirebaseAuth */,
 				DEBDB7292E44F0200037341F /* FirebaseFirestore */,
 				DE8B972D2E44FE5B0052C6BD /* FirebaseCore */,
+				DE24E9D02E464E3E00280EA4 /* FirebaseFirestoreCombine-Community */,
 			);
 			productName = Sprout;
 			productReference = DE262DEE2E42A5F60008B194 /* Sprout.app */;
@@ -370,6 +373,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DE24E9D02E464E3E00280EA4 /* FirebaseFirestoreCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DEBDB7262E44F0200037341F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseFirestoreCombine-Community";
+		};
 		DE8B972D2E44FE5B0052C6BD /* FirebaseCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DEBDB7262E44F0200037341F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

@@ -10,48 +10,85 @@ import SwiftUI
 struct SettingsView: View {
     
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var viewModel: AuthViewModel
+    
+    let firstSectionTitle = "Settings"
+    let secondSectionTitle = "Account"
     
     var body: some View {
-        
-        ZStack {
-            backgroundColor.ignoresSafeArea()
-            
-            List {
-                Section {
-                    HStack {
-                        Text("PH")
-                            .font(.title)
-                            .fontWeight(.semibold)
-                            .foregroundColor(textColor)
-                            .frame(width: 72, height: 72)
-                            .background(Color(.systemGray3))
-                            .clipShape(Circle())
-                        
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Pratham Hebbar")
-                                .font(.subheadline)
+        if let user = viewModel.currentUser {
+            ZStack {
+                backgroundColor.ignoresSafeArea()
+                
+                List {
+                    Text(firstSectionTitle.prefix(1).uppercased() + firstSectionTitle.dropFirst().lowercased())
+                        .foregroundColor(textColor)
+                        .font(.headline)
+                        .padding(.top, 10)
+                    
+                    Section(header: EmptyView()) {
+                        HStack {
+                            Text("\(user.initials)")
+                                .font(.title)
                                 .fontWeight(.semibold)
-                                .foregroundColor(textColor)
-                                .padding(.top, 4)
+                                .foregroundColor(backgroundColor)
+                                .frame(width: 72, height: 72)
+                                .background(textColor)
+                                .clipShape(Circle())
                             
-                            Text("prathamhebbar2021@gmail.com")
-                                .font(.footnote)
-                                .accentColor(.gray)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("\(user.fullName)")
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(textColor)
+                                    .padding(.top, 4)
+                                
+                                Text("\(user.email)")
+                                    .font(.footnote)
+                                    .accentColor(textColor)
+                            }
                         }
                     }
-                }
-                .background(Color.clear)
-                
-                Section("General") {
+                    .listRowBackground(sectionColor)
+                    .cornerRadius(15)
                     
-                }
-                
-                Section("Account") {
+                    Text(secondSectionTitle.prefix(1).uppercased() + secondSectionTitle.dropFirst().lowercased())
+                        .foregroundColor(textColor)
+                        .font(.headline)
                     
+                    Section(header: EmptyView()) {
+                        Button {
+                            viewModel.signOut()
+                        } label: {
+                            SettingsRowView(imageName: "arrow.left.square.fill", title: "Sign Out", tintColor: textColor)
+                        }
+                        
+                        Button {
+                            viewModel.deleteAccount()
+                        } label: {
+                            SettingsRowView(imageName: "minus.circle.fill", title: "Delete Account", tintColor: textColor)
+                        }
+                    }
+                    .listRowBackground(sectionColor)
+                    .cornerRadius(15)
                 }
+                .listStyle(.insetGrouped)
+                .scrollContentBackground(.hidden)
             }
         }
 
+    }
+    
+    private var sectionColor: Color {
+        colorScheme == .light
+        ? Color(red: 250/255, green: 187/255, blue: 139/255)
+        : Color(red: 244/255, green: 218/255, blue: 198/255)
+    }
+    
+    private var tintColor: Color {
+        colorScheme == .dark
+            ? Color(red: 92/255, green: 157/255, blue: 82/255)
+            : Color(red: 48/255, green: 91/255, blue: 38/255)
     }
     
     
