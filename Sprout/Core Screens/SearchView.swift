@@ -15,6 +15,9 @@ struct SearchView: View {
             
             Text("Search and look through a collection of plants").foregroundColor(textColor)
         }
+        .task {
+            await fetchVegetables()
+        }
     }
     
     private var backgroundColor: Color {
