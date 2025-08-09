@@ -11,7 +11,7 @@ struct MainView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @State private var selectedTab = 0
-       
+    @EnvironmentObject var locationManager: LocationManager
 
     var body: some View {
            TabView(selection: $selectedTab) {
