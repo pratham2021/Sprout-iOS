@@ -1,10 +1,17 @@
 //
 //  Utilities.swift
 //  Sprout
-//
-//  Created by Pratham  Hebbar on 8/9/25.
-//
+//  Created by Pratham  Hebbar on 8/9/2025.
 
 import Foundation
+import Firebase
+import FirebaseFirestore
 
-var RAPID_API_KEY = "" // retrieve from firebase
+var PERENUAL_API_KEY: String {
+    get async {
+        let db = Firestore.firestore()
+        let docRef = db.collection("keys").document("api keys")
+        let document = try? await docRef.getDocument()
+        return document?.data()?["plantAPI"] as! String
+    }
+}

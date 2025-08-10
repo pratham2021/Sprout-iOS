@@ -6,7 +6,7 @@ import Foundation
 
 func fetchSpecies(completion: @escaping ([Plant]) -> Void) async {
     
-    let apiKey = PERENUAL_API_KEY
+    let apiKey = await PERENUAL_API_KEY
     
     guard let url = URL(string: "https://perenual.com/api/v2/species-list?hardiness=4-8&key=\(apiKey)") else {
         completion([])
