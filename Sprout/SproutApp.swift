@@ -14,7 +14,6 @@ import FirebaseCore
 struct SproutApp: App {
     
     @StateObject var viewModel = AuthViewModel()
-    @StateObject var locationManager = LocationManager()
     
     init() {
         FirebaseApp.configure()
@@ -24,7 +23,6 @@ struct SproutApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(viewModel)
-                .environmentObject(locationManager)
         }
     }
 }

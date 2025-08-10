@@ -7,105 +7,103 @@ import SwiftUI
 struct SearchView: View {
     
     @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var locationManager: LocationManager
-    @State var fruits: [Plant] = []
-    @State var flowers: [Plant] = []
-    @State var herbs: [Plant] = []
-    @State var vegetables: [Plant] = []
     
     var body: some View {
         
         ZStack {
             backgroundColor.ignoresSafeArea()
-            VStack {
-                if fruits.count != 0 {
-                    Text("fruits")
+            
+            List {
+                Section(header: Text("Plant Species").foregroundColor(headerColor).font(.headline)) {
+                    ScrollView(.horizontal, showsIndicators: true) {
+                        HStack(alignment: .top, spacing: 16) {
+                            ForEach(0..<10, id: \.self) { index in
+                                VStack {
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(cardBackgroundColor)
+                                        .frame(width: 120, height: 80)
+                        
+                                    Text("Species \(index + 1)")
+                                        .font(.caption)
+                                        .multilineTextAlignment(.center)
+                                        .lineLimit(2)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                                .frame(width: 120)
+                                .shadow(radius: 2)
+                            }
+                        }
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 4)
+                    }
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
                 }
                 
-                if flowers.count != 0 {
-                    Text("flowers")
+                Section(header: Text("Species Care Guide").foregroundColor(headerColor).font(.headline)) {
+                    ScrollView(.horizontal, showsIndicators: true) {
+                        HStack(alignment: .top, spacing: 16) {
+                            ForEach(0..<10, id: \.self) { index in
+                                VStack {
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(cardBackgroundColor)
+                                        .frame(width: 120, height: 80)
+                                    Text("Species Care Guide \(index + 1)")
+                                        .font(.caption)
+                                        .multilineTextAlignment(.center)
+                                        .lineLimit(2)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                                .frame(width: 120)
+                                .shadow(radius: 2)
+                            }
+                        }
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 4)
+                    }
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
                 }
                 
-                if herbs.count != 0 {
-                    Text("herbs")
-                }
-                
-                if vegetables.count != 0 {
-                    Text("vegetables")
+                Section(header: Text("Pest Disease").foregroundColor(headerColor).font(.headline)) {
+                    ScrollView(.horizontal, showsIndicators: true) {
+                        HStack(alignment: .top, spacing: 16) {
+                            ForEach(0..<10, id: \.self) { index in
+                                VStack {
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(cardBackgroundColor)
+                                        .frame(width: 120, height: 80)
+                                    Text("Pest Disease \(index + 1)")
+                                        .font(.caption)
+                                        .multilineTextAlignment(.center)
+                                        .lineLimit(2)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                                .frame(width: 120)
+                                .shadow(radius: 2)
+                            }
+                        }
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 4)
+                    }
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
                 }
             }
-           
-            
+            .scrollContentBackground(.hidden)
+            .background(Color.clear)
+            .listStyle(.insetGrouped)
         }
         
         .onAppear {
-            guard let zip = locationManager.zipCode, locationManager.authorizationStatus == .authorizedWhenInUse || locationManager.authorizationStatus == .authorizedAlways else {
-                fetchAllPlants(for: "")
-                return
-            }
             
-            var zone = fetchZone(for: zip) { zone in
-                
-            }
-            
-            fetchAllPlants(for: "")
         }
-        .task(id: locationManager.zipCode) {
-            guard let zip = locationManager.zipCode, locationManager.authorizationStatus == .authorizedWhenInUse || locationManager.authorizationStatus == .authorizedAlways else {
-                fetchAllPlants(for: "")
-                return
-            }
-           
-            var zone = fetchZone(for: zip) { zone in
-                
-            }
-            
-            fetchAllPlants(for: "")
-        }
-        
-        
     }
     
-    private func fetchAllPlants(for zip: String) {
-        let group = DispatchGroup()
-        
-        var fetchedFruits: [Plant]?
-        var fetchedFlowers: [Plant]?
-        var fetchedHerbs: [Plant]?
-        var fetchedVegetables: [Plant]?
-        
-        group.enter()
-        
-        fetchFruits(zip: zip) { plants in
-            fetchedFruits = plants
-            group.leave()
-        }
-        
-        group.enter()
-        fetchFlowers(zip: zip) { plants in
-            fetchedFlowers = plants
-            group.leave()
-        }
-        
-        group.enter()
-        fetchHerbs(zip: zip) { plants in
-            fetchedHerbs = plants
-            group.leave()
-        }
-        
-        
-        group.enter()
-        fetchVegetables(zip: zip) { plants in
-            fetchedVegetables = plants
-            group.leave()
-        }
-        
-        group.notify(queue: .main) {
-            if let fruits = fetchedFruits { self.fruits = fruits }
-            if let flowers = fetchedFlowers { self.flowers = flowers }
-            if let herbs = fetchedHerbs { self.herbs = herbs }
-            if let vegetables = fetchedVegetables { self.vegetables = vegetables }
-        }
+    private var cardBackgroundColor: Color {
+        colorScheme == .light
+        ? Color(red: 250/255, green: 187/255, blue: 139/255)
+        : Color(red: 244/255, green: 218/255, blue: 198/255)
     }
     
     private var backgroundColor: Color {
@@ -117,8 +115,14 @@ struct SearchView: View {
     private var textColor: Color {
         colorScheme == .dark ? .black : .black.opacity(0.8)
     }
+    
+    private var headerColor: Color {
+        colorScheme == .dark
+            ? Color(red: 0.3, green: 0.2, blue: 0.1)
+            : Color(red: 0.2, green: 0.15, blue: 0.1)
+    }
 }
 
 #Preview {
-    SearchView(fruits: [Plant](), flowers: [Plant](), herbs: [Plant](), vegetables: [Plant]()).preferredColorScheme(.light)
+    SearchView().preferredColorScheme(.light)
 }
