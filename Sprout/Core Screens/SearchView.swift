@@ -8,36 +8,34 @@ struct SearchView: View {
 
     @Environment(\.colorScheme) var colorScheme
     @State var plantsSpecies: [Plant]
-    @State var speciesCareGuides: [SpeciesCarePlant]
+    @State var speciesPlantCareGuides: [SpeciesCarePlant]
     @State var plantDiseases: [PlantDisease]
     
     var body: some View {
         
         ZStack {
             backgroundColor.ignoresSafeArea()
-            
-            if plantsSpecies.count != 0 {
-                Color.red.ignoresSafeArea()
-            }
-            
+
             List {
                 Section(header: Text("Plant Species").foregroundColor(headerColor).font(.headline)) {
                     ScrollView(.horizontal, showsIndicators: true) {
                         HStack(alignment: .top, spacing: 16) {
-                            ForEach(0..<10, id: \.self) { index in
-                                VStack {
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(cardBackgroundColor)
-                                        .frame(width: 120, height: 80)
-                        
-                                    Text("Species \(index + 1)")
-                                        .font(.caption)
-                                        .multilineTextAlignment(.center)
-                                        .lineLimit(2)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                }
-                                .frame(width: 120)
-                                .shadow(radius: 2)
+                            ForEach(0..<plantsSpecies.count, id: \.self) { index in
+                                  PlantCardView(plant: plantsSpecies[index])
+                                  
+//                                VStack {
+//                                    RoundedRectangle(cornerRadius: 12)
+//                                        .fill(cardBackgroundColor)
+//                                        .frame(width: 120, height: 80)
+//                        
+//                                    Text("Species \(index + 1)")
+//                                        .font(.caption)
+//                                        .multilineTextAlignment(.center)
+//                                        .lineLimit(2)
+//                                        .fixedSize(horizontal: false, vertical: true)
+//                                }
+//                                .frame(width: 120)
+//                                .shadow(radius: 2)
                             }
                         }
                         .padding(.vertical, 8)
@@ -50,19 +48,20 @@ struct SearchView: View {
                 Section(header: Text("Species Care Guide").foregroundColor(headerColor).font(.headline)) {
                     ScrollView(.horizontal, showsIndicators: true) {
                         HStack(alignment: .top, spacing: 16) {
-                            ForEach(0..<10, id: \.self) { index in
-                                VStack {
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(cardBackgroundColor)
-                                        .frame(width: 120, height: 80)
-                                    Text("Species Care Guide \(index + 1)")
-                                        .font(.caption)
-                                        .multilineTextAlignment(.center)
-                                        .lineLimit(2)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                }
-                                .frame(width: 120)
-                                .shadow(radius: 2)
+                            ForEach(0..<speciesPlantCareGuides.count, id: \.self) { index in
+                                SpeciesCarePlantView(speciesCarePlant: speciesPlantCareGuides[index])
+//                                VStack {
+//                                    RoundedRectangle(cornerRadius: 12)
+//                                        .fill(cardBackgroundColor)
+//                                        .frame(width: 120, height: 80)
+//                                    Text("Species Care Guide \(index + 1)")
+//                                        .font(.caption)
+//                                        .multilineTextAlignment(.center)
+//                                        .lineLimit(2)
+//                                        .fixedSize(horizontal: false, vertical: true)
+//                                }
+//                                .frame(width: 120)
+//                                .shadow(radius: 2)
                             }
                         }
                         .padding(.vertical, 8)
@@ -75,19 +74,20 @@ struct SearchView: View {
                 Section(header: Text("Pest Disease").foregroundColor(headerColor).font(.headline)) {
                     ScrollView(.horizontal, showsIndicators: true) {
                         HStack(alignment: .top, spacing: 16) {
-                            ForEach(0..<10, id: \.self) { index in
-                                VStack {
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(cardBackgroundColor)
-                                        .frame(width: 120, height: 80)
-                                    Text("Pest Disease \(index + 1)")
-                                        .font(.caption)
-                                        .multilineTextAlignment(.center)
-                                        .lineLimit(2)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                }
-                                .frame(width: 120)
-                                .shadow(radius: 2)
+                            ForEach(0..<plantDiseases.count, id: \.self) { index in
+                                PlantDiseaseView(plantDisease: plantDiseases[index])
+//                                VStack {
+//                                    RoundedRectangle(cornerRadius: 12)
+//                                        .fill(cardBackgroundColor)
+//                                        .frame(width: 120, height: 80)
+//                                    Text("Pest Disease \(index + 1)")
+//                                        .font(.caption)
+//                                        .multilineTextAlignment(.center)
+//                                        .lineLimit(2)
+//                                        .fixedSize(horizontal: false, vertical: true)
+//                                }
+//                                .frame(width: 120)
+//                                .shadow(radius: 2)
                             }
                         }
                         .padding(.vertical, 8)
@@ -101,19 +101,26 @@ struct SearchView: View {
             .background(Color.clear)
             .listStyle(.insetGrouped)
         }
-        .task {
-            await fetchSpecies { fetchedPlantSpecies in
-                plantsSpecies = fetchedPlantSpecies
-            }
-            
-            await fetchSpeciesCareGuide { fetchedSpeciesCarePlants in
-                speciesCareGuides = fetchedSpeciesCarePlants
-            }
-            
-            await fetchPestDisease { fetchedPlantDiseases in
-                plantDiseases = fetchedPlantDiseases
-            }
+        .onAppear {
+            print("On Appear")
+            print(plantsSpecies.count)
+            print(speciesPlantCareGuides.count)
+            print(plantDiseases.count)
         }
+        
+//        .task {
+//            await fetchSpecies { fetchedPlantSpecies in
+//                plantsSpecies = fetchedPlantSpecies
+//            }
+//            
+//            await fetchSpeciesCareGuide { fetchedSpeciesCarePlants in
+//                speciesCareGuides = fetchedSpeciesCarePlants
+//            }
+//            
+//            await fetchPestDisease { fetchedPlantDiseases in
+//                plantDiseases = fetchedPlantDiseases
+//            }
+//        }
     }
     
     private var cardBackgroundColor: Color {
@@ -140,5 +147,5 @@ struct SearchView: View {
 }
 
 #Preview {
-    SearchView(plantsSpecies: [Plant](), speciesCareGuides: [SpeciesCarePlant](), plantDiseases: [PlantDisease]()).preferredColorScheme(.light)
+    SearchView(plantsSpecies: [Plant](), speciesPlantCareGuides: [SpeciesCarePlant](), plantDiseases: [PlantDisease]()).preferredColorScheme(.light)
 }

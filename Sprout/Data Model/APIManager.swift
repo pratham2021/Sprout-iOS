@@ -15,9 +15,7 @@ func fetchSpecies(completion: @escaping ([Plant]) -> Void) async {
     
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
-    
-    print(request.url?.absoluteString)
-    
+
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
             // print("Error:", error)
@@ -29,9 +27,7 @@ func fetchSpecies(completion: @escaping ([Plant]) -> Void) async {
             completion([])
             return
         }
-               
-        print(httpResponse.url)
-        
+                       
         if let data = data {
             let decoder = JSONDecoder()
             do {
@@ -106,7 +102,7 @@ func fetchSpeciesCareGuide(completion: @escaping ([SpeciesCarePlant]) -> Void) a
 
 func fetchPestDisease(completion: @escaping ([PlantDisease]) -> Void) async {
     
-    let apiKey = await PERENUAL_API_KEY
+    var apiKey = await PERENUAL_API_KEY
     
     guard let url = URL(string: "https://perenual.com/api/pest-disease-list?key=\(apiKey)") else {
         completion([])
@@ -126,8 +122,6 @@ func fetchPestDisease(completion: @escaping ([PlantDisease]) -> Void) async {
             completion([])
             return
         }
-               
-        print(httpResponse.url)
         
         if let data = data {
             let decoder = JSONDecoder()
@@ -136,10 +130,6 @@ func fetchPestDisease(completion: @escaping ([PlantDisease]) -> Void) async {
                 completion(decodedResponse.data)
             }
             catch {
-                print("Decoding error:", error)
-                if let jsonString = String(data: data, encoding: .utf8) {
-                    print("Raw API Response:\n", jsonString)
-                }
                 completion([])
             }
         }
