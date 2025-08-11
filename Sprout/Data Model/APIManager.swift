@@ -35,10 +35,14 @@ func fetchSpecies(completion: @escaping ([Plant]) -> Void) async {
         if let data = data {
             let decoder = JSONDecoder()
             do {
-                
-                completion([])
+                let decodedResponse = try decoder.decode(PlantResponse.self, from: data)
+                completion(decodedResponse.data)
             }
             catch {
+                print("Decoding error:", error)
+                if let jsonString = String(data: data, encoding: .utf8) {
+                    print("Raw API Response:\n", jsonString)
+                }
                 completion([])
             }
         }
