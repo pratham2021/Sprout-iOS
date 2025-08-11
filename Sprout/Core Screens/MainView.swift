@@ -47,7 +47,6 @@ struct MainView: View {
                updateTabBarAppearance(for: newColorScheme)
            }
            .task {
-               
                await fetchSpecies { fetchedPlantSpecies in
                    plantsSpecies = fetchedPlantSpecies
                }
@@ -59,10 +58,6 @@ struct MainView: View {
                await fetchPestDisease { fetchedPlantDiseases in
                    plantDiseases = fetchedPlantDiseases
                }
-               
-               print(plantsSpecies.count)
-               print(speciesPlantCareGuides.count)
-               print(plantDiseases.count)
            }
     }
 

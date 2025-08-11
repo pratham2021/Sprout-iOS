@@ -12,7 +12,6 @@ struct SearchView: View {
     @State var plantDiseases: [PlantDisease]
     
     var body: some View {
-        
         ZStack {
             backgroundColor.ignoresSafeArea()
 
@@ -22,20 +21,6 @@ struct SearchView: View {
                         HStack(alignment: .top, spacing: 16) {
                             ForEach(0..<plantsSpecies.count, id: \.self) { index in
                                   PlantCardView(plant: plantsSpecies[index])
-                                  
-//                                VStack {
-//                                    RoundedRectangle(cornerRadius: 12)
-//                                        .fill(cardBackgroundColor)
-//                                        .frame(width: 120, height: 80)
-//                        
-//                                    Text("Species \(index + 1)")
-//                                        .font(.caption)
-//                                        .multilineTextAlignment(.center)
-//                                        .lineLimit(2)
-//                                        .fixedSize(horizontal: false, vertical: true)
-//                                }
-//                                .frame(width: 120)
-//                                .shadow(radius: 2)
                             }
                         }
                         .padding(.vertical, 8)
@@ -50,18 +35,6 @@ struct SearchView: View {
                         HStack(alignment: .top, spacing: 16) {
                             ForEach(0..<speciesPlantCareGuides.count, id: \.self) { index in
                                 SpeciesCarePlantView(speciesCarePlant: speciesPlantCareGuides[index])
-//                                VStack {
-//                                    RoundedRectangle(cornerRadius: 12)
-//                                        .fill(cardBackgroundColor)
-//                                        .frame(width: 120, height: 80)
-//                                    Text("Species Care Guide \(index + 1)")
-//                                        .font(.caption)
-//                                        .multilineTextAlignment(.center)
-//                                        .lineLimit(2)
-//                                        .fixedSize(horizontal: false, vertical: true)
-//                                }
-//                                .frame(width: 120)
-//                                .shadow(radius: 2)
                             }
                         }
                         .padding(.vertical, 8)
@@ -76,18 +49,6 @@ struct SearchView: View {
                         HStack(alignment: .top, spacing: 16) {
                             ForEach(0..<plantDiseases.count, id: \.self) { index in
                                 PlantDiseaseView(plantDisease: plantDiseases[index])
-//                                VStack {
-//                                    RoundedRectangle(cornerRadius: 12)
-//                                        .fill(cardBackgroundColor)
-//                                        .frame(width: 120, height: 80)
-//                                    Text("Pest Disease \(index + 1)")
-//                                        .font(.caption)
-//                                        .multilineTextAlignment(.center)
-//                                        .lineLimit(2)
-//                                        .fixedSize(horizontal: false, vertical: true)
-//                                }
-//                                .frame(width: 120)
-//                                .shadow(radius: 2)
                             }
                         }
                         .padding(.vertical, 8)
@@ -107,20 +68,6 @@ struct SearchView: View {
             print(speciesPlantCareGuides.count)
             print(plantDiseases.count)
         }
-        
-//        .task {
-//            await fetchSpecies { fetchedPlantSpecies in
-//                plantsSpecies = fetchedPlantSpecies
-//            }
-//            
-//            await fetchSpeciesCareGuide { fetchedSpeciesCarePlants in
-//                speciesCareGuides = fetchedSpeciesCarePlants
-//            }
-//            
-//            await fetchPestDisease { fetchedPlantDiseases in
-//                plantDiseases = fetchedPlantDiseases
-//            }
-//        }
     }
     
     private var cardBackgroundColor: Color {

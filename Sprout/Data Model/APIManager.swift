@@ -30,6 +30,7 @@ func fetchSpecies(completion: @escaping ([Plant]) -> Void) async {
                        
         if let data = data {
             let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
             do {
                 let decodedResponse = try decoder.decode(PlantResponse.self, from: data)
                 completion(decodedResponse.data)
@@ -124,16 +125,20 @@ func fetchPestDisease(completion: @escaping ([PlantDisease]) -> Void) async {
         }
         
         if let data = data {
+            print(url.absoluteString)
+            
             let decoder = JSONDecoder()
             do {
                 let decodedResponse = try decoder.decode(PlantDiseaseResponse.self, from: data)
                 completion(decodedResponse.data)
             }
             catch {
+                print("Error parsing the JSON")
                 completion([])
             }
         }
         else {
+            print("No data found at location")
             completion([])
         }
     }

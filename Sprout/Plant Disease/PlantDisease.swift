@@ -9,12 +9,24 @@ import Foundation
 
 struct PlantDisease: Codable {
     let id: Int
-    let common_name: String
-    let scientific_name: String
-    let other_name: String?
+    let commonName: String
+    let scientificName: String
+    let otherName: [String]?
     let family: String?
     let description: [DescriptionSection]
     let solution: [SolutionSection]
     let host: [String]
     let images: [DiseaseImage]
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case commonName = "common_name"
+        case scientificName = "scientific_name"
+        case otherName = "other_name"
+        case family
+        case description
+        case solution
+        case host
+        case images
+    }
 }
