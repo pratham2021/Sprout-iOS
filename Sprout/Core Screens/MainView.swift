@@ -20,7 +20,7 @@ struct MainView: View {
                }
                
                Tab("Search", systemImage: "text.page.badge.magnifyingglass", value: 1) {
-                   SearchView(plantsSpecies: [Plant](), speciesCareGuides: [Plant](), pestDiseases: [Plant]())
+                   SearchView(plantsSpecies: [Plant](), speciesCareGuides: [SpeciesCarePlant](), plantDiseases: [PlantDisease]())
                }
                
                Tab("Settings", systemImage: "gear", value: 2) {

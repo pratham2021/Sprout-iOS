@@ -5,11 +5,11 @@
 import SwiftUI
 
 struct SearchView: View {
-    
+
     @Environment(\.colorScheme) var colorScheme
     @State var plantsSpecies: [Plant]
-    @State var speciesCareGuides: [Plant]
-    @State var pestDiseases: [Plant]
+    @State var speciesCareGuides: [SpeciesCarePlant]
+    @State var plantDiseases: [PlantDisease]
     
     var body: some View {
         
@@ -101,20 +101,17 @@ struct SearchView: View {
             .background(Color.clear)
             .listStyle(.insetGrouped)
         }
-        .onAppear {
-            Task {
-                var speciesOfPlant = [Plant]()
-                
-                await fetchSpecies { plants in
-                    speciesOfPlant = plants
-                }
-                
-                print(speciesOfPlant.count)
-                
-                
-                await MainActor.run {
-                    plantsSpecies = speciesOfPlant
-                }
+        .task {
+            await fetchSpecies { fetchedPlantSpecies in
+                plantsSpecies = fetchedPlantSpecies
+            }
+            
+            await fetchSpeciesCareGuide { fetchedSpeciesCarePlants in
+                speciesCareGuides = fetchedSpeciesCarePlants
+            }
+            
+            await fetchPestDisease { fetchedPlantDiseases in
+                plantDiseases = fetchedPlantDiseases
             }
         }
     }
@@ -143,5 +140,5 @@ struct SearchView: View {
 }
 
 #Preview {
-    SearchView(plantsSpecies: [Plant](), speciesCareGuides: [Plant](), pestDiseases: [Plant]()).preferredColorScheme(.light)
+    SearchView(plantsSpecies: [Plant](), speciesCareGuides: [SpeciesCarePlant](), plantDiseases: [PlantDisease]()).preferredColorScheme(.light)
 }

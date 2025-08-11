@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+// MARK: - Description Section
+struct DescriptionSection: Codable {
+    let subtitle: String
+    let description: String
+}
