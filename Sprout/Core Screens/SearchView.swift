@@ -20,7 +20,7 @@ struct SearchView: View {
                     ScrollView(.horizontal, showsIndicators: true) {
                         HStack(alignment: .top, spacing: 16) {
                             ForEach(0..<plantsSpecies.count, id: \.self) { index in
-                                  PlantCardView(plant: plantsSpecies[index])
+                                PlantCardView(plant: plantsSpecies[index])
                             }
                         }
                         .padding(.vertical, 8)
@@ -48,7 +48,6 @@ struct SearchView: View {
                     ScrollView(.horizontal, showsIndicators: true) {
                         HStack(alignment: .top, spacing: 16) {
                             ForEach(0..<plantDiseases.count, id: \.self) { index in
-                                
                                 if let imageURL = plantDiseases[index].images.first?.originalURL {
                                     AsyncImage(url: URL(string: imageURL)) { phase in
                                         switch phase {
