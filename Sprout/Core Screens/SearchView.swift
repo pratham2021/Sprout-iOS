@@ -48,7 +48,24 @@ struct SearchView: View {
                     ScrollView(.horizontal, showsIndicators: true) {
                         HStack(alignment: .top, spacing: 16) {
                             ForEach(0..<plantDiseases.count, id: \.self) { index in
-                                PlantDiseaseView(plantDisease: plantDiseases[index])
+                                
+                                if let imageURL = plantDiseases[index].images.first?.originalURL {
+                                    AsyncImage(url: URL(string: imageURL)) { phase in
+                                        switch phase {
+                                        case .empty:
+                                            PlantDiseaseView(plantDisease: plantDiseases[index], imageToDisplay: Image("golden-pothos"))
+                                        case .success(let image):
+                                            PlantDiseaseView(plantDisease: plantDiseases[index], imageToDisplay: image)
+                                        case .failure:
+                                            PlantDiseaseView(plantDisease: plantDiseases[index], imageToDisplay: Image("golden-pothos"))
+                                        @unknown default:
+                                            PlantDiseaseView(plantDisease: plantDiseases[index], imageToDisplay: Image("golden-pothos"))
+                                        }
+                                    }
+                                }
+                                else {
+                                    PlantDiseaseView(plantDisease: plantDiseases[index], imageToDisplay: Image("golden-pothos"))
+                                }
                             }
                         }
                         .padding(.vertical, 8)
@@ -63,9 +80,7 @@ struct SearchView: View {
             .listStyle(.insetGrouped)
         }
         .onAppear {
-//            print(plantsSpecies.count)
-//            print(speciesPlantCareGuides.count)
-//            print(plantDiseases.count)
+            
         }
     }
     

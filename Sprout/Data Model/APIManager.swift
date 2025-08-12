@@ -105,6 +105,7 @@ func fetchPestDisease(completion: @escaping ([PlantDisease]) -> Void) async {
     
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
+            print(error.localizedDescription)
             completion([])
             return
         }
@@ -119,6 +120,47 @@ func fetchPestDisease(completion: @escaping ([PlantDisease]) -> Void) async {
             do {
                 let decodedResponse = try decoder.decode(PlantDiseaseResponse.self, from: data)
                 completion(decodedResponse.data)
+            }
+            catch {
+                completion([])
+            }
+        }
+        else {
+            completion([])
+        }
+    }
+    
+    task.resume()
+}
+
+func fetchPlantSpeciesDetail(plant: Plant, completion: @escaping ([PlantSpecies]) -> Void) async {
+    let apiKey = await PERENUAL_API_KEY
+    var ID = plant.id
+    
+    guard let url = URL(string: "https://perenual.com/api/v2/species/details/\(ID)?key=\(apiKey)") else {
+        completion([])
+        return
+    }
+    
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    
+    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            completion([])
+            return
+        }
+                   
+        guard let httpResponse = response as? HTTPURLResponse else {
+            completion([])
+            return
+        }
+        
+        if let data = data {
+            let decoder = JSONDecoder()
+            do {
+                let decodedResponse = try decoder.decode([PlantSpecies].self, from: data)
+                completion(decodedResponse)
             }
             catch {
                 completion([])

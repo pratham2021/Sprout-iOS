@@ -2,56 +2,34 @@
 //  Sprout
 //  Created by Pratham  Hebbar on 8/11/2025.
 
+
+
+
 import SwiftUI
 
 struct PlantDiseaseView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @State var plantDisease: PlantDisease
+    @State var imageToDisplay: Image
     
     var body: some View {
         ZStack {
             VStack(spacing: 10) {
                 Rectangle()
                     .background {
-                        if let imageURL = plantDisease.images.first?.originalURL {
-                            AsyncImage(url: URL(string: imageURL)) { phase in
-                                switch phase {
-                                case .empty:
-                                    Image("golden-pothos")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                case .success(let image):
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                case .failure:
-                                    Image("golden-pothos")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                @unknown default:
-                                    Image("golden-pothos")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                }
-                            }
-                        }
-                        else {
-                            Image("golden-pothos")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                        }
+                        imageToDisplay.resizable().aspectRatio(contentMode: .fit)
                     }
                     .foregroundColor(.clear)
                 
-                Text(plantDisease.commonName)
+                Text(plantDisease.commonName.trimmingCharacters(in: .whitespaces))
                     .font(.footnote)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
                     .foregroundColor(textColor)
                 
-                Text("(" + plantDisease.scientificName + ")")
+                Text("(" + plantDisease.scientificName.trimmingCharacters(in: .whitespaces) + ")")
                     .font(.footnote)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
@@ -61,6 +39,7 @@ struct PlantDiseaseView: View {
         }
         .frame(width: 120, height: 120)
         .cornerRadius(15)
+        
     }
     
     private var cardBackgroundColor: Color {
@@ -118,5 +97,5 @@ struct PlantDiseaseView: View {
                          smallURL: "https://perenual.com/storage/species_disease/1_a/small/5794681214_d97177b332_b.jpg",
                          thumbnail: "https://perenual.com/storage/species_disease/1_a/thumbnail/5794681214_d97177b332_b.jpg")
         ]
-    ))
+                     ), imageToDisplay: Image("golden-pothos"))
 }

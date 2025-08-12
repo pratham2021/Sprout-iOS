@@ -58,6 +58,10 @@ struct MainView: View {
                await fetchPestDisease { fetchedPlantDiseases in
                    plantDiseases = fetchedPlantDiseases
                }
+               
+               print(plantsSpecies.count)
+               print(speciesPlantCareGuides.count)
+               print(plantDiseases.count)
            }
     }
 

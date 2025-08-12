@@ -13,14 +13,12 @@ struct SpeciesCarePlantView: View {
     @State var speciesCarePlant: SpeciesCarePlant
     
     var body: some View {
-        
-        
         ZStack {
             Rectangle().foregroundColor(cardBackgroundColor)
             
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 10) {
-                    Text(speciesCarePlant.commonName.lowercased().capitalized)
+                    Text(speciesCarePlant.commonName.trimmingCharacters(in: .whitespaces).lowercased().capitalized)
                         .font(.footnote)
                         .multilineTextAlignment(.center)
                         .lineLimit(2)
