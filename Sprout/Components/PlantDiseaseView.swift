@@ -1,18 +1,84 @@
-//
 //  PlantDiseaseView.swift
 //  Sprout
-//
-//  Created by Pratham  Hebbar on 8/11/25.
-//
+//  Created by Pratham  Hebbar on 8/11/2025.
 
 import SwiftUI
 
 struct PlantDiseaseView: View {
     
-    var plantDisease: PlantDisease
+    @Environment(\.colorScheme) var colorScheme
+    @State var plantDisease: PlantDisease
     
     var body: some View {
-        Text("Plant Diseases")
+        ZStack {
+            VStack(spacing: 10) {
+                Rectangle()
+                    .background {
+                        if let imageURL = plantDisease.images.first?.originalURL {
+                            AsyncImage(url: URL(string: imageURL)) { phase in
+                                switch phase {
+                                case .empty:
+                                    Image("golden-pothos")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                case .failure:
+                                    Image("golden-pothos")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                @unknown default:
+                                    Image("golden-pothos")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                }
+                            }
+                        }
+                        else {
+                            Image("golden-pothos")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                        }
+                    }
+                    .foregroundColor(.clear)
+                
+                Text(plantDisease.commonName)
+                    .font(.footnote)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .foregroundColor(textColor)
+                
+                Text("(" + plantDisease.scientificName + ")")
+                    .font(.footnote)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .foregroundColor(textColor)
+            }
+        }
+        .frame(width: 120, height: 120)
+        .cornerRadius(15)
+    }
+    
+    private var cardBackgroundColor: Color {
+        colorScheme == .light
+        ? Color(red: 250/255, green: 187/255, blue: 139/255)
+        : Color(red: 244/255, green: 218/255, blue: 198/255)
+    }
+    
+    private var backgroundColor: Color {
+        colorScheme == .dark
+            ? Color(red: 250/255, green: 187/255, blue: 139/255)
+            : Color(red: 244/255, green: 218/255, blue: 198/255)
+    }
+    
+    private var textColor: Color {
+        colorScheme == .dark
+            ? Color(red: 0.3, green: 0.2, blue: 0.1)
+            : Color(red: 0.2, green: 0.15, blue: 0.1)
     }
 }
 

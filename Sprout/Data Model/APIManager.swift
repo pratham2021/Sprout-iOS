@@ -18,7 +18,6 @@ func fetchSpecies(completion: @escaping ([Plant]) -> Void) async {
 
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
-            // print("Error:", error)
             completion([])
             return
         }
@@ -30,7 +29,7 @@ func fetchSpecies(completion: @escaping ([Plant]) -> Void) async {
                        
         if let data = data {
             let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            
             do {
                 let decodedResponse = try decoder.decode(PlantResponse.self, from: data)
                 completion(decodedResponse.data)
@@ -63,11 +62,8 @@ func fetchSpeciesCareGuide(completion: @escaping ([SpeciesCarePlant]) -> Void) a
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     
-    // print(request.url?.absoluteString)
-    
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
-            // print("Error:", error)
             completion([])
             return
         }
@@ -76,8 +72,6 @@ func fetchSpeciesCareGuide(completion: @escaping ([SpeciesCarePlant]) -> Void) a
             completion([])
             return
         }
-               
-        // print(httpResponse.url)
         
         if let data = data {
             let decoder = JSONDecoder()
@@ -86,10 +80,6 @@ func fetchSpeciesCareGuide(completion: @escaping ([SpeciesCarePlant]) -> Void) a
                 completion(decodedResponse.data)
             }
             catch {
-                print("Decoding error:", error)
-                if let jsonString = String(data: data, encoding: .utf8) {
-                    print("Raw API Response:\n", jsonString)
-                }
                 completion([])
             }
         }
@@ -125,20 +115,16 @@ func fetchPestDisease(completion: @escaping ([PlantDisease]) -> Void) async {
         }
         
         if let data = data {
-            print(url.absoluteString)
-            
             let decoder = JSONDecoder()
             do {
                 let decodedResponse = try decoder.decode(PlantDiseaseResponse.self, from: data)
                 completion(decodedResponse.data)
             }
             catch {
-                print("Error parsing the JSON")
                 completion([])
             }
         }
         else {
-            print("No data found at location")
             completion([])
         }
     }

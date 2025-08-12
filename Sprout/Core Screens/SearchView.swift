@@ -63,10 +63,9 @@ struct SearchView: View {
             .listStyle(.insetGrouped)
         }
         .onAppear {
-            print("On Appear")
-            print(plantsSpecies.count)
-            print(speciesPlantCareGuides.count)
-            print(plantDiseases.count)
+//            print(plantsSpecies.count)
+//            print(speciesPlantCareGuides.count)
+//            print(plantDiseases.count)
         }
     }
     
