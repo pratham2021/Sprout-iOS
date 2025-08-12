@@ -9,7 +9,7 @@ struct PlantDiseaseView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var plantDisease: PlantDisease
     @State var imageToDisplay: Image
-    @State private var showDetail = false
+    @State private var showPlantDiseaseDetail = false
     
     var body: some View {
         ZStack {
@@ -38,10 +38,10 @@ struct PlantDiseaseView: View {
         .frame(width: 120, height: 120)
         .cornerRadius(15)
         .onTapGesture {
-            showDetail = true
+            showPlantDiseaseDetail = true
         }
-        .fullScreenCover(isPresented: $showDetail) {
-            PlantDiseaseDetailView(disease: plantDisease)
+        .fullScreenCover(isPresented: $showPlantDiseaseDetail) {
+            PlantDiseaseDetailView(disease: plantDisease, showDetail: $showPlantDiseaseDetail)
         }
     }
     

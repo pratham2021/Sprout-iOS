@@ -11,6 +11,7 @@ struct SpeciesCarePlantView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @State var speciesCarePlant: SpeciesCarePlant
+    @State var showSpeciesCareGuideDetail = false
     
     var body: some View {
         ZStack {
@@ -38,6 +39,12 @@ struct SpeciesCarePlantView: View {
         }
         .frame(width: 120, height: 65)
         .cornerRadius(15)
+        .onTapGesture {
+            showSpeciesCareGuideDetail = true
+        }
+        .fullScreenCover(isPresented: $showSpeciesCareGuideDetail) {
+            SpeciesCarePlantDetailView(speciesCarePlant: speciesCarePlant, showView: $showSpeciesCareGuideDetail)
+        }
     }
     
     private var cardBackgroundColor: Color {

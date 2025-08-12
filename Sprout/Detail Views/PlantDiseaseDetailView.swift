@@ -10,8 +10,9 @@ import SwiftUI
 struct PlantDiseaseDetailView: View {
     
     @State var disease: PlantDisease
-    @Environment(\.dismiss) private var dismiss
+    // @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) var colorScheme
+    @Binding var showDetail: Bool
     
     var body: some View {
         VStack {
@@ -19,9 +20,9 @@ struct PlantDiseaseDetailView: View {
                 .font(.title)
                 .padding()
           
-            Button(action: {
-                dismiss()
-            }) {
+            Button {
+                showDetail = false
+            } label: {
                 Image(systemName: "xmark.circle.fill").foregroundColor(textColor)
             }
             
@@ -73,5 +74,5 @@ struct PlantDiseaseDetailView: View {
                                                                  smallURL: "https://perenual.com/storage/species_disease/1_a/small/5794681214_d97177b332_b.jpg",
                                                                  thumbnail: "https://perenual.com/storage/species_disease/1_a/thumbnail/5794681214_d97177b332_b.jpg")
                                                  ]
-    ))
+                                                ), showDetail: .constant(false))
 }
