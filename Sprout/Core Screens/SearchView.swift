@@ -18,8 +18,8 @@ struct SearchView: View {
                 Section(header: Text("Plant Species").foregroundColor(headerColor).font(.headline)) {
                     ScrollView(.horizontal, showsIndicators: true) {
                         HStack(alignment: .top, spacing: 16) {
-                            ForEach(0..<10, id: \.self) { index in
-                                Text("Plant Species")
+                            ForEach(0..<plants.count, id: \.self) { index in
+                                PlantCardView(plant: plants[index])
                             }
                         }
                         .padding(.vertical, 8)
@@ -29,25 +29,11 @@ struct SearchView: View {
                     .listRowBackground(Color.clear)
                 }
                 
-                Section(header: Text("Species Care Guide").foregroundColor(headerColor).font(.headline)) {
+                Section(header: Text("Distributions").foregroundColor(headerColor).font(.headline)) {
                     ScrollView(.horizontal, showsIndicators: true) {
                         HStack(alignment: .top, spacing: 16) {
-                            ForEach(0..<10, id: \.self) { index in
-                                Text("Species Care Guide")
-                            }
-                        }
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 4)
-                    }
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.clear)
-                }
-                
-                Section(header: Text("Pest Disease").foregroundColor(headerColor).font(.headline)) {
-                    ScrollView(.horizontal, showsIndicators: true) {
-                        HStack(alignment: .top, spacing: 16) {
-                            ForEach(0..<10, id: \.self) { index in
-                                Text("Pest Diseases")
+                            ForEach(0..<distributions.count, id: \.self) { index in
+                                DistributionCardView(distribution: distributions[index])
                             }
                         }
                         .padding(.vertical, 8)

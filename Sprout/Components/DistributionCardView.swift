@@ -13,7 +13,6 @@ struct DistributionCardView: View {
     @State var distribution: Distribution
     @State var showDetail: Bool = false
     
-    
     var body: some View {
         ZStack {
             Rectangle().foregroundColor(cardBackgroundColor)
