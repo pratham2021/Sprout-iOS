@@ -11,7 +11,6 @@ struct MainView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @State private var selectedTab = 0
-    @EnvironmentObject var locationManager: LocationManager
     @State var plantsSpecies: [PlantSpecies] = [PlantSpecies]()
     @State var distributions: [Distribution] = [Distribution]()
 
