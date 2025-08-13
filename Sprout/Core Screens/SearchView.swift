@@ -7,9 +7,6 @@ import SwiftUI
 struct SearchView: View {
 
     @Environment(\.colorScheme) var colorScheme
-    @State var plantsSpecies: [Plant]
-    @State var speciesPlantCareGuides: [SpeciesCarePlant]
-    @State var plantDiseases: [PlantDisease]
     
     var body: some View {
         ZStack {
@@ -19,8 +16,8 @@ struct SearchView: View {
                 Section(header: Text("Plant Species").foregroundColor(headerColor).font(.headline)) {
                     ScrollView(.horizontal, showsIndicators: true) {
                         HStack(alignment: .top, spacing: 16) {
-                            ForEach(0..<plantsSpecies.count, id: \.self) { index in
-                                PlantCardView(plant: plantsSpecies[index])
+                            ForEach(0..<10, id: \.self) { index in
+                                Text("Plant Species")
                             }
                         }
                         .padding(.vertical, 8)
@@ -33,8 +30,8 @@ struct SearchView: View {
                 Section(header: Text("Species Care Guide").foregroundColor(headerColor).font(.headline)) {
                     ScrollView(.horizontal, showsIndicators: true) {
                         HStack(alignment: .top, spacing: 16) {
-                            ForEach(0..<speciesPlantCareGuides.count, id: \.self) { index in
-                                SpeciesCarePlantView(speciesCarePlant: speciesPlantCareGuides[index])
+                            ForEach(0..<10, id: \.self) { index in
+                                Text("Species Care Guide")
                             }
                         }
                         .padding(.vertical, 8)
@@ -47,24 +44,8 @@ struct SearchView: View {
                 Section(header: Text("Pest Disease").foregroundColor(headerColor).font(.headline)) {
                     ScrollView(.horizontal, showsIndicators: true) {
                         HStack(alignment: .top, spacing: 16) {
-                            ForEach(0..<plantDiseases.count, id: \.self) { index in
-                                if let imageURL = plantDiseases[index].images.first?.originalURL {
-                                    AsyncImage(url: URL(string: imageURL)) { phase in
-                                        switch phase {
-                                        case .empty:
-                                            PlantDiseaseView(plantDisease: plantDiseases[index], imageToDisplay: Image("golden-pothos"))
-                                        case .success(let image):
-                                            PlantDiseaseView(plantDisease: plantDiseases[index], imageToDisplay: image)
-                                        case .failure:
-                                            PlantDiseaseView(plantDisease: plantDiseases[index], imageToDisplay: Image("golden-pothos"))
-                                        @unknown default:
-                                            PlantDiseaseView(plantDisease: plantDiseases[index], imageToDisplay: Image("golden-pothos"))
-                                        }
-                                    }
-                                }
-                                else {
-                                    PlantDiseaseView(plantDisease: plantDiseases[index], imageToDisplay: Image("golden-pothos"))
-                                }
+                            ForEach(0..<10, id: \.self) { index in
+                                Text("Pest Diseases")
                             }
                         }
                         .padding(.vertical, 8)
@@ -107,5 +88,5 @@ struct SearchView: View {
 }
 
 #Preview {
-    SearchView(plantsSpecies: [Plant](), speciesPlantCareGuides: [SpeciesCarePlant](), plantDiseases: [PlantDisease]()).preferredColorScheme(.light)
+    SearchView().preferredColorScheme(.light)
 }

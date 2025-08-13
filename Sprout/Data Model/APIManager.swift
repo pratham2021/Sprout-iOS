@@ -4,11 +4,11 @@
 
 import Foundation
 
-func fetchSpecies(completion: @escaping ([Plant]) -> Void) async {
+func fetchPlants(completion: @escaping ([PlantSpecies]) -> Void) async {
     
     let apiKey = await PERENUAL_API_KEY
     
-    guard let url = URL(string: "https://perenual.com/api/v2/species-list?hardiness=4-8&key=\(apiKey)") else {
+    guard let url = URL(string: "https://trefle.io/api/v1/plants?token=\(apiKey)") else {
         completion([])
         return
     }
@@ -35,10 +35,6 @@ func fetchSpecies(completion: @escaping ([Plant]) -> Void) async {
                 completion(decodedResponse.data)
             }
             catch {
-                print("Decoding error:", error)
-                if let jsonString = String(data: data, encoding: .utf8) {
-                    print("Raw API Response:\n", jsonString)
-                }
                 completion([])
             }
         }
@@ -50,18 +46,18 @@ func fetchSpecies(completion: @escaping ([Plant]) -> Void) async {
     task.resume()
 }
 
-func fetchSpeciesCareGuide(completion: @escaping ([SpeciesCarePlant]) -> Void) async {
+func fetchDistribution(completion: @escaping ([Distribution]) -> Void) async {
     
     let apiKey = await PERENUAL_API_KEY
     
-    guard let url = URL(string: "https://perenual.com/api/species-care-guide-list?key=\(apiKey)") else {
+    guard let url = URL(string: "https://trefle.io/api/v1/distributions?token=\(apiKey)") else {
         completion([])
         return
     }
     
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
-    
+
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
             completion([])
@@ -72,11 +68,12 @@ func fetchSpeciesCareGuide(completion: @escaping ([SpeciesCarePlant]) -> Void) a
             completion([])
             return
         }
-        
+                       
         if let data = data {
             let decoder = JSONDecoder()
+            
             do {
-                let decodedResponse = try decoder.decode(SpeciesCarePlantDataResponse.self, from: data)
+                let decodedResponse = try decoder.decode(DistributionResponse.self, from: data)
                 completion(decodedResponse.data)
             }
             catch {
@@ -91,21 +88,20 @@ func fetchSpeciesCareGuide(completion: @escaping ([SpeciesCarePlant]) -> Void) a
     task.resume()
 }
 
-func fetchPestDisease(completion: @escaping ([PlantDisease]) -> Void) async {
+func fetchPlantByDistribution(distributionId: Int, completion: @escaping ([PlantSpecies]) -> Void) async {
     
-    var apiKey = await PERENUAL_API_KEY
+    let apiKey = await PERENUAL_API_KEY
     
-    guard let url = URL(string: "https://perenual.com/api/pest-disease-list?key=\(apiKey)") else {
+    guard let url = URL(string: "https://trefle.io/api/v1/distributions/\(distributionId)/plants?token=\(apiKey)") else {
         completion([])
         return
     }
     
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
-    
+
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
-            print(error.localizedDescription)
             completion([])
             return
         }
@@ -114,11 +110,12 @@ func fetchPestDisease(completion: @escaping ([PlantDisease]) -> Void) async {
             completion([])
             return
         }
-        
+                       
         if let data = data {
             let decoder = JSONDecoder()
+            
             do {
-                let decodedResponse = try decoder.decode(PlantDiseaseResponse.self, from: data)
+                let decodedResponse = try decoder.decode(PlantResponse.self, from: data)
                 completion(decodedResponse.data)
             }
             catch {
@@ -133,43 +130,6 @@ func fetchPestDisease(completion: @escaping ([PlantDisease]) -> Void) async {
     task.resume()
 }
 
-func fetchPlantSpeciesDetail(plant: Plant, completion: @escaping ([PlantSpecies]) -> Void) async {
-    let apiKey = await PERENUAL_API_KEY
-    var ID = plant.id
-    
-    guard let url = URL(string: "https://perenual.com/api/v2/species/details/\(ID)?key=\(apiKey)") else {
-        completion([])
-        return
-    }
-    
-    var request = URLRequest(url: url)
-    request.httpMethod = "GET"
-    
-    let task = URLSession.shared.dataTask(with: request) { data, response, error in
-        if let error = error {
-            completion([])
-            return
-        }
-                   
-        guard let httpResponse = response as? HTTPURLResponse else {
-            completion([])
-            return
-        }
-        
-        if let data = data {
-            let decoder = JSONDecoder()
-            do {
-                let decodedResponse = try decoder.decode([PlantSpecies].self, from: data)
-                completion(decodedResponse)
-            }
-            catch {
-                completion([])
-            }
-        }
-        else {
-            completion([])
-        }
-    }
-    
-    task.resume()
-}
+//func fetchDistributionPlantByName(plantName, ) async {
+//    
+//}
