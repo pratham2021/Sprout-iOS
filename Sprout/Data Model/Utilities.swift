@@ -7,7 +7,7 @@ import Foundation
 import Firebase
 import FirebaseFirestore
 
-var PERENUAL_API_KEY: String {
+var PLANT_API_KEY: String {
     get async {
         let db = Firestore.firestore()
         let docRef = db.collection("keys").document("api keys")

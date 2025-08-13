@@ -7,6 +7,8 @@ import SwiftUI
 struct SearchView: View {
 
     @Environment(\.colorScheme) var colorScheme
+    @State var plants: [PlantSpecies] = [PlantSpecies]()
+    @State var distributions: [Distribution] = [Distribution]()
     
     var body: some View {
         ZStack {

@@ -12,9 +12,8 @@ struct MainView: View {
     @Environment(\.colorScheme) var colorScheme
     @State private var selectedTab = 0
     @EnvironmentObject var locationManager: LocationManager
-//    @State var plantsSpecies: [Plant] = [Plant]()
-//    @State var speciesPlantCareGuides: [SpeciesCarePlant] = [SpeciesCarePlant]()
-//    @State var plantDiseases: [PlantDisease] = [PlantDisease]()
+    @State var plantsSpecies: [PlantSpecies] = [PlantSpecies]()
+    @State var distributions: [Distribution] = [Distribution]()
 
     var body: some View {
            TabView(selection: $selectedTab) {
@@ -23,7 +22,7 @@ struct MainView: View {
                }
                
                Tab("Search", systemImage: "text.page.badge.magnifyingglass", value: 1) {
-                   SearchView()
+                   SearchView(plants: plantsSpecies, distributions: distributions)
                }
                
                Tab("Settings", systemImage: "gear", value: 2) {
@@ -46,17 +45,13 @@ struct MainView: View {
                updateTabBarAppearance(for: newColorScheme)
            }
            .task {
-//               await fetchSpecies { fetchedPlantSpecies in
-//                   plantsSpecies = fetchedPlantSpecies
-//               }
-//               
-//               await fetchSpeciesCareGuide { fetchedSpeciesCarePlants in
-//                   speciesPlantCareGuides = fetchedSpeciesCarePlants
-//               }
-//               
-//               await fetchPestDisease { fetchedPlantDiseases in
-//                   plantDiseases = fetchedPlantDiseases
-//               }
+               await fetchPlants { plants in
+                   plantsSpecies = plants
+               }
+               
+               await fetchDistributions { distributionsArray in
+                   distributions = distributionsArray
+               }
            }
     }
 
