@@ -1,9 +1,6 @@
-//
 //  DistributionCardView.swift
 //  Sprout
-//
 //  Created by Pratham  Hebbar on 8/13/25.
-//
 
 import SwiftUI
 
@@ -22,13 +19,13 @@ struct DistributionCardView: View {
                     Text(distribution.name)
                         .font(.footnote)
                         .multilineTextAlignment(.center)
-                        .lineLimit(2)
+                        .lineLimit(nil)
                         .fixedSize(horizontal: false, vertical: true)
                         .foregroundColor(textColor)
+                        .padding(8)
                 }
             }
         }
-        .frame(width: 120, height: 120)
         .cornerRadius(15)
         .onTapGesture {
             showDetail = true

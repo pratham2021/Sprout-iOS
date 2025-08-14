@@ -1,6 +1,6 @@
 //  SearchView.swift
 //  Sprout
-//  Created by Pratham  Hebbar on 8/5/25.
+//  Created by Pratham  Hebbar on 8/5/2025.
 
 import SwiftUI
 

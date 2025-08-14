@@ -1,9 +1,6 @@
-//
 //  PlantCardView.swift
 //  Sprout
-//
-//  Created by Pratham  Hebbar on 8/13/25.
-//
+//  Created by Pratham  Hebbar on 8/13/2025
 
 import SwiftUI
 
@@ -15,7 +12,7 @@ struct PlantCardView: View {
     
     var body: some View {
         ZStack {
-            VStack(spacing: 10) {
+            VStack(spacing: 15) {
                 
                 Rectangle().background {
                     if let imageURL = plant.imageURL {
