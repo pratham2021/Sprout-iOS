@@ -10,25 +10,30 @@ import Foundation
 struct Growth: Codable {
     let description: String?
     let sowing: String?
-    let daysToHarvest: Int?
-    let rowSpacing: Distance
-    let spread: Distance
-    let phMaximum: Double?
-    let phMinimum: Double?
-    let light: String?
-    let atmosphericHumidity: String?
-    let growthMonths: [String]?
-    let bloomMonths: [String]?
-    let fruitMonths: [String]?
-    let minimumPrecipitation: Distance
-    let maximumPrecipitation: Distance
-    let minimumRootDepth: Distance
-    let minimumTemperature: Temperature
-    let maximumTemperature: Temperature
-    let soilNutriments: String?
-    let soilSalinity: String?
-    let soilTexture: String?
-    let soilHumidity: String?
+    let daysToHarvest: Double?
+    let phMaximum: Double? // of the top 30 centimeters of soil
+    let phMinimum: Double? // of the top 30 centimeters of soil
+    let light: Int? // lux
+    let atmosphericHumidity: Int? // %
+    
+    let growthMonths: [String]? // The most active growth months of the species
+    let bloomMonths: [String]? // The months the species usually blooms
+    let fruitMonths: [String]? // The months the species usually produces fruits
+    
+    let rowSpacing: Distance // cm
+    let spread: Distance // cm
+    
+    let minimumPrecipitation: Distance // mm
+    let maximumPrecipitation: Distance // mm
+    let minimumRootDepth: Distance // mm
+    
+    let minimumTemperature: Temperature // degF or degC
+    let maximumTemperature: Temperature // degF or degC
+    
+    let soilNutriments: Int? // Required quantity of soil nutriments, from 0 (oligotrophic) to 10 (hypereutrophic)
+    let soilSalinity: Int? // Tolerance to salinity, on a scale from 0 (untolerant) to 10 (hyperhaline)
+    let soilTexture: Int? // Required texture of the soil, on a scale from 0 (clay) to 10 (rock)
+    let soilHumidity: Int? // Required humidity of the soil, on a scale from 0 (xerophile) to 10 (subaquatic)
     
     enum CodingKeys: String, CodingKey {
         case description, sowing

@@ -12,10 +12,8 @@ struct Images: Codable {
     let bark: [PlantImage]?
     let habit: [PlantImage]?
     let fruit: [PlantImage]?
-    let other: [PlantImage]?
     
     enum CodingKeys: String, CodingKey {
         case leaf, bark, habit, fruit
-        case other = ""
     }
 }

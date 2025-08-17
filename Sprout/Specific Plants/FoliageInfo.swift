@@ -9,8 +9,8 @@ import Foundation
 
 struct FoliageInfo: Codable {
     let texture: String?
-    let color: String?
-    let leafRetention: String?
+    let color: [String]?
+    let leafRetention: Bool?
     
     enum CodingKeys: String, CodingKey {
         case texture, color

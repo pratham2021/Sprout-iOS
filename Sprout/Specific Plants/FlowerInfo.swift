@@ -8,6 +8,6 @@
 import Foundation
 
 struct FlowerInfo: Codable {
-    let color: String?
+    let color: [String]?
     let conspicuous: Bool?
 }

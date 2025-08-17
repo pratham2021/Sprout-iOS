@@ -59,13 +59,11 @@ func fetchSpecificPlant(id: Int, completion: @escaping (PlantData?) -> Void) asy
     
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
-            print("Error")
             completion(nil)
             return
         }
                    
         guard let httpResponse = response as? HTTPURLResponse else {
-            print("Error")
             completion(nil)
             return
         }
@@ -78,12 +76,11 @@ func fetchSpecificPlant(id: Int, completion: @escaping (PlantData?) -> Void) asy
                 completion(decodedResponse.data)
             }
             catch {
-                print("Error parsing JSON")
+                print(id)
                 completion(nil)
             }
         }
         else {
-            print("Error no data")
             completion(nil)
         }
     }

@@ -9,9 +9,9 @@ import Foundation
 
 struct FruitOrSeedInfo: Codable {
     let conspicuous: Bool?
-    let color: String?
+    let color: [String]?
     let shape: String?
-    let seedPersistence: String?
+    let seedPersistence: Bool?
         
     enum CodingKeys: String, CodingKey {
         case conspicuous, color, shape

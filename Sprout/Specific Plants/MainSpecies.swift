@@ -9,16 +9,16 @@ import Foundation
 
 struct MainSpecies: Codable {
     let id: Int
-    let commonName: String
+    let commonName: String?
     let slug: String
     let scientificName: String
    
-    let year: Int
-    let status: String
+    let year: Int?
+    let status: String?
     
-    let edible: Bool
-    let ediblePart: String?
-    let duration: String?
+    let edible: Bool?
+    let ediblePart: [String]?
+    let duration: [String]?
     
     let images: Images
     let commonNames: [String: [String]]

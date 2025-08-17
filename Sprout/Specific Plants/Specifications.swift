@@ -11,7 +11,7 @@ struct Specifications: Codable {
     let growthRate: String?
     let averageHeight: Height
     let maximumHeight: Height
-    let nitrogenFixation: Bool?
+    let nitrogenFixation: String?
     let shapeAndOrientation: String?
     let toxicity: String?
     
