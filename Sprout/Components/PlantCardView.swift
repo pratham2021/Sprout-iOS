@@ -8,8 +8,7 @@ struct PlantCardView: View {
     
     @Environment(\.colorScheme) private var colorScheme
     
-    var plant: PlantSpecies
-    
+    @State var plant: PlantSpecies
     @State private var plantImage: Image?
     @State private var showDetail = false
     @State private var plantToDisplayInDetail: PlantData?
@@ -26,13 +25,14 @@ struct PlantCardView: View {
             plantNameText
         }
         .frame(width: cardSize, height: cardSize)
-//        .background(cardBackgroundColor)
         .cornerRadius(cornerRadius)
         .task {
             await loadPlantDetails()
         }
         .onTapGesture {
-            handleTap()
+            if plantImage != Image("golden-pothos") {
+                handleTap()
+            }
         }
         .fullScreenCover(isPresented: $showDetail) {
             plantDetailView
@@ -64,7 +64,9 @@ struct PlantCardView: View {
         case .success(let image):
             image
                 .resizable()
-                .onAppear { plantImage = image }
+                .onAppear {
+                    plantImage = image
+                }
         case .failure:
             fallbackImage
         @unknown default:
@@ -104,7 +106,7 @@ struct PlantCardView: View {
     @ViewBuilder
     private var plantDetailView: some View {
         if let plantData = plantToDisplayInDetail, let image = plantImage {
-            PlantCardDetailView(plantSpecies: plantData, image: plantImage!, showDetail: $showDetail)
+            PlantCardDetailView(plantSpecies: plantData, showDetail: $showDetail)
         } else {
             loadingView
         }

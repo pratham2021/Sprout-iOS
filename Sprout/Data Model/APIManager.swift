@@ -221,3 +221,14 @@ func fetchPlantsInDistribution(plantEndpoint: String, completion: @escaping ([Pl
     
     task.resume()
 }
+
+
+extension String {
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
+    }
+
+    mutating func capitalizeFirstLetter() {
+        self = self.capitalizingFirstLetter()
+    }
+}
