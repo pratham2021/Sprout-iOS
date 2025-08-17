@@ -46,6 +46,53 @@ func fetchPlants(completion: @escaping ([PlantSpecies]) -> Void) async {
     task.resume()
 }
 
+func fetchSpecificPlant(id: Int, completion: @escaping (PlantData?) -> Void) async {
+    
+    let apiKey = await PLANT_API_KEY
+    
+    guard let url = URL(string: "https://trefle.io/api/v1/plants/\(id)?token=\(apiKey)") else {
+        completion(nil)
+        return
+    }
+    
+    var request = URLRequest(url: url)
+    
+    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            print("Error")
+            completion(nil)
+            return
+        }
+                   
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("Error")
+            completion(nil)
+            return
+        }
+                       
+        if let data = data {
+            let decoder = JSONDecoder()
+            
+            do {
+                let decodedResponse = try decoder.decode(SpecificPlantResponse.self, from: data)
+                completion(decodedResponse.data)
+            }
+            catch {
+                print("Error parsing JSON")
+                completion(nil)
+            }
+        }
+        else {
+            print("Error no data")
+            completion(nil)
+        }
+    }
+    
+    task.resume()
+}
+
+
+// MARK: - Distributions
 func fetchDistributions(completion: @escaping ([Distribution]) -> Void) async {
     
     let apiKey = await PLANT_API_KEY

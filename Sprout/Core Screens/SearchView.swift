@@ -15,40 +15,44 @@ struct SearchView: View {
             backgroundColor.ignoresSafeArea()
 
             List {
-                Section(header: Text("Plant Species").foregroundColor(headerColor).font(.headline)) {
-                    ScrollView(.horizontal, showsIndicators: true) {
-                        HStack(alignment: .top, spacing: 16) {
-                            ForEach(0..<plants.count, id: \.self) { index in
-                                PlantCardView(plant: plants[index])
-                            }
-                        }
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 4)
-                    }
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.clear)
-                }
-                
-                Section(header: Text("Distributions").foregroundColor(headerColor).font(.headline)) {
-                    ScrollView(.horizontal, showsIndicators: true) {
-                        HStack(alignment: .top, spacing: 16) {
-                            ForEach(0..<distributions.count, id: \.self) { index in
-                                DistributionCardView(distribution: distributions[index])
-                            }
-                        }
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 4)
-                    }
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.clear)
-                }
+                plantsSection
+                distributionsSection
             }
             .scrollContentBackground(.hidden)
             .background(Color.clear)
             .listStyle(.insetGrouped)
         }
-        .onAppear {
-            
+    }
+    
+    private var plantsSection: some View {
+        Section(header: Text("Plants").foregroundColor(headerColor).font(.headline)) {
+            ScrollView(.horizontal, showsIndicators: true) {
+                HStack(alignment: .top, spacing: 16) {
+                    ForEach(0..<plants.count, id: \.self) { index in
+                        PlantCardView(plant: plants[index])
+                    }
+                }
+                .padding(.vertical, 8)
+                .padding(.horizontal, 4)
+            }
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
+        }
+    }
+    
+    private var distributionsSection: some View {
+        Section(header: Text("Distributions").foregroundColor(headerColor).font(.headline)) {
+            ScrollView(.horizontal, showsIndicators: true) {
+                HStack(alignment: .top, spacing: 16) {
+                    ForEach(0..<distributions.count, id: \.self) { index in
+                        DistributionCardView(distribution: distributions[index])
+                    }
+                }
+                .padding(.vertical, 8)
+                .padding(.horizontal, 4)
+            }
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
         }
     }
     
