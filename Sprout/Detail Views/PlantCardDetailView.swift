@@ -80,7 +80,6 @@ struct PlantCardDetailView: View {
                             .fontWeight(.semibold)
                         
                         ForEach(language.value, id: \.self) { plantName in
-//                            Text("• \(plantName)")
                             HStack(alignment: .top) {
                                 Text("•")
                                     .foregroundColor(textColor)
@@ -143,20 +142,22 @@ struct PlantCardDetailView: View {
                             .font(.subheadline)
                             .fontWeight(.semibold)
                         
-                        ForEach(section_name.value, id: \.self) { value in
-                            HStack(alignment: .top) {
-                                Text("•")
-                                    .foregroundColor(textColor)
-                                    .font(.footnote)
-                                
-                                Text(value)
-                                    .foregroundColor(textColor)
-                                    .font(.footnote)
-                                    .multilineTextAlignment(.leading)
-                                
-                                Spacer()
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(section_name.value, id: \.self) { value in
+                                HStack(alignment: .top) {
+                                    Text("•")
+                                        .foregroundColor(textColor)
+                                        .font(.footnote)
+                                    
+                                    Text(value)
+                                        .foregroundColor(textColor)
+                                        .font(.footnote)
+                                        .multilineTextAlignment(.leading)
+                                    
+                                    Spacer()
+                                }
+                                .padding(.leading, 16)
                             }
-                            .padding(.leading, 16)
                         }
                     }
                 }
@@ -173,7 +174,7 @@ struct PlantCardDetailView: View {
     
     @ViewBuilder
     private var distributionsView: some View {
-        if let distributions = plantSpecies.mainSpecies.distributions {
+        if plantSpecies.mainSpecies.distributions != nil {
             Text("Distribution zones!")
                 .foregroundColor(textColor)
                 .font(.subheadline)
@@ -227,17 +228,408 @@ struct PlantCardDetailView: View {
 //        Text(new_string)
 //            .
         
-        if let flower = plantSpecies.mainSpecies.flower {
+        
+        var new_string = ""
+        
+        if plantSpecies.mainSpecies.flower != nil {
             
+            let flower = plantSpecies.mainSpecies.flower
+            
+            VStack(alignment: .leading, spacing: 8) {
+                
+                if flower.conspicuous == nil {
+                    Text("No information on visual conspicuousness for this flower")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                    
+                    Text("Inconspicous flowers are flowers that tend not to draw attention. These flowers are either small, have dull colors, or mild in fragrance.")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                else {
+                    if flower.conspicuous! {
+                        Text("This plant has a conspicous flower")
+                            .foregroundColor(textColor)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .multilineTextAlignment(.leading)
+                    }
+                    else {
+                        Text("This plant has an inconspicous flower")
+                            .foregroundColor(textColor)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .multilineTextAlignment(.leading)
+                        
+                        Text("Inconspicous flowers are flowers that tend not to draw attention. These flowers are either small, have dull colors, or mild in fragrance.")
+                            .foregroundColor(textColor)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .multilineTextAlignment(.leading)
+                    }
+                }
+                
+                if flower.color?.count == 0 || flower.color == nil {
+                    Text("No flower colors")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                else {
+                    let colors = flower.color!
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Flower Colors")
+                            .foregroundColor(textColor)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(colors, id: \.self) { flowerColor in
+                                HStack {
+                                    Text("•")
+                                        .foregroundColor(textColor)
+                                        .font(.footnote)
+                                    
+                                    Text(flowerColor.capitalizingFirstLetter())
+                                        .foregroundColor(textColor)
+                                    
+                                    Spacer()
+                                }
+                                .padding(.leading, 16)
+                            }
+                        }
+                    }
+                    
+                }
+            }
         }
     }
     
     @ViewBuilder
     private var foliageView: some View {
-        if let foliage = plantSpecies.mainSpecies.foliage {
+        
+        if plantSpecies.mainSpecies.foliage != nil {
+            
+            
+            VStack(alignment: .leading, spacing: 8) {
+                let foliage = plantSpecies.mainSpecies.foliage
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    if let leafRetention = foliage.leafRetention {
+                        Text("Leaf Retention: \(leafRetention)")
+                        Text("Leaf retention (or marcescence) is the ability of a deciduous tree to retain dead leaves in the winter months, past the leaf-drop period, which is typically in fall.")
+                    }
+                    else {
+                        Text("No information on leaf retention for this plant")
+                        Text("Leaf retention (or marcescence) is the ability of a deciduous tree to retain dead leaves in the winter months, past the leaf-drop period, which is typically in fall.")
+                    }
+                }
+                .foregroundColor(textColor)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .multilineTextAlignment(.leading)
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    
+                    if let texture = foliage.texture {
+                        Text("Leaf Texture: \(texture.capitalizingFirstLetter())")
+                        //                            .foregroundColor(textColor)
+                        //                            .font(.subheadline)
+                        //                            .fontWeight(.semibold)
+                        //                            .multilineTextAlignment(.leading)
+                        
+                        Text("Leaf texture refers to the smoothness or roughness of a plant's leaves and stems based on appearance and has three main umbrellas: fine, medium, and coarse (bold). ")
+                        //                            .foregroundColor(textColor)
+                        //                            .font(.subheadline)
+                        //                            .fontWeight(.semibold)
+                        //                            .multilineTextAlignment(.leading)
+                    }
+                    else {
+                        Text("No information on leaf texture for this plant")
+                        //                            .foregroundColor(textColor)
+                        //                            .font(.subheadline)
+                        //                            .fontWeight(.semibold)
+                        //                            .multilineTextAlignment(.leading)
+                        
+                        Text("Leaf texture refers to the smoothness or roughness of a plant's leaves and stems based on appearance and has three main umbrellas: fine, medium, and coarse (bold). ")
+                        //                            .foregroundColor(textColor)
+                        //                            .font(.subheadline)
+                        //                            .fontWeight(.semibold)
+                        //                            .multilineTextAlignment(.leading)
+                    }
+                }
+                .foregroundColor(textColor)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .multilineTextAlignment(.leading)
+                
+                //                HStack(alignment: .top) {
+                //                    Text("•")
+                //                        .foregroundColor(textColor)
+                //                        .font(.footnote)
+                //
+                //                    Text(plantName)
+                //                        .foregroundColor(textColor)
+                //                        .font(.footnote)
+                //                        .multilineTextAlignment(.leading)
+                //
+                //                    Spacer()
+                //                }
+                //                .padding(.leading, 16)
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    if let foliageColors = foliage.color {
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(foliageColors, id: \.self) { randomColor in
+                                HStack(alignment: .top) {
+                                    Text("•")
+                                        .foregroundColor(textColor)
+                                        .font(.footnote)
+                                    
+                                    Text(randomColor)
+                                        .foregroundColor(textColor)
+                                        .font(.footnote)
+                                        .multilineTextAlignment(.leading)
+                                    
+                                    Spacer()
+                                }
+                                .padding(.leading, 16)
+                            }
+                        }
+                    }
+                    else {
+                        Text("No foliage colors for this plant.")
+                            .foregroundColor(textColor)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .multilineTextAlignment(.leading)
+                    }
+                }
+                
+            }
             
         }
+        
     }
+    
+//    let id: Int
+//    let commonName: String?
+//    let slug: String
+//    let scientificName: String
+//   
+//    let year: Int?
+//    let status: String?
+//    
+//    let edible: Bool?
+//    let ediblePart: [String]?
+//    let duration: [String]?
+//    
+//    let images: Images
+//    let commonNames: [String: [String]]
+//    let distribution: [String: [String]]
+//    let distributions: SpeciesDistributions
+//    let flower: FlowerInfo
+//    let foliage: FoliageInfo
+//    let fruitOrSeed: FruitOrSeedInfo
+//    let specifications: Specifications
+//    let growth: Growth
+    
+//    VStack(alignment: .leading, spacing: 8) {
+//        ForEach(sortedDistribution, id: \.key) { section_name in
+//            VStack(alignment: .leading, spacing: 4) {
+//                Text(section_name.key.capitalizingFirstLetter())
+//                    .foregroundColor(textColor)
+//                    .font(.subheadline)
+//                    .fontWeight(.semibold)
+//                
+//                VStack(alignment: .leading, spacing: 4) {
+//                    ForEach(section_name.value, id: \.self) { value in
+//                        HStack(alignment: .top) {
+//                            Text("•")
+//                                .foregroundColor(textColor)
+//                                .font(.footnote)
+//                            
+//                            Text(value)
+//                                .foregroundColor(textColor)
+//                                .font(.footnote)
+//                                .multilineTextAlignment(.leading)
+//                            
+//                            Spacer()
+//                        }
+//                        .padding(.leading, 16)
+//                    }
+//                }
+//            }
+//        }
+//    }
+    
+    @ViewBuilder
+    private var growthView: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            
+            VStack(alignment: .leading, spacing: 4) {
+                if plantSpecies.mainSpecies.growth != nil {
+                    
+//                    plantSpecies.mainSpecies.growth.atmosphericHumidity // Int?
+//                    plantSpecies.mainSpecies.growth.bloomMonths // [String]?
+//                    plantSpecies.mainSpecies.growth.daysToHarvest // Double?
+//                    plantSpecies.mainSpecies.growth.description // String?
+//                    plantSpecies.mainSpecies.growth.fruitMonths // [String]?
+//                    plantSpecies.mainSpecies.growth.growthMonths // [String]?
+//                    plantSpecies.mainSpecies.growth.light // Int?
+//                    plantSpecies.mainSpecies.growth.maximumPrecipitation // Distance
+//                    plantSpecies.mainSpecies.growth.maximumTemperature // Temperature
+//                    plantSpecies.mainSpecies.growth.minimumPrecipitation // Distance
+//                    plantSpecies.mainSpecies.growth.minimumRootDepth // Distance
+//                    plantSpecies.mainSpecies.growth.minimumTemperature // Temperature
+//                    plantSpecies.mainSpecies.growth.phMaximum // Double?
+//                    plantSpecies.mainSpecies.growth.phMinimum // Double?
+//                    plantSpecies.mainSpecies.growth.rowSpacing // Distance
+//                    plantSpeices.mainSpecies.growth.soilHumidity // Int?
+//                    plantSpecies.mainSpecies.growth.soilNutriments // Int?
+//                    plantSpecies.mainSpecies.growth.soilSalinity // Int?
+//                    plantSpecies.mainSpecies.growth.soilTexture // Int?
+//                    plantSpecies.mainSpecies.growth.sowing // String?
+//                    plantSpecies.mainSpecies.growth.spread // Distance
+                    
+                    Text("Growth Details")
+                }
+                else {
+                    Text("No information to display for plant growth")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var specificationsView: some View {
+        if plantSpecies.mainSpecies.specifications != nil {
+            let specifications = plantSpecies.mainSpecies.specifications
+            
+            // specifications.averageHeight // Height
+                // specifications.averageHeight.cm // Int?
+            
+            // specifications.growthForm // String?
+            // specifications.growthHabit // String?
+            // specifications.growthRate // String?
+            
+            // specifications.ligneousType // String?
+            // specifications.maximumHeight // Height
+            // specifications.nitrogenFixation // String?
+            
+            // specifications.shapeAndOrientation // String?
+            // specifications.toxicity // String?
+            
+            Text("Specifications View")
+        }
+    }
+    
+    
+    @ViewBuilder
+    private var fruitOrSeedView: some View {
+        if plantSpecies.mainSpecies.fruitOrSeed != nil {
+            let fruitOrSeed = plantSpecies.mainSpecies.fruitOrSeed
+            
+            VStack(alignment: .leading, spacing: 8) {
+                
+                if let fruitColors = fruitOrSeed.color {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Fruit Colors")
+                            .foregroundColor(textColor)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(fruitColors, id: \.self) { fruitColor in
+                                HStack {
+                                    Text("•")
+                                        .foregroundColor(textColor)
+                                        .font(.footnote)
+                                    
+                                    Text(fruitColor.capitalizingFirstLetter())
+                                        .foregroundColor(textColor)
+                                    
+                                    Spacer()
+                                }
+                                .padding(.leading, 16)
+                            }
+                        }
+                    }
+                }
+                else {
+                    Text("No Fruit Colors")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                
+                if fruitOrSeed.conspicuous != nil {
+                    Text(fruitOrSeed.conspicuous! ? "Fruit Conspicuousness: Visible" : "Fruit Conspicuousness: Invisible")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                else {
+                    Text("No information on fruit visibility.")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                
+                if fruitOrSeed.seedPersistence != nil {
+                    Text(fruitOrSeed.conspicuous! ? "Fruit Conspicuousness: Visible" : "Fruit Conspicuousness: Invisible")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                else {
+                    Text("No information on fruit seed persistence.")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                    
+                    Text("Seed persistence is a plant's ability for its fruits or seed considered persistent in the soil for long periods of time.")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                
+                if fruitOrSeed.shape != nil {
+                    Text("Fruit Shape: \(fruitOrSeed.shape!)")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                else {
+                    Text("No information on fruit's shape")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                
+            }
+        }
+        
+    }
+    
     
     @ViewBuilder
     private var vegetableLabel: some View {
@@ -254,7 +646,7 @@ struct PlantCardDetailView: View {
     @ViewBuilder
     private var verticallyScrollableView: some View {
         ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 35) {
                 Text(plantSpecies.commonName ?? "")
                     .foregroundColor(textColor)
                     .font(.title)
@@ -265,11 +657,23 @@ struct PlantCardDetailView: View {
                     .font(.footnote)
                     .fontWeight(.bold)
                 
+                // edibleView
+                
                 commonNamesView
                 
                 distributionView
                 
                 durationSection
+                
+                flowerView
+                
+                foliageView
+                
+                fruitOrSeedView
+                
+                growthView
+                
+                specificationsView
                 
                 vegetableLabel
             }
