@@ -3,4 +3,22 @@
    uuid = "CC6B6E8A-C263-4975-9953-1141D5087030"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "869A13CD-543A-42CE-A6F3-47D4C7E93FC4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../../var/folders/m3/j1vbwyyj7597shvb_wj67j6m0000gn/T/swift-generated-sources/@__swiftmacro_6Sprout0030PlantCardDetailViewswift_eDAEifMX95_23_9PredicatefMf_.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1"
+            endingLineNumber = "1"
+            landmarkName = "savePlant(_:to:)"
+            landmarkType = "37">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

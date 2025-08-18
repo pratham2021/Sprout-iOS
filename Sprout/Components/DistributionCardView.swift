@@ -8,7 +8,6 @@ struct DistributionCardView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @State var distribution: Distribution
-    @State var showDetail: Bool = false
     
     var body: some View {
         ZStack {
@@ -17,22 +16,19 @@ struct DistributionCardView: View {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 10) {
                     Text(distribution.name)
-                        .font(.footnote)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .foregroundColor(textColor)
-                        .padding(8)
+                    Text("TDWG Code: \(distribution.tdwgCode)")
+                    Text("TDWG Level: \(distribution.tdwgLevel)")
+                    Text("Species Count: \(distribution.speciesCount)")
                 }
+                .font(.footnote)
+                .multilineTextAlignment(.center)
+                .lineLimit(nil)
+                .fixedSize(horizontal: false, vertical: true)
+                .foregroundColor(textColor)
+                .padding(8)
             }
         }
         .cornerRadius(15)
-        .onTapGesture {
-            showDetail = true
-        }
-        .fullScreenCover(isPresented: $showDetail) {
-            DistributionDetailView(distribution: distribution, showDetail: $showDetail)
-        }
     }
     
     private var cardBackgroundColor: Color {

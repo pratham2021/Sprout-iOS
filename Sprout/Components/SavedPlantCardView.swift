@@ -5,11 +5,14 @@
 //  Created by Pratham  Hebbar on 8/13/25.
 //
 
+import Foundation
 import SwiftUI
+import SwiftData
 
 struct SavedPlantCardView: View {
     
     @Environment(\.colorScheme) var colorScheme
+    @State var savedPlant: LocalPlant
     
     var body: some View {
         ZStack {
@@ -19,24 +22,56 @@ struct SavedPlantCardView: View {
                 .cornerRadius(15)
             
             VStack(spacing: 10) {
-                Text("European Silver Fir")
+                Text(savedPlant.name)
                     .font(.footnote)
+                    .fontWeight(.medium)
                     .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: true, vertical: true)
                     .foregroundColor(textColor)
+                    // .frame(height: 32)
                 
-                Image("golden-pothos")
-                    
-                Text("Saved on Aug 13, 2025")
-                    .font(.footnote)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: true, vertical: true)
-                    .foregroundColor(textColor)
+                if savedPlant.plantImageUrl != "golden-pothos" {
+                    AsyncImage(url: URL(string: savedPlant.plantImageUrl)) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    } placeholder: {
+                        Image("golden-pothos")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    }
+                }
+                else {
+                    Image("golden-pothos")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                }
+                
+                VStack(spacing: 4) {
+                    Text(savedPlant.scientificName)
+                        .font(.caption)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(textColor)
+                        
+                    Text(formatDate(date: savedPlant.dateSaved))
+                        .font(.caption2)
+                        .foregroundColor(textColor.opacity(0.8))
+                }
+                // .frame(height: 40)
             }
-            .padding(8)
+            .padding(12)
         }
-        .fixedSize(horizontal: true, vertical: true)
+        .frame(width: 120, height: 160)
         .listRowBackground(Color.clear)
+    }
+    
+    func formatDate(date: Date) -> String {
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        
+        let dateString = formatter.string(from: date)
+        return dateString
     }
     
     private var cardBackgroundColor: Color {
@@ -52,6 +87,6 @@ struct SavedPlantCardView: View {
     }
 }
 
-#Preview {
-    SavedPlantCardView()
-}
+//#Preview {
+//    SavedPlantCardView()
+//}

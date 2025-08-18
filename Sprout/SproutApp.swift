@@ -5,10 +5,12 @@
 //  Created by Pratham  Hebbar on 8/5/25.
 //
 
-import SwiftUI
 import Firebase
 import FirebaseAuth
 import FirebaseCore
+import SwiftUI
+import SwiftData
+
 
 @main
 struct SproutApp: App {
@@ -24,5 +26,7 @@ struct SproutApp: App {
             ContentView()
                 .environmentObject(viewModel)
         }
+        .modelContainer(for: [LocalPlant.self])
+        
     }
 }

@@ -25,7 +25,7 @@ struct SearchView: View {
     }
     
     private var plantsSection: some View {
-        Section(header: Text("Plants").foregroundColor(headerColor).font(.headline)) {
+        Section {
             ScrollView(.horizontal, showsIndicators: true) {
                 HStack(alignment: .top, spacing: 16) {
                     ForEach(0..<plants.count, id: \.self) { index in
@@ -37,11 +37,46 @@ struct SearchView: View {
             }
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.clear)
+        } header: {
+            HStack {
+                Text("Plants")
+                    .foregroundColor(headerColor)
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .textCase(nil)
+                
+                Spacer()
+            }
+            .textCase(nil)
+            .listRowInsets(EdgeInsets())
+            .padding(.leading, 0)
         }
+        
+        //        Section(header: Text("Plants")
+        //                        .foregroundColor(headerColor)
+        //                        .font(.title)
+        //                        .fontWeight(.bold)
+        //                        .textCase(nil)
+        //
+        //        ) {
+        //            ScrollView(.horizontal, showsIndicators: true) {
+        //                HStack(alignment: .top, spacing: 16) {
+        //                    ForEach(0..<plants.count, id: \.self) { index in
+        //                        PlantCardView(plant: plants[index])
+        //                    }
+        //                }
+        //                .padding(.vertical, 8)
+        //                .padding(.horizontal, 4)
+        //            }
+        //            .listRowInsets(EdgeInsets())
+        //            .listRowBackground(Color.clear)
+        //        }
+        
     }
     
     private var distributionsSection: some View {
-        Section(header: Text("Distributions").foregroundColor(headerColor).font(.headline)) {
+        
+        Section {
             ScrollView(.horizontal, showsIndicators: true) {
                 HStack(alignment: .top, spacing: 16) {
                     ForEach(0..<distributions.count, id: \.self) { index in
@@ -53,7 +88,38 @@ struct SearchView: View {
             }
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.clear)
+        } header: {
+            HStack {
+                Text("Distributions")
+                    .foregroundColor(headerColor)
+                    .font(.title)
+                    .fontWeight(.bold)
+                
+                Spacer()
+            }
+            .textCase(nil)
+            .listRowInsets(EdgeInsets())
+            .padding(.leading, 0)
         }
+        
+//        Section(header: Text("Distributions")
+//                            .foregroundColor(headerColor)
+//                            .font(.title)
+//                            .fontWeight(.bold)
+//                            .textCase(nil)
+//        ) {
+//            ScrollView(.horizontal, showsIndicators: true) {
+//                HStack(alignment: .top, spacing: 16) {
+//                    ForEach(0..<distributions.count, id: \.self) { index in
+//                        DistributionCardView(distribution: distributions[index])
+//                    }
+//                }
+//                .padding(.vertical, 8)
+//                .padding(.horizontal, 4)
+//            }
+//            .listRowInsets(EdgeInsets())
+//            .listRowBackground(Color.clear)
+//        }
     }
     
     private var cardBackgroundColor: Color {

@@ -3,35 +3,54 @@
 //  Created by Pratham  Hebbar on 8/13/2025.
 
 import SwiftUI
+import SwiftData
 
 struct PlantCardDetailView: View {
     
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.modelContext) var context
     @State private var plantImage: Image?
     @State var plantSpecies: PlantData
     @Binding var showDetail:Bool
     private let fallbackImageName = "golden-pothos"
     
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+    
     var body: some View {
         ZStack {
             screenBackgroundColor.ignoresSafeArea()
+            
+//            (name: String, scientificName: String, dateSaved: Date, isVegetable: Bool, plantImageUrl: String, isEdible: Bool, ediblePart: [String]? = nil, duration: [String]? = nil, flowerColor: [String]? = nil, hasConspicuousFlower: Bool? = nil, foliageTexture: String? = nil, foliageColor: [String]? = nil, leafRetention: Bool? = nil, isFruitConspicuous: Bool? = nil, fruitColor: [String]? = nil, fruitShape: String? = nil, fruitSeedPersistence: Bool? = nil, growthForm: String? = nil, growthHabit: String? = nil, growthRate: String? = nil, averageHeight: Int? = nil, maximumHeight: Int? = nil, nitrogenFixation: String? = nil, shapeAndOrientation: String? = nil, toxicity: String? = nil, growthDescription: String? = nil, sowingDescription: String? = nil, daysToHarvest: Double? = nil, phMaximum: Double? = nil, phMinimum: Double? = nil, light: Int? = nil, atmosphericHumidity: Int? = nil, bloomMonths: [String]? = nil, fruitMonths: [String]? = nil, growthMonths: [String]? = nil, rowSpacingCM: Int? = nil, rowSpacingMM: Int? = nil, spreadCM: Int? = nil, spreadMM: Int? = nil, minimumPrecipitationCM: Int? = nil, minimumPrecipitationMM: Int? = nil, maximumPrecipitationCM: Int? = nil, maximumPrecipitationMM: Int? = nil, minimumRootDepthCM: Int? = nil, minimumRootDepthMM: Int? = nil, minimumTempFahrenheit: Double? = nil, minimumTempCelsius: Double? = nil, maximumTempFahrenheit: Double? = nil, maximumTempCelsius: Double? = nil, soilNutriments: Int? = nil, soilSalinity: Int? = nil, soilTexture: Int? = nil, soilHumidity: Int? = nil)
             
             VStack(spacing: 20) {
                 
                 plantImageView
                 
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 20) {
                     
                     verticallyScrollableView
                     
                     HStack(spacing: 15) {
                         Button {
-                            // save to local on device storage
+                            let plant = LocalPlant(name: plantSpecies.commonName!, scientificName: plantSpecies.scientificName, dateSaved: Date(), isVegetable: plantSpecies.vegetable ?? false, plantImageUrl: plantSpecies.imageUrl ?? fallbackImageName, isEdible: plantSpecies.mainSpecies.edible ?? false, foliageTexture: plantSpecies.mainSpecies.foliage.texture ?? "Unknown", leafRetention: plantSpecies.mainSpecies.foliage.leafRetention ?? nil)
                             
-                            // if it already exists, throw an error
+                            do {
+                                try savePlant(plant, to: context)
+                                
+                                alertMessage = "Plant saved successfully!"
+                                showAlert = true
+                            }
+                            catch PlantSaveError.duplicateName(let plant_name) {
+                                alertMessage = "A plant named '\(plant_name)' already exists"
+                                showAlert = true
+                            }
+                            catch {
+                                alertMessage = "Failed to save: \(error.localizedDescription)"
+                                showAlert = true
+                            }
                             
-                            // if it doesn't already exist, then save it locally on device
-                            
+                            showDetail = false
                         } label: {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 15)
@@ -43,6 +62,12 @@ struct PlantCardDetailView: View {
                             }
                         }
                         .frame(maxWidth: .infinity)
+                        .alert("Save Result", isPresented: $showAlert) {
+                            Button("OK") {}
+                        } message: {
+                            Text(alertMessage)
+                        }
+                        
                         
                         Button {
                             showDetail = false
@@ -65,7 +90,36 @@ struct PlantCardDetailView: View {
             }
         }
     }
+    // MARK: - Swift Data
+    func savePlant(_ plant: LocalPlant, to modelContext: ModelContext) throws {
+        let plantName = plant.name
+        
+        let fetchDescriptor = FetchDescriptor<LocalPlant>(
+            predicate: #Predicate { $0.name == plantName }
+        )
+        
+        let existingPlants = try modelContext.fetch(fetchDescriptor)
+        
+        if !existingPlants.isEmpty {
+            throw PlantSaveError.duplicateName(plant.name)
+        }
+        
+        modelContext.insert(plant)
+        try modelContext.save()
+    }
     
+    enum PlantSaveError: LocalizedError {
+        case duplicateName(String)
+        
+        var errorDescription: String? {
+            switch self {
+            case .duplicateName(let name):
+                return "A plant named '\(name)' already exists"
+            }
+        }
+    }
+    
+    // MARK: - Separate Views
     @ViewBuilder
     private var commonNamesView: some View {
         if plantSpecies.mainSpecies.commonNames.count > 0 {
@@ -190,47 +244,8 @@ struct PlantCardDetailView: View {
         }
     }
     
-//    "flower": {
-//        "color": null,
-//        "conspicuous": null
-//    },
-//    "foliage": {
-//        "texture": null,
-//        "color": null,
-//        "leaf_retention": null
-//    },
-//    "fruit_or_seed": {
-//        "conspicuous": null,
-//        "color": null,
-//        "shape": null,
-//        "seed_persistence": null
-//    },
-    
     @ViewBuilder
     private var flowerView: some View {
-//        var new_string = ""
-//        if let flower = plantSpecies.mainSpecies.flower {
-//            
-//            if flower.color == nil {
-//                new_string += "No Color"
-//            }
-//            else {
-//                ForEach(flower.color, id: \.self) { color in
-//                    new_string += "\(color)"
-//                }
-//            }
-//            
-//            if flower.conspicuous {
-//                new_string
-//            }
-//        }
-//        
-//        Text(new_string)
-//            .
-        
-        
-        var new_string = ""
-        
         if plantSpecies.mainSpecies.flower != nil {
             
             let flower = plantSpecies.mainSpecies.flower
@@ -390,7 +405,55 @@ struct PlantCardDetailView: View {
             }
             
         }
-        
+    }
+    
+    @ViewBuilder
+    private var edibleView: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if let edibility = plantSpecies.mainSpecies.edible {
+                Text(edibility ? "Edible: Yes" : "Edible: No")
+                    .foregroundColor(textColor)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .multilineTextAlignment(.leading)
+            }
+            else {
+                Text("Edible: Unknown")
+                    .foregroundColor(textColor)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .multilineTextAlignment(.leading)
+            }
+            
+            if let edibleParts = plantSpecies.mainSpecies.ediblePart {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Edible Parts")
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        ForEach(edibleParts, id: \.self) { ediblePart in
+                            HStack {
+                                Text("•")
+                                    .foregroundColor(textColor)
+                                    .font(.footnote)
+                                
+                                Text(ediblePart.capitalizingFirstLetter())
+                                    .foregroundColor(textColor)
+                                
+                                Spacer()
+                            }
+                            .padding(.leading)
+                        }
+                    }
+                }
+            }
+            else {
+                Text("No edible parts")
+                    .foregroundColor(textColor)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .multilineTextAlignment(.leading)
+            }
+        }
     }
     
     @ViewBuilder
@@ -817,21 +880,33 @@ struct PlantCardDetailView: View {
                     
                     // MARK: - Row Spacing - The minimum spacing between each rows of plants, in centimeters
                     if growth_object.rowSpacing.cm != nil && growth_object.rowSpacing.mm != nil {
-                        Text("Row Spacing: \(growth_object.rowSpacing.cm!) cm/\(growth_object.rowSpacing.mm!) mm")
+                        let rowSpacingCM = growth_object.rowSpacing.cm!
+                        let formattedCM = String(format: "%.1f", rowSpacingCM)
+                        
+                        let rowSpacingMM = growth_object.rowSpacing.mm!
+                        let formattedMM = String(format: "%.1f", rowSpacingMM)
+                        
+                        Text("Row Spacing: \(formattedCM) cm/\(formattedMM) mm")
                             .foregroundColor(textColor)
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .multilineTextAlignment(.leading)
                     }
                     else if growth_object.rowSpacing.cm != nil {
-                        Text("Row Spacing: \(growth_object.rowSpacing.cm!) cm")
+                        let rowSpacingCM = growth_object.rowSpacing.cm!
+                        let formattedCM = String(format: "%.1f", rowSpacingCM)
+                        
+                        Text("Row Spacing: \(formattedCM) cm")
                             .foregroundColor(textColor)
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .multilineTextAlignment(.leading)
                     }
                     else if growth_object.rowSpacing.mm != nil {
-                        Text("Row Spacing: \(growth_object.rowSpacing.mm!) mm")
+                        let rowSpacingMM = growth_object.rowSpacing.mm!
+                        let formattedMM = String(format: "%.1f", rowSpacingMM)
+                        
+                        Text("Row Spacing: \(formattedMM) mm")
                             .foregroundColor(textColor)
                             .font(.subheadline)
                             .fontWeight(.semibold)
@@ -853,7 +928,7 @@ struct PlantCardDetailView: View {
                     
                     // MARK: - Soil Humidity
                     if growth_object.soilHumidity != nil {
-                        Text("Required Soil Humidity: \(growth_object.soilHumidity)")
+                        Text("Required Soil Humidity: \(growth_object.soilHumidity!)")
                             .foregroundColor(textColor)
                             .font(.subheadline)
                             .fontWeight(.semibold)
@@ -869,7 +944,7 @@ struct PlantCardDetailView: View {
                     
                     // MARK: - Soil Nutriments
                     if growth_object.soilNutriments != nil {
-                        Text("Required Soil Nutriment Quantity: \(growth_object.soilNutriments)")
+                        Text("Required Soil Nutriment Quantity: \(growth_object.soilNutriments!)")
                             .foregroundColor(textColor)
                             .font(.subheadline)
                             .fontWeight(.semibold)
@@ -885,7 +960,7 @@ struct PlantCardDetailView: View {
                     
                     // MARK: - Soil Salinity
                     if growth_object.soilSalinity != nil {
-                        Text("Required Soil Salinity: \(growth_object.soilSalinity)")
+                        Text("Required Soil Salinity: \(growth_object.soilSalinity!)")
                             .foregroundColor(textColor)
                             .font(.subheadline)
                             .fontWeight(.semibold)
@@ -901,7 +976,7 @@ struct PlantCardDetailView: View {
                     
                     // MARK: - Soil Texture
                     if growth_object.soilTexture != nil {
-                        Text("Required Soil Texture: \(growth_object.soilTexture)")
+                        Text("Required Soil Texture: \(growth_object.soilTexture!)")
                             .foregroundColor(textColor)
                             .font(.subheadline)
                             .fontWeight(.semibold)
@@ -930,8 +1005,8 @@ struct PlantCardDetailView: View {
                                     .fontWeight(.semibold)
                                     .multilineTextAlignment(.leading)
                             }
+                            .padding(.leading, 16)
                         }
-                        .padding(.leading, 16)
                     }
                     else {
                         Text("No description on sowing the plant")
@@ -1306,7 +1381,7 @@ struct PlantCardDetailView: View {
                     .font(.title2)
                     .fontWeight(.bold)
                 
-                // edibleView
+                edibleView
                 
                 commonNamesView
                 

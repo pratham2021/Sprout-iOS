@@ -3,30 +3,60 @@
 //  Created by Pratham  Hebbar on 8/5/2025
 
 import SwiftUI
+import SwiftData
 
 struct SavedView: View {
     
     @Environment(\.colorScheme) var colorScheme
-    
-    var plants:[String] = ["P", "A", "R"]
+    @Environment(\.modelContext) var context
+    @Query(sort: \LocalPlant.dateSaved) var localPlants: [LocalPlant]
     
     var body: some View {
         
         ZStack {
             backgroundColor.ignoresSafeArea()
             
-            if plants.isEmpty {
-                Text("No saved plants.").foregroundColor(textColor)
-            }
-            else {
-                List {
-                    SavedPlantCardView()
+            List {
+                ForEach(localPlants) { localPlant in
+                    SavedPlantCardView(savedPlant: localPlant)
                         .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.vertical, 8)
                         .listRowInsets(EdgeInsets())
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
                 }
-                .scrollContentBackground(.hidden)
-                .background(Color.clear)
-                .listStyle(.insetGrouped)
+                .onDelete { indexSet in
+                    for index in indexSet {
+                        context.delete(localPlants[index])
+                        try! context.save()
+                    }
+                }
+            }
+            .scrollContentBackground(.hidden)
+            .background(Color.clear)
+            .listStyle(.plain)
+            .environment(\.editMode, .constant(.inactive))
+            .overlay {
+                if localPlants.isEmpty {
+                    
+                    ContentUnavailableView(label: {
+                        Label {
+                            Text("No Saved Plants")
+                                .foregroundColor(textColor)
+                        } icon: {
+                            Image(systemName: "apple.meditate")
+                                .symbolRenderingMode(.monochrome)
+                                .foregroundColor(textColor)
+                        }
+                    }, description: {
+                        Text("Start saving plants locally to see your list.")
+                            .foregroundColor(textColor)
+                    }, actions: {
+                        
+                    })
+                    .offset(y: -60)
+                    
+                }
             }
         }
         
