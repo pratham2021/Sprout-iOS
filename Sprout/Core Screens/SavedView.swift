@@ -12,24 +12,12 @@ struct SavedView: View {
     @Query(sort: \LocalPlant.dateSaved) var localPlants: [LocalPlant]
     
     var body: some View {
-        
         ZStack {
             backgroundColor.ignoresSafeArea()
             
             List {
                 ForEach(localPlants) { localPlant in
-                    SavedPlantCardView(savedPlant: localPlant)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.vertical, 8)
-                        .listRowInsets(EdgeInsets())
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Color.clear)
-                }
-                .onDelete { indexSet in
-                    for index in indexSet {
-                        context.delete(localPlants[index])
-                        try! context.save()
-                    }
+                    plantRow(for: localPlant)
                 }
             }
             .scrollContentBackground(.hidden)
@@ -38,28 +26,57 @@ struct SavedView: View {
             .environment(\.editMode, .constant(.inactive))
             .overlay {
                 if localPlants.isEmpty {
-                    
-                    ContentUnavailableView(label: {
-                        Label {
-                            Text("No Saved Plants")
-                                .foregroundColor(textColor)
-                        } icon: {
-                            Image(systemName: "apple.meditate")
-                                .symbolRenderingMode(.monochrome)
-                                .foregroundColor(textColor)
-                        }
-                    }, description: {
-                        Text("Start saving plants locally to see your list.")
-                            .foregroundColor(textColor)
-                    }, actions: {
-                        
-                    })
-                    .offset(y: -60)
-                    
+                    emptyStateView
                 }
             }
         }
-        
+    }
+    
+    @ViewBuilder
+    private func plantRow(for localPlant: LocalPlant) -> some View {
+        SavedPlantCardView(savedPlant: localPlant)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.vertical, 8)
+            .listRowInsets(EdgeInsets())
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
+            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                deleteButton(for: localPlant)
+            }
+    }
+    
+    @ViewBuilder
+    private func deleteButton(for localPlant: LocalPlant) -> some View {
+        Button(role: .destructive) {
+            context.delete(localPlant)
+            do {
+                try context.save()
+            } catch {
+                print("Failed to delete plant: \(error)")
+            }
+        } label: {
+            Image(systemName: "trash.fill")
+        }
+    }
+    
+    @ViewBuilder
+    private var emptyStateView: some View {
+        ContentUnavailableView(label: {
+            Label {
+                Text("No Saved Plants")
+                    .foregroundColor(textColor)
+            } icon: {
+                Image(systemName: "apple.meditate")
+                    .symbolRenderingMode(.monochrome)
+                    .foregroundColor(textColor)
+            }
+        }, description: {
+            Text("Start saving plants locally to see your list.")
+                .foregroundColor(textColor)
+        }, actions: {
+            
+        })
+        .offset(y: -60)
     }
     
     private var backgroundColor: Color {

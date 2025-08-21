@@ -50,7 +50,11 @@ struct PlantCardDetailView: View {
                                 showAlert = true
                             }
                             
-                            showDetail = false
+                            Task {
+                                try await Task.sleep(nanoseconds: 2_000_000_000)
+                                
+                                showDetail = false
+                            }
                         } label: {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 15)
@@ -219,24 +223,6 @@ struct PlantCardDetailView: View {
         }
         else {
             Text("No distributions to show")
-                .foregroundColor(textColor)
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .multilineTextAlignment(.leading)
-        }
-    }
-    
-    @ViewBuilder
-    private var distributionsView: some View {
-        if plantSpecies.mainSpecies.distributions != nil {
-            Text("Distribution zones!")
-                .foregroundColor(textColor)
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .multilineTextAlignment(.leading)
-        }
-        else {
-            Text("No distribution zones to show")
                 .foregroundColor(textColor)
                 .font(.subheadline)
                 .fontWeight(.semibold)
