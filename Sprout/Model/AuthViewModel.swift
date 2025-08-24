@@ -26,7 +26,6 @@ class AuthViewModel: ObservableObject {
     }
     
     func signIn(withEmail email: String, password: String) async throws {
-        // print("Sign in..")
         do {
             let result = try await Auth.auth().signIn(withEmail: email, password: password)
             self.userSession = result.user
@@ -50,8 +49,6 @@ class AuthViewModel: ObservableObject {
     }
     
     func signOut() {
-        print("Sign Out")
-        
         do {
             try Auth.auth().signOut() // sign out the user on backend
             self.userSession = nil // wipes out user session and takes us back to login screen
@@ -63,6 +60,33 @@ class AuthViewModel: ObservableObject {
     
     func deleteAccount() {
         print("Delete")
+        
+        do {
+            
+            if self.userSession == nil || self.currentUser == nil {
+                return
+            }
+            
+            try Auth.auth().currentUser?.delete { error in
+                if error == nil {
+                    let db = Firestore.firestore()
+                    
+                    let userID = self.userSession!.uid
+                    
+                    db.collection("users").document(userID).delete { error in
+                        if error == nil {
+                            DispatchQueue.main.async {
+                                self.userSession = nil
+                                self.currentUser = nil
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch {
+            print("Error deleting user")
+        }
     }
     
     func fetchUser() async {

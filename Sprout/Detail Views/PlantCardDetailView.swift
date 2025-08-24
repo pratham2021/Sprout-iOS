@@ -338,11 +338,11 @@ struct PlantCardDetailView: View {
                     
                     if let texture = foliage.texture {
                         Text("Leaf Texture: \(texture.capitalizingFirstLetter())")
-                        Text("Leaf texture refers to the smoothness or roughness of a plant's leaves and stems based on appearance and has three main umbrellas: fine, medium, and coarse (bold). ")
+                        Text("Leaf texture refers to how smooth or rough a plant's leaves and stems appear and has three main categories: fine, medium, and coarse (bold). ")
                     }
                     else {
                         Text("No information on leaf texture for this plant")
-                        Text("Leaf texture refers to the smoothness or roughness of a plant's leaves and stems based on appearance and has three main umbrellas: fine, medium, and coarse (bold). ")
+                        Text("Leaf texture refers to how smooth or rough a plant's leaves and stems appear and has three main categories: fine, medium, and coarse (bold). ")
                     }
                 }
                 .foregroundColor(textColor)

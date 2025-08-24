@@ -27,7 +27,6 @@ struct SavedPlantCardView: View {
                     .fontWeight(.medium)
                     .multilineTextAlignment(.center)
                     .foregroundColor(textColor)
-                    // .frame(height: 32)
                 
                 if savedPlant.plantImageUrl != "golden-pothos" {
                     AsyncImage(url: URL(string: savedPlant.plantImageUrl)) { image in
@@ -51,6 +50,8 @@ struct SavedPlantCardView: View {
                         .font(.caption)
                         .multilineTextAlignment(.center)
                         .foregroundColor(textColor)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
                         
                     Text(formatDate(date: savedPlant.dateSaved))
                         .font(.caption2)
