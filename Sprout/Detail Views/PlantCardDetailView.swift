@@ -21,8 +21,6 @@ struct PlantCardDetailView: View {
         ZStack {
             screenBackgroundColor.ignoresSafeArea()
             
-//            (name: String, scientificName: String, dateSaved: Date, isVegetable: Bool, plantImageUrl: String, isEdible: Bool, ediblePart: [String]? = nil, duration: [String]? = nil, flowerColor: [String]? = nil, hasConspicuousFlower: Bool? = nil, foliageTexture: String? = nil, foliageColor: [String]? = nil, leafRetention: Bool? = nil, isFruitConspicuous: Bool? = nil, fruitColor: [String]? = nil, fruitShape: String? = nil, fruitSeedPersistence: Bool? = nil, growthForm: String? = nil, growthHabit: String? = nil, growthRate: String? = nil, averageHeight: Int? = nil, maximumHeight: Int? = nil, nitrogenFixation: String? = nil, shapeAndOrientation: String? = nil, toxicity: String? = nil, growthDescription: String? = nil, sowingDescription: String? = nil, daysToHarvest: Double? = nil, phMaximum: Double? = nil, phMinimum: Double? = nil, light: Int? = nil, atmosphericHumidity: Int? = nil, bloomMonths: [String]? = nil, fruitMonths: [String]? = nil, growthMonths: [String]? = nil, rowSpacingCM: Int? = nil, rowSpacingMM: Int? = nil, spreadCM: Int? = nil, spreadMM: Int? = nil, minimumPrecipitationCM: Int? = nil, minimumPrecipitationMM: Int? = nil, maximumPrecipitationCM: Int? = nil, maximumPrecipitationMM: Int? = nil, minimumRootDepthCM: Int? = nil, minimumRootDepthMM: Int? = nil, minimumTempFahrenheit: Double? = nil, minimumTempCelsius: Double? = nil, maximumTempFahrenheit: Double? = nil, maximumTempCelsius: Double? = nil, soilNutriments: Int? = nil, soilSalinity: Int? = nil, soilTexture: Int? = nil, soilHumidity: Int? = nil)
-            
             VStack(spacing: 20) {
                 
                 plantImageView
