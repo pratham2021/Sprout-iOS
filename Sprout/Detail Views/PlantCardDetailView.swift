@@ -1361,8 +1361,6 @@ struct PlantCardDetailView: View {
                 .font(.title2)
                 .fontWeight(.bold)
                 
-                
-                
                 edibleView
                 
                 commonNamesView
