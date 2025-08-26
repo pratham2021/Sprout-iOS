@@ -94,6 +94,7 @@ struct PlantCardView: View {
         }
     }
     
+    @ViewBuilder
     private var plantNameText: some View {
         Text(plant.commonName ?? "Plant Not Found")
             .font(.footnote)
@@ -121,16 +122,11 @@ struct PlantCardView: View {
                 ProgressView()
                     .scaleEffect(1.5)
                     .tint(cardBackgroundColor)
-                
-                Text("Loading plant details...")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
             }
         }
     }
     
     // MARK: - Computed Properties
-    
     private var cardBackgroundColor: Color {
         colorScheme == .light
             ? Color(red: 250/255, green: 187/255, blue: 139/255)

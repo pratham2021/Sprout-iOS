@@ -9,6 +9,7 @@ struct SearchView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var plants: [PlantSpecies] = [PlantSpecies]()
     @State var distributions: [Distribution] = [Distribution]()
+    @State var ediblePlants: [EdiblePlantSpecies] = [EdiblePlantSpecies]()
     
     var body: some View {
         ZStack {
@@ -17,6 +18,7 @@ struct SearchView: View {
             List {
                 plantsSection
                 distributionsSection
+                ediblePlantsSection
             }
             .scrollContentBackground(.hidden)
             .background(Color.clear)
@@ -120,6 +122,34 @@ struct SearchView: View {
 //            .listRowInsets(EdgeInsets())
 //            .listRowBackground(Color.clear)
 //        }
+    }
+    
+    private var ediblePlantsSection: some View {
+        Section {
+            ScrollView(.horizontal, showsIndicators: true) {
+                HStack(alignment: .top, spacing: 16) {
+                    ForEach(0..<ediblePlants.count, id: \.self) { index in
+                        EdiblePlantCardView(ediblePlant: ediblePlants[index])
+                    }
+                }
+                .padding(.vertical, 8)
+                .padding(.horizontal, 4)
+            }
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
+        } header: {
+            HStack {
+                Text("Edible Plants")
+                    .foregroundColor(headerColor)
+                    .font(.title)
+                    .fontWeight(.bold)
+                
+                Spacer()
+            }
+            .textCase(nil)
+            .listRowInsets(EdgeInsets())
+            .padding(.leading, 0)
+        }
     }
     
     private var cardBackgroundColor: Color {

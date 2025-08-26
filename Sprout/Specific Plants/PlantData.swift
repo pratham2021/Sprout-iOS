@@ -4,13 +4,14 @@
 
 import Foundation
 
-struct PlantData: Codable {
+struct PlantData: Decodable {
     let id: Int
     let commonName: String?
     let slug: String
     let scientificName: String
     let mainSpeciesId: Int
     let imageUrl: String?
+    let observations: String
     let vegetable: Bool?
     let mainSpecies: MainSpecies
 
@@ -21,6 +22,7 @@ struct PlantData: Codable {
         case scientificName = "scientific_name"
         case mainSpeciesId = "main_species_id"
         case imageUrl = "image_url"
+        case observations = "observations"
         case vegetable
         case mainSpecies = "main_species"
     }

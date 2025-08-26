@@ -1,21 +1,19 @@
-//  PlantCardDetailView.swift
+//
+//  EdiblePlantDetailView.swift
 //  Sprout
-//  Created by Pratham  Hebbar on 8/13/2025.
+//
+//  Created by Pratham  Hebbar on 8/25/25.
+//
 
 import SwiftUI
-import SwiftData
 
-struct PlantCardDetailView: View {
+struct EdiblePlantDetailView: View {
     
-    @Environment(\.colorScheme) var colorScheme
-    @Environment(\.modelContext) var context
-    @State private var plantImage: Image?
-    @State var plantSpecies: PlantData
+    @Environment(\.colorScheme) private var colorScheme
+    @State var ediblePlant: EdiblePlantSpecies
+    @State var plantToDisplayInDetail: PlantData
     @Binding var showDetail:Bool
     private let fallbackImageName = "golden-pothos"
-    
-    @State private var showAlert = false
-    @State private var alertMessage = ""
     
     var body: some View {
         ZStack {
@@ -24,54 +22,28 @@ struct PlantCardDetailView: View {
             VStack(spacing: 20) {
                 
                 VStack(alignment: .leading) {
-                    plantImageView
+                    ediblePlantImageView
                 }
                 .padding(.horizontal)
                 
                 VStack(alignment: .leading, spacing: 20) {
                     
+                    // Scrollable View
                     verticallyScrollableView
-                    
+                   
                     HStack(spacing: 15) {
-                        Button {
-                            let plant = LocalPlant(name: plantSpecies.commonName!, scientificName: plantSpecies.scientificName, dateSaved: Date(), isVegetable: plantSpecies.vegetable ?? false, plantImageUrl: plantSpecies.imageUrl ?? fallbackImageName, isEdible: plantSpecies.mainSpecies.edible ?? false, foliageTexture: plantSpecies.mainSpecies.foliage.texture ?? "Unknown", leafRetention: plantSpecies.mainSpecies.foliage.leafRetention ?? nil)
-                            
-                            do {
-                                try savePlant(plant, to: context)
-                                
-                                alertMessage = "Plant saved successfully!"
-                                showAlert = true
-                            }
-                            catch PlantSaveError.duplicateName(let plant_name) {
-                                alertMessage = "A plant named '\(plant_name)' already exists"
-                                showAlert = true
-                            }
-                            catch {
-                                alertMessage = "Failed to save: \(error.localizedDescription)"
-                                showAlert = true
-                            }
-                            
-                            Task {
-                                try await Task.sleep(nanoseconds: 2_000_000_000)
-                                
-                                showDetail = false
-                            }
-                        } label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .foregroundColor(buttonBackgroundColor)
-                                    .frame(height: 40)
-                                
-                                Text("Save locally")
-                                    .foregroundColor(cardBackgroundColor)
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .alert("Save Result", isPresented: $showAlert) {
-                            Button("OK") {}
-                        } message: {
-                            Text(alertMessage)
-                        }
+//                        Button {
+//                            showDetail = false
+//                        } label: {
+//                            ZStack {
+//                                RoundedRectangle(cornerRadius: 15)
+//                                    .foregroundColor(buttonBackgroundColor)
+//                                    .frame(height: 40)
+//                                
+//                                Text("Save locally")
+//                                    .foregroundColor(cardBackgroundColor)
+//                            }
+//                        }
                         
                         
                         Button {
@@ -89,46 +61,126 @@ struct PlantCardDetailView: View {
                         }
                         .frame(maxWidth: .infinity)
                     }
+                    .padding(.horizontal)
+                    .padding(.bottom, 30)
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 30)
+            }
+        }
+        
+    }
+    
+    @ViewBuilder
+    private var verticallyScrollableView: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 20) {
+                Text(ediblePlant.commonName ?? "")
+                    .foregroundColor(textColor)
+                    .font(.title)
+                    .fontWeight(.bold)
+                
+                VStack(alignment: .leading, spacing: 20) {
+                    Text(ediblePlant.scientificName)
+                    Text("Family: \(ediblePlant.family)")
+                    Text("Genus: \(ediblePlant.genus)")
+                    Text("Observations: \(plantToDisplayInDetail.observations ?? "")")
+                }
+                .foregroundColor(textColor)
+                .font(.title2)
+                .fontWeight(.bold)
+                
+                
+                commonNamesView
+                
+                distributionView
+                
+                durationSection
+                
+                flowerView
+                
+                foliageView
+                
+                fruitOrSeedView
+                
+                growthView
+                
+                specificationsView
+                
+                vegetableLabel
+            }
+            .padding(.horizontal)
+        }
+    }
+    
+    @ViewBuilder
+    private var ediblePlantImageView: some View {
+        Group {
+            if let imageURL = ediblePlant.imageUrl {
+                AsyncImage(url: URL(string: imageURL)) { phase in
+                    asyncImageContent(for: phase)
+                        // .aspectRatio(contentMode: .fill)
+                        .clipShape(Rectangle())
+                }
+            } else {
+                fallbackImage
+                    .clipShape(Rectangle())
             }
         }
     }
-    // MARK: - Swift Data
-    func savePlant(_ plant: LocalPlant, to modelContext: ModelContext) throws {
-        let plantName = plant.name
-        
-        let fetchDescriptor = FetchDescriptor<LocalPlant>(
-            predicate: #Predicate { $0.name == plantName }
-        )
-        
-        let existingPlants = try modelContext.fetch(fetchDescriptor)
-        
-        if !existingPlants.isEmpty {
-            throw PlantSaveError.duplicateName(plant.name)
-        }
-        
-        modelContext.insert(plant)
-        try modelContext.save()
-    }
     
-    enum PlantSaveError: LocalizedError {
-        case duplicateName(String)
-        
-        var errorDescription: String? {
-            switch self {
-            case .duplicateName(let name):
-                return "A plant named '\(name)' already exists"
-            }
+    @ViewBuilder
+    private func asyncImageContent(for phase: AsyncImagePhase) -> some View {
+        switch phase {
+        case .empty:
+            fallbackImage
+        case .success(let image):
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(height: 300)
+        case .failure:
+            fallbackImage
+        @unknown default:
+            fallbackImage
         }
     }
     
-    // MARK: - Separate Views
+    private var fallbackImage: some View {
+        Image(fallbackImageName)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(height: 300)
+    }
+    
+    private var buttonBackgroundColor: Color {
+        colorScheme == .dark
+            ? Color(red: 68/255, green: 123/255, blue: 59/255)
+            : Color(red: 48/255, green: 91/255, blue: 38/255)
+    }
+    
+    private var screenBackgroundColor: Color {
+        colorScheme == .dark
+            ? Color(red: 250/255, green: 187/255, blue: 139/255)
+            : Color(red: 244/255, green: 218/255, blue: 198/255)
+    }
+    
+    private var cardBackgroundColor: Color {
+        colorScheme == .light
+            ? Color(red: 250/255, green: 187/255, blue: 139/255)
+            : Color(red: 244/255, green: 218/255, blue: 198/255)
+    }
+    
+    private var textColor: Color {
+        colorScheme == .dark
+            ? Color(red: 0.3, green: 0.2, blue: 0.1)
+            : Color(red: 0.2, green: 0.15, blue: 0.1)
+    }
+    
+    // MARK: - Scroll Views
+    
     @ViewBuilder
     private var commonNamesView: some View {
-        if plantSpecies.mainSpecies.commonNames.count > 0 {
-            let sortedCommonNames = plantSpecies.mainSpecies.commonNames.filter { $0.key.count < 3 }.sorted { $0.key < $1.key }
+        if plantToDisplayInDetail.mainSpecies.commonNames.count > 0 {
+            let sortedCommonNames = plantToDisplayInDetail.mainSpecies.commonNames.filter { $0.key.count < 3 }.sorted { $0.key < $1.key }
             
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(sortedCommonNames, id: \.key) { language in
@@ -166,32 +218,11 @@ struct PlantCardDetailView: View {
         }
     }
     
-    @ViewBuilder
-    private var durationSection: some View {
-        if let duration = plantSpecies.mainSpecies.duration {
-            HStack {
-                ForEach(duration, id: \.self) { durationItem in
-                    Text(durationItem)
-                        .foregroundColor(textColor)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .multilineTextAlignment(.leading)
-                }
-            }
-        }
-        else {
-            Text("Duration: Unknown")
-                .foregroundColor(textColor)
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .multilineTextAlignment(.leading)
-        }
-    }
     
     @ViewBuilder
     private var distributionView: some View {
-        if plantSpecies.mainSpecies.distribution.count > 0 {
-            let sortedDistribution = plantSpecies.mainSpecies.distribution.sorted { $0.key < $1.key }
+        if plantToDisplayInDetail.mainSpecies.distribution.count > 0 {
+            let sortedDistribution = plantToDisplayInDetail.mainSpecies.distribution.sorted { $0.key < $1.key }
             
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(sortedDistribution, id: \.key) { section_name in
@@ -232,10 +263,32 @@ struct PlantCardDetailView: View {
     }
     
     @ViewBuilder
+    private var durationSection: some View {
+        if let duration = plantToDisplayInDetail.mainSpecies.duration {
+            HStack {
+                ForEach(duration, id: \.self) { durationItem in
+                    Text(durationItem)
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+            }
+        }
+        else {
+            Text("Duration: Unknown")
+                .foregroundColor(textColor)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .multilineTextAlignment(.leading)
+        }
+    }
+    
+    @ViewBuilder
     private var flowerView: some View {
-        if plantSpecies.mainSpecies.flower != nil {
+        if plantToDisplayInDetail.mainSpecies.flower != nil {
             
-            let flower = plantSpecies.mainSpecies.flower
+            let flower = plantToDisplayInDetail.mainSpecies.flower
             
             VStack(alignment: .leading, spacing: 8) {
                 
@@ -290,7 +343,7 @@ struct PlantCardDetailView: View {
                             .foregroundColor(textColor)
                             .font(.subheadline)
                             .fontWeight(.semibold)
-                            
+                        
                         VStack(alignment: .leading, spacing: 4) {
                             ForEach(colors, id: \.self) { flowerColor in
                                 HStack {
@@ -315,12 +368,9 @@ struct PlantCardDetailView: View {
     
     @ViewBuilder
     private var foliageView: some View {
-        
-        if plantSpecies.mainSpecies.foliage != nil {
-            
-            
+        if plantToDisplayInDetail.mainSpecies.foliage != nil {
             VStack(alignment: .leading, spacing: 8) {
-                let foliage = plantSpecies.mainSpecies.foliage
+                let foliage = plantToDisplayInDetail.mainSpecies.foliage
                 
                 VStack(alignment: .leading, spacing: 8) {
                     if let leafRetention = foliage.leafRetention {
@@ -354,39 +404,39 @@ struct PlantCardDetailView: View {
                 .multilineTextAlignment(.leading)
                 
                 
-                    if let foliageColors = foliage.color {
-                        
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Foliage Colors")
-                                    .foregroundColor(textColor)
-                                    .font(.subheadline)
-                                    .fontWeight(.semibold)
-                                
-                                ForEach(foliageColors, id: \.self) { randomColor in
-                                    HStack(alignment: .top) {
-                                        Text("•")
-                                            .foregroundColor(textColor)
-                                            .font(.footnote)
-                                        
-                                        Text(randomColor)
-                                            .foregroundColor(textColor)
-                                            .font(.footnote)
-                                            .multilineTextAlignment(.leading)
-                                        
-                                        Spacer()
-                                    }
-                                    .padding(.leading, 16)
-                                }
-                            
-                        }
-                    }
-                    else {
-                        Text("No foliage colors for this plant.")
+                if let foliageColors = foliage.color {
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Foliage Colors")
                             .foregroundColor(textColor)
                             .font(.subheadline)
                             .fontWeight(.semibold)
-                            .multilineTextAlignment(.leading)
+                        
+                        ForEach(foliageColors, id: \.self) { randomColor in
+                            HStack(alignment: .top) {
+                                Text("•")
+                                    .foregroundColor(textColor)
+                                    .font(.footnote)
+                                
+                                Text(randomColor)
+                                    .foregroundColor(textColor)
+                                    .font(.footnote)
+                                    .multilineTextAlignment(.leading)
+                                
+                                Spacer()
+                            }
+                            .padding(.leading, 16)
+                        }
+                        
                     }
+                }
+                else {
+                    Text("No foliage colors for this plant.")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
                 
                 
             }
@@ -394,51 +444,97 @@ struct PlantCardDetailView: View {
         }
     }
     
+    
     @ViewBuilder
-    private var edibleView: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            if let edibility = plantSpecies.mainSpecies.edible {
-                Text(edibility ? "Edible: Yes" : "Edible: No")
-                    .foregroundColor(textColor)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .multilineTextAlignment(.leading)
-            }
-            else {
-                Text("Edible: Unknown")
-                    .foregroundColor(textColor)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .multilineTextAlignment(.leading)
-            }
+    private var fruitOrSeedView: some View {
+        if plantToDisplayInDetail.mainSpecies.fruitOrSeed != nil {
+            let fruitOrSeed = plantToDisplayInDetail.mainSpecies.fruitOrSeed
             
-            if let edibleParts = plantSpecies.mainSpecies.ediblePart {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Edible Parts")
-                    
+            VStack(alignment: .leading, spacing: 8) {
+                
+                if let fruitColors = fruitOrSeed.color {
                     VStack(alignment: .leading, spacing: 4) {
-                        ForEach(edibleParts, id: \.self) { ediblePart in
-                            HStack {
-                                Text("•")
-                                    .foregroundColor(textColor)
-                                    .font(.footnote)
-                                
-                                Text(ediblePart.capitalizingFirstLetter())
-                                    .foregroundColor(textColor)
-                                
-                                Spacer()
+                        Text("Fruit Colors")
+                            .foregroundColor(textColor)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                        
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(fruitColors, id: \.self) { fruitColor in
+                                HStack {
+                                    Text("•")
+                                        .foregroundColor(textColor)
+                                        .font(.footnote)
+                                    
+                                    Text(fruitColor.capitalizingFirstLetter())
+                                        .foregroundColor(textColor)
+                                    
+                                    Spacer()
+                                }
+                                .padding(.leading, 16)
                             }
-                            .padding(.leading)
                         }
                     }
                 }
-            }
-            else {
-                Text("No edible parts")
-                    .foregroundColor(textColor)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .multilineTextAlignment(.leading)
+                else {
+                    Text("No Fruit Colors")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                
+                if fruitOrSeed.conspicuous != nil {
+                    Text(fruitOrSeed.conspicuous! ? "Fruit Conspicuousness: Visible" : "Fruit Conspicuousness: Invisible")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                else {
+                    Text("No information on fruit visibility.")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                
+                if fruitOrSeed.seedPersistence != nil {
+                    Text(fruitOrSeed.conspicuous! ? "Fruit Conspicuousness: Visible" : "Fruit Conspicuousness: Invisible")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                else {
+                    Text("No information on fruit seed persistence.")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                    
+                    Text("Seed persistence is a plant's ability for its fruits or seed considered persistent in the soil for long periods of time.")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                
+                if fruitOrSeed.shape != nil {
+                    Text("Fruit Shape: \(fruitOrSeed.shape!)")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                else {
+                    Text("No information on fruit's shape")
+                        .foregroundColor(textColor)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
+                }
+                
             }
         }
     }
@@ -449,9 +545,9 @@ struct PlantCardDetailView: View {
         VStack(alignment: .leading, spacing: 8) {
             
             VStack(alignment: .leading, spacing: 4) {
-                if plantSpecies.mainSpecies.growth != nil {
+                if plantToDisplayInDetail.mainSpecies.growth != nil {
                     
-                    let growth_object = plantSpecies.mainSpecies.growth
+                    let growth_object = plantToDisplayInDetail.mainSpecies.growth
                     
                     if let a_h = growth_object.atmosphericHumidity {
                         Text("Atmospheric Humidity: \(a_h)%")
@@ -520,7 +616,7 @@ struct PlantCardDetailView: View {
                             .fontWeight(.semibold)
                             .multilineTextAlignment(.leading)
                     }
-                                        
+                    
                     if let growth_desc = growth_object.description {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Growth Description:")
@@ -1059,13 +1155,15 @@ struct PlantCardDetailView: View {
     
     @ViewBuilder
     private var specificationsView: some View {
-        if plantSpecies.mainSpecies.specifications != nil {
-            let specifications = plantSpecies.mainSpecies.specifications
+        
+        
+        if plantToDisplayInDetail.mainSpecies.specifications != nil {
+            let specifications = plantToDisplayInDetail.mainSpecies.specifications
             
             // specifications.averageHeight // Height
-                // specifications.averageHeight.cm // Int?
+            // specifications.averageHeight.cm // Int?
             // specifications.growthForm // String?
-        
+            
             
             VStack(alignment: .leading, spacing: 8) {
                 
@@ -1236,115 +1334,13 @@ struct PlantCardDetailView: View {
                         .fontWeight(.semibold)
                         .multilineTextAlignment(.leading)
                 }
-                
-                
-            }
-            
-        }
-        
-        
-    }
-    
-    
-    @ViewBuilder
-    private var fruitOrSeedView: some View {
-        if plantSpecies.mainSpecies.fruitOrSeed != nil {
-            let fruitOrSeed = plantSpecies.mainSpecies.fruitOrSeed
-            
-            VStack(alignment: .leading, spacing: 8) {
-                
-                if let fruitColors = fruitOrSeed.color {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Fruit Colors")
-                            .foregroundColor(textColor)
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                            
-                        VStack(alignment: .leading, spacing: 4) {
-                            ForEach(fruitColors, id: \.self) { fruitColor in
-                                HStack {
-                                    Text("•")
-                                        .foregroundColor(textColor)
-                                        .font(.footnote)
-                                    
-                                    Text(fruitColor.capitalizingFirstLetter())
-                                        .foregroundColor(textColor)
-                                    
-                                    Spacer()
-                                }
-                                .padding(.leading, 16)
-                            }
-                        }
-                    }
-                }
-                else {
-                    Text("No Fruit Colors")
-                        .foregroundColor(textColor)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .multilineTextAlignment(.leading)
-                }
-                
-                if fruitOrSeed.conspicuous != nil {
-                    Text(fruitOrSeed.conspicuous! ? "Fruit Conspicuousness: Visible" : "Fruit Conspicuousness: Invisible")
-                        .foregroundColor(textColor)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .multilineTextAlignment(.leading)
-                }
-                else {
-                    Text("No information on fruit visibility.")
-                        .foregroundColor(textColor)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .multilineTextAlignment(.leading)
-                }
-                
-                if fruitOrSeed.seedPersistence != nil {
-                    Text(fruitOrSeed.conspicuous! ? "Fruit Conspicuousness: Visible" : "Fruit Conspicuousness: Invisible")
-                        .foregroundColor(textColor)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .multilineTextAlignment(.leading)
-                }
-                else {
-                    Text("No information on fruit seed persistence.")
-                        .foregroundColor(textColor)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .multilineTextAlignment(.leading)
-                    
-                    Text("Seed persistence is a plant's ability for its fruits or seed considered persistent in the soil for long periods of time.")
-                        .foregroundColor(textColor)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .multilineTextAlignment(.leading)
-                }
-                
-                if fruitOrSeed.shape != nil {
-                    Text("Fruit Shape: \(fruitOrSeed.shape!)")
-                        .foregroundColor(textColor)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .multilineTextAlignment(.leading)
-                }
-                else {
-                    Text("No information on fruit's shape")
-                        .foregroundColor(textColor)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .multilineTextAlignment(.leading)
-                }
-                
             }
         }
-        
     }
-    
     
     @ViewBuilder
     private var vegetableLabel: some View {
-        if let vegetable = plantSpecies.vegetable {
+        if let vegetable = plantToDisplayInDetail.vegetable {
             Text(vegetable ? "Vegetable: Yes" : "Vegetable: No")
                 .foregroundColor(textColor)
                 .font(.subheadline)
@@ -1353,113 +1349,8 @@ struct PlantCardDetailView: View {
         }
         
     }
-    
-    @ViewBuilder
-    private var verticallyScrollableView: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 25) {
-                Text(plantSpecies.commonName ?? "")
-                    .foregroundColor(textColor)
-                    .font(.title)
-                    .fontWeight(.bold)
-                
-                Text(plantSpecies.scientificName)
-                    .foregroundColor(textColor)
-                    .font(.title2)
-                    .fontWeight(.bold)
-                
-                edibleView
-                
-                commonNamesView
-                
-                distributionView
-                
-                durationSection
-                
-                flowerView
-                
-                foliageView
-                
-                fruitOrSeedView
-                
-                growthView
-                
-                specificationsView
-                
-                vegetableLabel
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private var plantImageView: some View {
-        Group {
-            if let imageURL = plantSpecies.imageUrl {
-                AsyncImage(url: URL(string: imageURL)) { phase in
-                    asyncImageContent(for: phase)
-                        // .aspectRatio(contentMode: .fit)
-                        .clipShape(Rectangle())
-                }
-            } else {
-                fallbackImage
-                    .aspectRatio(contentMode: .fit)
-                    .clipShape(Rectangle())
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private func asyncImageContent(for phase: AsyncImagePhase) -> some View {
-        switch phase {
-        case .empty:
-            fallbackImage
-        case .success(let image):
-            image
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(height: 300)
-//                .onAppear {
-//                    plantImage = image
-//                }
-        case .failure:
-            fallbackImage
-        @unknown default:
-            fallbackImage
-        }
-    }
-        
-    private var fallbackImage: some View {
-        Image(fallbackImageName)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(height: 300)
-//            .onAppear {
-//                plantImage = Image(fallbackImageName)
-//            }
-    }
-    
-    private var buttonBackgroundColor: Color {
-        colorScheme == .dark
-            ? Color(red: 68/255, green: 123/255, blue: 59/255)
-            : Color(red: 48/255, green: 91/255, blue: 38/255)
-    }
-    
-    private var screenBackgroundColor: Color {
-        colorScheme == .dark
-            ? Color(red: 250/255, green: 187/255, blue: 139/255)
-            : Color(red: 244/255, green: 218/255, blue: 198/255)
-    }
-    
-    private var cardBackgroundColor: Color {
-        colorScheme == .light
-            ? Color(red: 250/255, green: 187/255, blue: 139/255)
-            : Color(red: 244/255, green: 218/255, blue: 198/255)
-    }
-    
-    private var textColor: Color {
-        colorScheme == .dark
-            ? Color(red: 0.3, green: 0.2, blue: 0.1)
-            : Color(red: 0.2, green: 0.15, blue: 0.1)
-    }
-    
 }
+
+// #Preview {
+//    EdiblePlantDetailView()
+// }

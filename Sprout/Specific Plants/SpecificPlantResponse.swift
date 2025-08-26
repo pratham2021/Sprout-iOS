@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct SpecificPlantResponse: Codable {
+struct SpecificPlantResponse: Decodable {
     let data: PlantData
 }

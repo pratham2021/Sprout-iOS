@@ -10,6 +10,7 @@ struct MainView: View {
     @State private var selectedTab = 0
     @State var plantsSpecies: [PlantSpecies] = [PlantSpecies]()
     @State var distributions: [Distribution] = [Distribution]()
+    @State var ediblePlantsSpecies: [EdiblePlantSpecies] = [EdiblePlantSpecies]()
 
     var body: some View {
            TabView(selection: $selectedTab) {
@@ -18,7 +19,7 @@ struct MainView: View {
                }
                
                Tab("Search", systemImage: "text.page.badge.magnifyingglass", value: 1) {
-                   SearchView(plants: plantsSpecies, distributions: distributions)
+                   SearchView(plants: plantsSpecies, distributions: distributions, ediblePlants: ediblePlantsSpecies)
                }
                
                Tab("Settings", systemImage: "gear", value: 2) {
@@ -47,6 +48,10 @@ struct MainView: View {
                
                await fetchDistributions { distributionsArray in
                    distributions = distributionsArray
+               }
+               
+               await fetchEdiblePlants { ediblePlantsArray in
+                   ediblePlantsSpecies = ediblePlantsArray
                }
            }
     }
