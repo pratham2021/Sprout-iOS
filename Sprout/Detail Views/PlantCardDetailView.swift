@@ -113,17 +113,6 @@ struct PlantCardDetailView: View {
         try modelContext.save()
     }
     
-    enum PlantSaveError: LocalizedError {
-        case duplicateName(String)
-        
-        var errorDescription: String? {
-            switch self {
-            case .duplicateName(let name):
-                return "A plant named '\(name)' already exists"
-            }
-        }
-    }
-    
     // MARK: - Separate Views
     @ViewBuilder
     private var commonNamesView: some View {
@@ -1363,10 +1352,16 @@ struct PlantCardDetailView: View {
                     .font(.title)
                     .fontWeight(.bold)
                 
-                Text(plantSpecies.scientificName)
-                    .foregroundColor(textColor)
-                    .font(.title2)
-                    .fontWeight(.bold)
+                VStack(alignment: .leading, spacing: 20) {
+                    Text(plantSpecies.scientificName)
+                       
+                    Text("Observations: \(plantSpecies.observations)")
+                }
+                .foregroundColor(textColor)
+                .font(.title2)
+                .fontWeight(.bold)
+                
+                
                 
                 edibleView
                 

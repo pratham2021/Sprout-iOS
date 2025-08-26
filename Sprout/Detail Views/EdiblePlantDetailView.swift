@@ -6,14 +6,19 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct EdiblePlantDetailView: View {
     
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.modelContext) var context
     @State var ediblePlant: EdiblePlantSpecies
     @State var plantToDisplayInDetail: PlantData
     @Binding var showDetail:Bool
     private let fallbackImageName = "golden-pothos"
+    
+    @State private var showAlert = false
+    @State private var alertMessage = ""
     
     var body: some View {
         ZStack {
@@ -32,19 +37,49 @@ struct EdiblePlantDetailView: View {
                     verticallyScrollableView
                    
                     HStack(spacing: 15) {
-//                        Button {
-//                            showDetail = false
-//                        } label: {
-//                            ZStack {
-//                                RoundedRectangle(cornerRadius: 15)
-//                                    .foregroundColor(buttonBackgroundColor)
-//                                    .frame(height: 40)
-//                                
-//                                Text("Save locally")
-//                                    .foregroundColor(cardBackgroundColor)
-//                            }
-//                        }
-                        
+                        Button {
+                            
+                            let plant = LocalPlant(name: plantToDisplayInDetail.commonName!, scientificName: plantToDisplayInDetail.scientificName, dateSaved: Date(), isVegetable: plantToDisplayInDetail.vegetable ?? false,
+                                                   
+                                plantImageUrl: plantToDisplayInDetail.imageUrl ?? fallbackImageName,
+                                isEdible: plantToDisplayInDetail.mainSpecies.edible ?? false,
+                                foliageTexture: plantToDisplayInDetail.mainSpecies.foliage.texture ?? "Unknown",
+                                leafRetention: plantToDisplayInDetail.mainSpecies.foliage.leafRetention ?? nil)
+                            
+                            do {
+                                try savePlant(plant, to: context)
+                                
+                                alertMessage = "Plant saved successfully!"
+                                showAlert = true
+                            }
+                            catch PlantSaveError.duplicateName(let plant_name) {
+                                alertMessage = "A plant named '\(plant_name)' already exists"
+                                showAlert = true
+                            }
+                            catch {
+                                alertMessage = "Failed to save: \(error.localizedDescription)"
+                                showAlert = true
+                            }
+                            
+                            Task {
+                                try await Task.sleep(nanoseconds: 2_000_000_000)
+                            }
+                        } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 15)
+                                    .foregroundColor(buttonBackgroundColor)
+                                    .frame(height: 40)
+                                
+                                Text("Save locally")
+                                    .foregroundColor(cardBackgroundColor)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .alert("Save Result", isPresented: $showAlert) {
+                            Button("OK") {}
+                        } message: {
+                            Text(alertMessage)
+                        }
                         
                         Button {
                             showDetail = false
@@ -61,14 +96,33 @@ struct EdiblePlantDetailView: View {
                         }
                         .frame(maxWidth: .infinity)
                     }
-                    .padding(.horizontal)
-                    .padding(.bottom, 30)
                 }
+                .padding(.horizontal)
+                .padding(.bottom, 30)
             }
         }
         
     }
     
+    // MARK: - Local On Device Storage
+    func savePlant(_ plant: LocalPlant, to modelContext: ModelContext) throws {
+        let plantName = plant.name
+        
+        let fetchDescriptor = FetchDescriptor<LocalPlant>(
+            predicate: #Predicate { $0.name == plantName }
+        )
+        
+        let existingPlants = try modelContext.fetch(fetchDescriptor)
+        
+        if !existingPlants.isEmpty {
+            throw PlantSaveError.duplicateName(plant.name)
+        }
+        
+        modelContext.insert(plant)
+        try modelContext.save()
+    }
+    
+    // MARK: - Views
     @ViewBuilder
     private var verticallyScrollableView: some View {
         ScrollView(showsIndicators: false) {
@@ -82,7 +136,7 @@ struct EdiblePlantDetailView: View {
                     Text(ediblePlant.scientificName)
                     Text("Family: \(ediblePlant.family)")
                     Text("Genus: \(ediblePlant.genus)")
-                    Text("Observations: \(plantToDisplayInDetail.observations ?? "")")
+                    Text("Observations: \(plantToDisplayInDetail.observations)")
                 }
                 .foregroundColor(textColor)
                 .font(.title2)
@@ -107,7 +161,6 @@ struct EdiblePlantDetailView: View {
                 
                 vegetableLabel
             }
-            .padding(.horizontal)
         }
     }
     
@@ -175,8 +228,7 @@ struct EdiblePlantDetailView: View {
             : Color(red: 0.2, green: 0.15, blue: 0.1)
     }
     
-    // MARK: - Scroll Views
-    
+    // MARK: - Description/Information Views
     @ViewBuilder
     private var commonNamesView: some View {
         if plantToDisplayInDetail.mainSpecies.commonNames.count > 0 {

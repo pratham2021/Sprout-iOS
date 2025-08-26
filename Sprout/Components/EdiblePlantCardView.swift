@@ -62,6 +62,8 @@ struct EdiblePlantCardView: View {
     }
     
     private func handleTap() {
+        print(ediblePlant != nil)
+        print(ediblePlantToDisplayInDetail != nil)
         guard ediblePlant != nil else { return }
         showEdibleDetail = true
     }
