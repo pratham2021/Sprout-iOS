@@ -4,6 +4,7 @@
 
 import Foundation
 
+// Plant information provided by Trefle
 func fetchPlants(completion: @escaping ([PlantSpecies]) -> Void) async {
     
     let apiKey = await PLANT_API_KEY
