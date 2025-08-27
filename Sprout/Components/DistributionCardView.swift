@@ -12,21 +12,18 @@ struct DistributionCardView: View {
     var body: some View {
         ZStack {
             Rectangle().foregroundColor(cardBackgroundColor)
-            
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 10) {
-                    Text(distribution.name)
-                    Text("TDWG Code: \(distribution.tdwgCode)")
-                    Text("TDWG Level: \(distribution.tdwgLevel)")
-                    Text("Species Count: \(distribution.speciesCount)")
-                }
-                .font(.footnote)
-                .multilineTextAlignment(.center)
-                .lineLimit(nil)
-                .fixedSize(horizontal: false, vertical: true)
-                .foregroundColor(textColor)
-                .padding(8)
+            VStack(spacing: 10) {
+                Text(distribution.name)
+                Text("TDWG Code: \(distribution.tdwgCode)")
+                Text("TDWG Level: \(distribution.tdwgLevel)")
+                Text("Species Count: \(distribution.speciesCount)")
             }
+            .font(.footnote)
+            .multilineTextAlignment(.center)
+            .lineLimit(nil)
+            .fixedSize(horizontal: false, vertical: true)
+            .foregroundColor(textColor)
+            .padding(8)
         }
         .cornerRadius(15)
     }
