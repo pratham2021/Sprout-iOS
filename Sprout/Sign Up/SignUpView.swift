@@ -84,11 +84,11 @@ struct SignUpView: View {
                         .foregroundColor(backgroundColor)
                         .frame(width: UIScreen.main.bounds.width - 60, height: 48)
                     }
+                    .buttonStyle(PlainButtonStyle())
                     .background(textColor)
                     .disabled(!formIsValid)
                     .opacity(formIsValid ? 1.0:0.5)
                     .cornerRadius(30)
-                    .padding(.horizontal)
                     .padding(.top, 24)
                     
                     Spacer()
@@ -105,6 +105,7 @@ struct SignUpView: View {
                         .font(.system(size: 14))
                         .foregroundColor(textColor)
                     }
+                    .buttonStyle(PlainButtonStyle())
                 }
             }
         }
