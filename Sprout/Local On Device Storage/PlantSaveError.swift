@@ -1,9 +1,6 @@
-//
 //  PlantSaveError.swift
 //  Sprout
-//
-//  Created by Pratham  Hebbar on 8/26/25.
-//
+//  Created by Pratham  Hebbar on 8/26/2025
 
 import Foundation
 
