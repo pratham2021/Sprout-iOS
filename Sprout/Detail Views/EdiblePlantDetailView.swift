@@ -65,16 +65,16 @@ struct EdiblePlantDetailView: View {
                                 try await Task.sleep(nanoseconds: 2_000_000_000)
                             }
                         } label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .foregroundColor(buttonBackgroundColor)
-                                    .frame(height: 40)
-                                
-                                Text("Save locally")
-                                    .foregroundColor(cardBackgroundColor)
-                            }
+                            Text("Save locally")
+                                .foregroundColor(cardBackgroundColor)
+                                .font(.system(size: 16, weight: .medium))
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                                .frame(maxWidth: .infinity)
+                                .background(buttonBackgroundColor)
+                                .cornerRadius(15)
                         }
-                        .frame(maxWidth: .infinity)
+                        .buttonStyle(PlainButtonStyle())
                         .alert("Save Result", isPresented: $showAlert) {
                             Button("OK") {}
                         } message: {
@@ -85,16 +85,16 @@ struct EdiblePlantDetailView: View {
                             showDetail = false
                         }
                         label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .foregroundColor(textColor)
-                                    .frame(height: 40)
-                                
-                                Text("Dismiss")
-                                    .foregroundColor(cardBackgroundColor)
-                            }
+                            Text("Dismiss")
+                                .foregroundColor(cardBackgroundColor)
+                                .font(.system(size: 16, weight: .medium))
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                                .frame(maxWidth: .infinity)
+                                .background(textColor)
+                                .cornerRadius(15)
                         }
-                        .frame(maxWidth: .infinity)
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
                 .padding(.horizontal)
