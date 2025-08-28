@@ -28,23 +28,27 @@ struct EdiblePlantDetailView: View {
                 
                 VStack(alignment: .leading) {
                     ediblePlantImageView
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: .infinity, maxHeight: 250)
+                        .clipped()
                 }
                 .padding(.horizontal)
+                .fixedSize(horizontal: false, vertical: true)
                 
                 VStack(alignment: .leading, spacing: 20) {
                     
                     // Scrollable View
                     verticallyScrollableView
-                   
+                    
                     HStack(spacing: 15) {
                         Button {
                             
                             let plant = LocalPlant(name: plantToDisplayInDetail.commonName!, scientificName: plantToDisplayInDetail.scientificName, dateSaved: Date(), isVegetable: plantToDisplayInDetail.vegetable ?? false,
                                                    
-                                plantImageUrl: plantToDisplayInDetail.imageUrl ?? fallbackImageName,
-                                isEdible: plantToDisplayInDetail.mainSpecies.edible ?? false,
-                                foliageTexture: plantToDisplayInDetail.mainSpecies.foliage.texture ?? "Unknown",
-                                leafRetention: plantToDisplayInDetail.mainSpecies.foliage.leafRetention ?? nil)
+                                                   plantImageUrl: plantToDisplayInDetail.imageUrl ?? fallbackImageName,
+                                                   isEdible: plantToDisplayInDetail.mainSpecies.edible ?? false,
+                                                   foliageTexture: plantToDisplayInDetail.mainSpecies.foliage.texture ?? "Unknown",
+                                                   leafRetention: plantToDisplayInDetail.mainSpecies.foliage.leafRetention ?? nil)
                             
                             do {
                                 try savePlant(plant, to: context)
@@ -70,7 +74,7 @@ struct EdiblePlantDetailView: View {
                                 .font(.system(size: 16, weight: .medium))
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 12)
-                                .frame(maxWidth: .infinity)
+                                .frame(maxWidth: .infinity, minHeight: 44)
                                 .background(buttonBackgroundColor)
                                 .cornerRadius(15)
                         }
@@ -90,18 +94,19 @@ struct EdiblePlantDetailView: View {
                                 .font(.system(size: 16, weight: .medium))
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 12)
-                                .frame(maxWidth: .infinity)
+                                .frame(maxWidth: .infinity, minHeight: 44)
                                 .background(textColor)
                                 .cornerRadius(15)
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
+                    .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 30)
             }
+            .animation(nil)
         }
-        
     }
     
     // MARK: - Local On Device Storage
@@ -170,8 +175,7 @@ struct EdiblePlantDetailView: View {
             if let imageURL = ediblePlant.imageUrl {
                 AsyncImage(url: URL(string: imageURL)) { phase in
                     asyncImageContent(for: phase)
-                        // .aspectRatio(contentMode: .fill)
-                        .clipShape(Rectangle())
+                        
                 }
             } else {
                 fallbackImage
@@ -185,15 +189,31 @@ struct EdiblePlantDetailView: View {
         switch phase {
         case .empty:
             fallbackImage
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(height: 300)
+//                .frame(maxWidth: .infinity)
         case .success(let image):
             image
+//                .resizable()
+//                .aspectRatio(contentMode: .fill)
+//                .frame(height: 300)
                 .resizable()
-                .aspectRatio(contentMode: .fill)
+                .aspectRatio(contentMode: .fit)
                 .frame(height: 300)
+                .frame(maxWidth: .infinity)
         case .failure:
             fallbackImage
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(height: 300)
+//                .frame(maxWidth: .infinity)
         @unknown default:
             fallbackImage
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(height: 300)
+//                .frame(maxWidth: .infinity)
         }
     }
     
@@ -202,6 +222,7 @@ struct EdiblePlantDetailView: View {
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(height: 300)
+            .frame(maxWidth: .infinity)
     }
     
     private var buttonBackgroundColor: Color {

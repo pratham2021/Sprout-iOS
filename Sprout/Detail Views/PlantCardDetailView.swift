@@ -25,8 +25,12 @@ struct PlantCardDetailView: View {
                 
                 VStack(alignment: .leading) {
                     plantImageView
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: .infinity, maxHeight: 250)
+                        .clipped()
                 }
                 .padding(.horizontal)
+                .fixedSize(horizontal: false, vertical: true)
                 
                 VStack(alignment: .leading, spacing: 20) {
                     
@@ -56,7 +60,7 @@ struct PlantCardDetailView: View {
                                 .font(.system(size: 16, weight: .medium))
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 12)
-                                .frame(maxWidth: .infinity)
+                                .frame(maxWidth: .infinity, minHeight: 44)
                                 .background(buttonBackgroundColor)
                                 .cornerRadius(15)
                         }
@@ -77,17 +81,20 @@ struct PlantCardDetailView: View {
                                 .font(.system(size: 16, weight: .medium))
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 12)
-                                .frame(maxWidth: .infinity)
+                                .frame(maxWidth: .infinity, minHeight: 44)
                                 .background(textColor)
                                 .cornerRadius(15)
                         }
                         .buttonStyle(PlainButtonStyle())
-
                     }
+                    .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 30)
+                
+                // Spacer(minLength: 0)
             }
+            .animation(nil)
         }
     }
     // MARK: - Swift Data
@@ -1385,8 +1392,6 @@ struct PlantCardDetailView: View {
             if let imageURL = plantSpecies.imageUrl {
                 AsyncImage(url: URL(string: imageURL)) { phase in
                     asyncImageContent(for: phase)
-                        // .aspectRatio(contentMode: .fit)
-                        .clipShape(Rectangle())
                 }
             } else {
                 fallbackImage
@@ -1401,18 +1406,28 @@ struct PlantCardDetailView: View {
         switch phase {
         case .empty:
             fallbackImage
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(height: 300)
+//                .frame(maxWidth: .infinity)
         case .success(let image):
             image
                 .resizable()
-                .aspectRatio(contentMode: .fill)
+                .aspectRatio(contentMode: .fit)
                 .frame(height: 300)
-//                .onAppear {
-//                    plantImage = image
-//                }
+                .frame(maxWidth: .infinity)
         case .failure:
             fallbackImage
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(height: 300)
+//                .frame(maxWidth: .infinity)
         @unknown default:
             fallbackImage
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(height: 300)
+//                .frame(maxWidth: .infinity)
         }
     }
         
@@ -1421,6 +1436,7 @@ struct PlantCardDetailView: View {
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(height: 300)
+            .frame(maxWidth: .infinity)
 //            .onAppear {
 //                plantImage = Image(fallbackImageName)
 //            }
