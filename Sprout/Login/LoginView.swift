@@ -15,6 +15,8 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @EnvironmentObject var viewModel: AuthViewModel
+    @State private var isShowingAlert = false
+    @State private var alertMessage = ""
     
     var body: some View {
         NavigationStack {
@@ -39,8 +41,37 @@ struct LoginView: View {
                         .padding(.top, 12)
                         
                         Button {
+                            
+                            if email.trimmingCharacters(in: .whitespacesAndNewlines) == "" || password.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                                
+                                isShowingAlert = true
+                                
+                                var errorString = ""
+                                
+                                if email.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                                    errorString += "Email Field can't be blank."
+                                }
+                                
+                                if password.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                                    errorString += "\n"
+                                    errorString += "Password field can't be blank."
+                                }
+                                
+                                alertMessage = errorString
+                                
+                                return
+                            }
+                            
                             Task {
-                                try await viewModel.signIn(withEmail: email, password: password)
+                                do {
+                                    try await viewModel.signIn(withEmail: email.trimmingCharacters(in: .whitespacesAndNewlines), password: password.trimmingCharacters(in: .whitespacesAndNewlines))
+                                    
+                                    isShowingAlert = false
+                                }
+                                catch {
+                                    isShowingAlert = true
+                                    alertMessage = "The app failed to sign you in! Perhaps the user does not have an account."
+                                }
                             }
                         } label: {
                             HStack {
@@ -48,6 +79,11 @@ struct LoginView: View {
                             }
                             .foregroundColor(backgroundColor)
                             .frame(width: UIScreen.main.bounds.width - 60, height: 48)
+                        }
+                        .alert("Error", isPresented: $isShowingAlert) {
+                            Button("Try Again", role: .cancel) {}
+                        } message: {
+                            Text(verbatim: alertMessage)
                         }
                         .buttonStyle(PlainButtonStyle())
                         .background(textColor)

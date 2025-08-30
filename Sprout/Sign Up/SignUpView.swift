@@ -19,6 +19,8 @@ struct SignUpView: View {
     @State private var password: String = ""
     @State private var confirmedPassword: String = ""
     @EnvironmentObject var viewModel: AuthViewModel
+    @State private var isShowingAlert = false
+    @State private var alertMessage = ""
     
     var body: some View {
         ZStack {
@@ -65,16 +67,66 @@ struct SignUpView: View {
                     .padding(.top, 12)
                     
                     Button {
-                        if firstName.isEmpty || lastName.isEmpty || email.isEmpty || password.isEmpty || confirmedPassword.isEmpty {
+                        var errorString = ""
+                        
+                        if firstName.trimmingCharacters(in: .whitespacesAndNewlines) == "" || lastName.trimmingCharacters(in: .whitespacesAndNewlines) == "" || email.trimmingCharacters(in: .whitespacesAndNewlines) == "" || password.trimmingCharacters(in: .whitespacesAndNewlines) == "" || confirmedPassword.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                            
+                            isShowingAlert = true
+                            
+                            if firstName.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                                errorString += "First Name field can't be blank."
+                            }
+                            
+                            if lastName.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                                errorString += "\n"
+                                errorString += "Last Name field can't be blank."
+                            }
+                            
+                            if email.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                                errorString += "\n"
+                                errorString += "Email Field can't be blank."
+                            }
+                              
+                            if password.trimmingCharacters(in: .whitespacesAndNewlines) == "" && confirmedPassword.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                                errorString += "\n"
+                                errorString += "Password fields can't be blank."
+                            }
+                            else if password.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                                errorString += "\n"
+                                errorString += "Password field can't be blank."
+                            }
+                            else if confirmedPassword.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                                errorString += "\n"
+                                errorString += "Confirm Password field can't be blank."
+                            }
+                            
+                            if password.trimmingCharacters(in: .whitespacesAndNewlines) != confirmedPassword.trimmingCharacters(in: .whitespacesAndNewlines) {
+                                errorString += "\n"
+                                errorString += "Password fields must match."
+                            }
+//
+                            alertMessage = errorString
+                            
                             return
                         }
                         
-                        if password != confirmedPassword {
+                        if password.trimmingCharacters(in: .whitespacesAndNewlines) != confirmedPassword.trimmingCharacters(in: .whitespacesAndNewlines) {
+                            isShowingAlert = true
+                            errorString += "\n"
+                            errorString += "Password fields must match."
+                            alertMessage = errorString
                             return
                         }
                         
                         Task {
-                            try await viewModel.createUser(withEmail: email, password: password, fullName: firstName + " " + lastName)
+                            do {
+                                try await viewModel.createUser(withEmail: email.trimmingCharacters(in: .whitespacesAndNewlines), password: password.trimmingCharacters(in: .whitespacesAndNewlines), fullName: firstName.trimmingCharacters(in: .whitespacesAndNewlines) + " " + lastName.trimmingCharacters(in: .whitespacesAndNewlines))
+                            }
+                            catch {
+                                isShowingAlert = true
+                                alertMessage = ""
+                                alertMessage = "The app failed to create an account"
+                            }
                         }
                         
                     } label: {

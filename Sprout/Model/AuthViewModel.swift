@@ -7,6 +7,8 @@ import Firebase
 import FirebaseAuth
 import FirebaseFirestore
 
+
+
 protocol AuthenticationFormProtocol {
     var formIsValid: Bool { get }
 }
@@ -26,26 +28,38 @@ class AuthViewModel: ObservableObject {
     }
     
     func signIn(withEmail email: String, password: String) async throws {
-        do {
-            let result = try await Auth.auth().signIn(withEmail: email, password: password)
-            self.userSession = result.user
-            await fetchUser()
-        } catch {
-            print("DEBUG: Failed to log in with error \(error.localizedDescription)")
-        }
+//        do {
+//            let result = try await Auth.auth().signIn(withEmail: email, password: password)
+//            self.userSession = result.user
+//            await fetchUser()
+//        } catch {
+//            print("DEBUG: Failed to log in with error \(error.localizedDescription)")
+//            
+//        }
+        
+        let result = try await Auth.auth().signIn(withEmail: email, password: password)
+        self.userSession = result.user
+        await fetchUser()
     }
     
     func createUser(withEmail email: String, password: String, fullName: String) async throws {
-        do {
-            let result = try await Auth.auth().createUser(withEmail: email, password: password)
-            self.userSession = result.user
-            let user = User(id: result.user.uid, fullName: fullName, email: email)
-            let encodedUser = try Firestore.Encoder().encode(user)
-            try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
-            await fetchUser()
-        } catch {
-            print("Failed to create user with error: \(error.localizedDescription)")
-        }
+//        do {
+//            let result = try await Auth.auth().createUser(withEmail: email, password: password)
+//            self.userSession = result.user
+//            let user = User(id: result.user.uid, fullName: fullName, email: email)
+//            let encodedUser = try Firestore.Encoder().encode(user)
+//            try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
+//            await fetchUser()
+//        } catch {
+//            print("Failed to create user with error: \(error.localizedDescription)")
+//        }
+        
+        let result = try await Auth.auth().createUser(withEmail: email, password: password)
+        self.userSession = result.user
+        let user = User(id: result.user.uid, fullName: fullName, email: email)
+        let encodedUser = try Firestore.Encoder().encode(user)
+        try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
+        await fetchUser()
     }
     
     func signOut() {
