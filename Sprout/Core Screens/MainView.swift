@@ -22,9 +22,9 @@ struct MainView: View {
                    SearchView(plants: plantsSpecies, distributions: distributions, ediblePlants: ediblePlantsSpecies)
                }
                
-               Tab("Settings", systemImage: "gear", value: 2) {
-                   SettingsView()
-               }
+//               Tab("Settings", systemImage: "gear", value: 2) {
+//                   SettingsView()
+//               }
            }
            .tint(tabTintColor)
            .toolbarBackground(tabBarBackgroundColor, for: .tabBar)

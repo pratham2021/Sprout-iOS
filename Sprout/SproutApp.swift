@@ -15,16 +15,9 @@ import SwiftData
 @main
 struct SproutApp: App {
     
-    @StateObject var viewModel = AuthViewModel()
-    
-    init() {
-        FirebaseApp.configure()
-    }
-    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(viewModel)
+            MainView()
         }
         .modelContainer(for: [LocalPlant.self])
         
