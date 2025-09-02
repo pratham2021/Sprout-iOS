@@ -6,14 +6,15 @@
 //
 
 import Firebase
-import FirebaseAuth
-import FirebaseCore
 import SwiftUI
 import SwiftData
 
-
 @main
 struct SproutApp: App {
+    
+    init() {
+        FirebaseApp.configure()
+    }
     
     var body: some Scene {
         WindowGroup {
