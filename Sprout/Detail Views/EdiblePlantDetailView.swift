@@ -84,9 +84,9 @@ struct EdiblePlantDetailView: View {
                                 light: plantToDisplayInDetail.mainSpecies.growth.light ?? nil,
                                 atmosphericHumidity: plantToDisplayInDetail.mainSpecies.growth.atmosphericHumidity ?? nil,
                                                    
-                                growthMonths: plantSpecies.mainSpecies.growth.growthMonths ?? [],
-                                bloomMonths: plantSpecies.mainSpecies.growth.bloomMonths ?? [],
-                                fruitMonths: plantSpecies.mainSpecies.growth.fruitMonths ?? [],
+                                growthMonths: plantToDisplayInDetail.mainSpecies.growth.growthMonths ?? [],
+                                bloomMonths: plantToDisplayInDetail.mainSpecies.growth.bloomMonths ?? [],
+                                fruitMonths: plantToDisplayInDetail.mainSpecies.growth.fruitMonths ?? [],
                                                    
                                 rowSpacingCM: plantToDisplayInDetail.mainSpecies.growth.rowSpacing.cm ?? nil,
                                 rowSpacingMM: plantToDisplayInDetail.mainSpecies.growth.rowSpacing.mm ?? nil,
