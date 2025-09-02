@@ -52,6 +52,10 @@ class LocalPlant {
     var light: Int?
     var atmosphericHumidity: Int?
     
+    let growthMonths: [String]? // The most active growth months of the species
+    let bloomMonths: [String]? // The months the species usually blooms
+    let fruitMonths: [String]? // The months the species usually produces fruits
+    
     var rowSpacingCM: Int?
     var rowSpacingMM: Int?
     
@@ -77,7 +81,7 @@ class LocalPlant {
     var soilTexture: Int? // Required texture of the soil, on a scale from 0 (clay) to 10 (rock)
     var soilHumidity: Int? // Required humidity of the soil, on a scale from 0 (xerophile) to 10 (subaquatic)
     
-    init(name: String, scientificName: String, dateSaved: Date, isVegetable: Bool, plantImageUrl: String, isEdible: Bool, ediblePart: [String]? = nil, duration: [String]? = nil, flowerColor: [String]? = nil, hasConspicuousFlower: Bool? = nil, foliageTexture: String? = nil, foliageColor: [String]? = nil, leafRetention: Bool? = nil, isFruitConspicuous: Bool? = nil, fruitColor: [String]? = nil, fruitShape: String? = nil, fruitSeedPersistence: Bool? = nil, growthForm: String? = nil, growthHabit: String? = nil, growthRate: String? = nil, averageHeight: Int? = nil, maximumHeight: Int? = nil, nitrogenFixation: String? = nil, shapeAndOrientation: String? = nil, toxicity: String? = nil, growthDescription: String? = nil, sowingDescription: String? = nil, daysToHarvest: Double? = nil, phMaximum: Double? = nil, phMinimum: Double? = nil, light: Int? = nil, atmosphericHumidity: Int? = nil, rowSpacingCM: Int? = nil, rowSpacingMM: Int? = nil, spreadCM: Int? = nil, spreadMM: Int? = nil, minimumPrecipitationCM: Int? = nil, minimumPrecipitationMM: Int? = nil, maximumPrecipitationCM: Int? = nil, maximumPrecipitationMM: Int? = nil, minimumRootDepthCM: Int? = nil, minimumRootDepthMM: Int? = nil, minimumTempFahrenheit: Double? = nil, minimumTempCelsius: Double? = nil, maximumTempFahrenheit: Double? = nil, maximumTempCelsius: Double? = nil, soilNutriments: Int? = nil, soilSalinity: Int? = nil, soilTexture: Int? = nil, soilHumidity: Int? = nil) {
+    init(name: String, scientificName: String, dateSaved: Date, isVegetable: Bool, plantImageUrl: String, isEdible: Bool, ediblePart: [String]? = nil, duration: [String]? = nil, flowerColor: [String]? = nil, hasConspicuousFlower: Bool? = nil, foliageTexture: String? = nil, foliageColor: [String]? = nil, leafRetention: Bool? = nil, isFruitConspicuous: Bool? = nil, fruitColor: [String]? = nil, fruitShape: String? = nil, fruitSeedPersistence: Bool? = nil, growthForm: String? = nil, growthHabit: String? = nil, growthRate: String? = nil, averageHeight: Int? = nil, maximumHeight: Int? = nil, nitrogenFixation: String? = nil, shapeAndOrientation: String? = nil, toxicity: String? = nil, growthDescription: String? = nil, sowingDescription: String? = nil, daysToHarvest: Double? = nil, phMaximum: Double? = nil, phMinimum: Double? = nil, light: Int? = nil, atmosphericHumidity: Int? = nil, growthMonths: [String]?, bloomMonths: [String]?, fruitMonths: [String]?, rowSpacingCM: Int? = nil, rowSpacingMM: Int? = nil, spreadCM: Int? = nil, spreadMM: Int? = nil, minimumPrecipitationCM: Int? = nil, minimumPrecipitationMM: Int? = nil, maximumPrecipitationCM: Int? = nil, maximumPrecipitationMM: Int? = nil, minimumRootDepthCM: Int? = nil, minimumRootDepthMM: Int? = nil, minimumTempFahrenheit: Double? = nil, minimumTempCelsius: Double? = nil, maximumTempFahrenheit: Double? = nil, maximumTempCelsius: Double? = nil, soilNutriments: Int? = nil, soilSalinity: Int? = nil, soilTexture: Int? = nil, soilHumidity: Int? = nil) {
         self.name = name
         self.scientificName = scientificName
         self.dateSaved = dateSaved
@@ -110,6 +114,9 @@ class LocalPlant {
         self.phMinimum = phMinimum
         self.light = light
         self.atmosphericHumidity = atmosphericHumidity
+        self.growthMonths = growthMonths
+        self.bloomMonths = bloomMonths
+        self.fruitMonths = fruitMonths
         self.rowSpacingCM = rowSpacingCM
         self.rowSpacingMM = rowSpacingMM
         self.spreadCM = spreadCM

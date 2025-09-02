@@ -71,6 +71,10 @@ struct PlantCardDetailView: View {
                                 light: plantSpecies.mainSpecies.growth.light ?? nil,
                                 atmosphericHumidity: plantSpecies.mainSpecies.growth.atmosphericHumidity ?? nil,
                                                    
+                               growthMonths: plantSpecies.mainSpecies.growth.growthMonths ?? [],
+                               bloomMonths: plantSpecies.mainSpecies.growth.bloomMonths ?? [],
+                               fruitMonths: plantSpecies.mainSpecies.growth.fruitMonths ?? [],
+                                                   
                                 rowSpacingCM: plantSpecies.mainSpecies.growth.rowSpacing.cm ?? nil,
                                 rowSpacingMM: plantSpecies.mainSpecies.growth.rowSpacing.mm ?? nil,
                                                    
