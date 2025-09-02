@@ -38,7 +38,65 @@ struct PlantCardDetailView: View {
                     
                     HStack(spacing: 15) {
                         Button {
-                            let plant = LocalPlant(name: plantSpecies.commonName!, scientificName: plantSpecies.scientificName, dateSaved: Date(), isVegetable: plantSpecies.vegetable ?? false, plantImageUrl: plantSpecies.imageUrl ?? fallbackImageName, isEdible: plantSpecies.mainSpecies.edible ?? false, foliageTexture: plantSpecies.mainSpecies.foliage.texture ?? "Unknown", leafRetention: plantSpecies.mainSpecies.foliage.leafRetention ?? nil)
+                            let plant = LocalPlant(name: plantSpecies.commonName!, scientificName: plantSpecies.scientificName, dateSaved: Date(), isVegetable: plantSpecies.vegetable ?? false, plantImageUrl: plantSpecies.imageUrl ?? fallbackImageName, isEdible: plantSpecies.mainSpecies.edible ?? false, ediblePart: plantSpecies.mainSpecies.ediblePart, duration: plantSpecies.mainSpecies.duration,
+                                
+                                flowerColor: plantSpecies.mainSpecies.flower.color ?? [],
+                                hasConspicuousFlower: plantSpecies.mainSpecies.flower.conspicuous ?? nil,
+                                
+                                foliageTexture: plantSpecies.mainSpecies.foliage.texture ?? "Unknown",
+                                foliageColor: plantSpecies.mainSpecies.foliage.color ?? [],
+                                leafRetention: plantSpecies.mainSpecies.foliage.leafRetention ?? nil,
+                                
+                                isFruitConspicuous: plantSpecies.mainSpecies.fruitOrSeed.conspicuous ?? nil,
+                                fruitColor: plantSpecies.mainSpecies.fruitOrSeed.color ?? [],
+                                fruitShape: plantSpecies.mainSpecies.fruitOrSeed.shape ?? "Unknown",
+                                fruitSeedPersistence: plantSpecies.mainSpecies.fruitOrSeed.seedPersistence ?? nil,
+                                
+                                growthForm: plantSpecies.mainSpecies.specifications.growthForm ?? "Unknown",
+                                growthHabit: plantSpecies.mainSpecies.specifications.growthHabit ?? "Unknown",
+                                growthRate: plantSpecies.mainSpecies.specifications.growthRate ?? "Unknown",
+                                                   
+                                averageHeight: plantSpecies.mainSpecies.specifications.averageHeight.cm ?? nil,
+                                maximumHeight: plantSpecies.mainSpecies.specifications.maximumHeight.cm ?? nil,
+                                                   
+                                nitrogenFixation: plantSpecies.mainSpecies.specifications.nitrogenFixation ?? "Unknown",
+                                shapeAndOrientation: plantSpecies.mainSpecies.specifications.shapeAndOrientation ?? "Unknown",
+                                toxicity: plantSpecies.mainSpecies.specifications.shapeAndOrientation ?? "Unknown",
+                                
+                                growthDescription: plantSpecies.mainSpecies.growth.description ?? "Unknown",
+                                sowingDescription: plantSpecies.mainSpecies.growth.sowing ?? "Unknown",
+                                daysToHarvest: plantSpecies.mainSpecies.growth.daysToHarvest ?? nil,
+                                phMaximum: plantSpecies.mainSpecies.growth.phMaximum ?? nil,
+                                phMinimum: plantSpecies.mainSpecies.growth.phMinimum ?? nil,
+                                light: plantSpecies.mainSpecies.growth.light ?? nil,
+                                atmosphericHumidity: plantSpecies.mainSpecies.growth.atmosphericHumidity ?? nil,
+                                                   
+                                rowSpacingCM: plantSpecies.mainSpecies.growth.rowSpacing.cm ?? nil,
+                                rowSpacingMM: plantSpecies.mainSpecies.growth.rowSpacing.mm ?? nil,
+                                                   
+                                spreadCM: plantSpecies.mainSpecies.growth.spread.cm ?? nil,
+                                spreadMM: plantSpecies.mainSpecies.growth.spread.mm ?? nil,
+                                
+                                minimumPrecipitationCM: plantSpecies.mainSpecies.growth.minimumPrecipitation.cm ?? nil,
+                                minimumPrecipitationMM: plantSpecies.mainSpecies.growth.minimumPrecipitation.mm ?? nil,
+                            
+                                maximumPrecipitationCM: plantSpecies.mainSpecies.growth.maximumPrecipitation.cm ?? nil,
+                                maximumPrecipitationMM: plantSpecies.mainSpecies.growth.maximumPrecipitation.mm ?? nil,
+                               
+                               minimumRootDepthCM: plantSpecies.mainSpecies.growth.minimumRootDepth.cm ?? nil,
+                               minimumRootDepthMM: plantSpecies.mainSpecies.growth.minimumRootDepth.mm ?? nil,
+                               
+                               minimumTempFahrenheit: plantSpecies.mainSpecies.growth.minimumTemperature.degF ?? nil,
+                               minimumTempCelsius: plantSpecies.mainSpecies.growth.minimumTemperature.degC ?? nil,
+                                          
+                               maximumTempFahrenheit: plantSpecies.mainSpecies.growth.maximumTemperature.degF ?? nil,
+                               maximumTempCelsius: plantSpecies.mainSpecies.growth.maximumTemperature.degC ?? nil,
+                                                   
+                               soilNutriments: plantSpecies.mainSpecies.growth.soilNutriments ?? nil,
+                               soilSalinity: plantSpecies.mainSpecies.growth.soilSalinity ?? nil,
+                               soilTexture: plantSpecies.mainSpecies.growth.soilTexture ?? nil,
+                               soilHumidity: plantSpecies.mainSpecies.growth.soilHumidity ?? nil,
+                            )
                             
                             do {
                                 try savePlant(plant, to: context)
