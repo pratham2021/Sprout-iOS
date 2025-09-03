@@ -72,7 +72,7 @@ struct SavedView: View {
                     .foregroundColor(textColor)
             }
         }, description: {
-            Text("Start saving plants locally to see your list.")
+            Text("Start saving plants to your account to see your list.")
                 .foregroundColor(textColor)
         }, actions: {
             

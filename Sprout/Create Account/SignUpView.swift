@@ -67,8 +67,6 @@ struct SignUpView: View {
                     .padding(.top, 12)
                     
                     Button {
-                        
-                        
                         var errorString = ""
                         
                         if firstName.trimmingCharacters(in: .whitespacesAndNewlines) == "" || lastName.trimmingCharacters(in: .whitespacesAndNewlines) == "" || email.trimmingCharacters(in: .whitespacesAndNewlines) == "" || password.trimmingCharacters(in: .whitespacesAndNewlines) == "" || confirmedPassword.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
@@ -135,16 +133,22 @@ struct SignUpView: View {
                             Text("Create Account").fontWeight(.semibold)
                         }
                         .foregroundColor(backgroundColor)
-                        .frame(width: UIScreen.main.bounds.width - 60, height: 48)
+                        .frame(height: 48)
+                        .frame(maxWidth: .infinity)
+                        
+                    }
+                    .alert("Error", isPresented: $isShowingAlert) {
+                        Button("Try Again", role: .cancel) {}
+                    } message: {
+                        Text(verbatim: alertMessage)
                     }
                     .buttonStyle(PlainButtonStyle())
                     .background(textColor)
                     .disabled(!formIsValid)
                     .opacity(formIsValid ? 1.0:0.5)
                     .cornerRadius(30)
-                    .padding(.top, 24)
-                    
-                    Spacer()
+                    .padding(.top, 12)
+                    .padding(.horizontal, 30)
                     
                     Button {
                         // action that should happen
@@ -160,6 +164,7 @@ struct SignUpView: View {
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
+                
             }
         }
     }

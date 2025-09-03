@@ -117,7 +117,7 @@ struct PlantCardDetailView: View {
                                 showAlert = true
                             }
                         } label: {
-                            Text("Save locally")
+                            Text("Save")
                                 .foregroundColor(cardBackgroundColor)
                                 .font(.system(size: 16, weight: .medium))
                                 .padding(.horizontal, 16)

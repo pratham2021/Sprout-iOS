@@ -58,7 +58,6 @@ class AuthViewModel: ObservableObject {
         print("Delete")
         
         do {
-            
             if self.userSession == nil || self.currentUser == nil {
                 return
             }

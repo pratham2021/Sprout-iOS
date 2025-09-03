@@ -78,7 +78,7 @@ struct LoginView: View {
                                 Text("Sign In").fontWeight(.semibold)
                             }
                             .foregroundColor(backgroundColor)
-                            .frame(width: UIScreen.main.bounds.width - 60, height: 48)
+                            .frame(maxWidth: .infinity, minHeight: 48)
                         }
                         .alert("Error", isPresented: $isShowingAlert) {
                             Button("Try Again", role: .cancel) {}
@@ -90,7 +90,8 @@ struct LoginView: View {
                         .disabled(!formIsValid)
                         .opacity(formIsValid ? 1.0 : 0.5)
                         .cornerRadius(30)
-                        .padding(.top, 24)
+                        .padding(.top, 12)
+                        .padding(.horizontal, 30)
                         
                         Spacer()
                         

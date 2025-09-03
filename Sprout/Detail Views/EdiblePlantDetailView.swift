@@ -134,7 +134,7 @@ struct EdiblePlantDetailView: View {
                                 try await Task.sleep(nanoseconds: 2_000_000_000)
                             }
                         } label: {
-                            Text("Save locally")
+                            Text("Save")
                                 .foregroundColor(cardBackgroundColor)
                                 .font(.system(size: 16, weight: .medium))
                                 .padding(.horizontal, 16)
