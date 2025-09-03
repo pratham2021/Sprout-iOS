@@ -129,18 +129,11 @@ struct SignUpView: View {
                             }
                         }
                     } label: {
-                        HStack {
-                            Text("Create Account").fontWeight(.semibold)
-                        }
-                        .foregroundColor(backgroundColor)
-                        .frame(height: 48)
-                        .frame(maxWidth: .infinity)
-                        
-                    }
-                    .alert("Error", isPresented: $isShowingAlert) {
-                        Button("Try Again", role: .cancel) {}
-                    } message: {
-                        Text(verbatim: alertMessage)
+                        Text("Create Account")
+                            .fontWeight(.semibold)
+                            .foregroundColor(backgroundColor)
+                            .frame(height: 48)
+                            .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(PlainButtonStyle())
                     .background(textColor)
@@ -166,6 +159,11 @@ struct SignUpView: View {
                 }
                 
             }
+        }
+        .alert("Error", isPresented: $isShowingAlert) {
+            Button("Try Again", role: .cancel) {}
+        } message: {
+            Text(verbatim: alertMessage)
         }
     }
             

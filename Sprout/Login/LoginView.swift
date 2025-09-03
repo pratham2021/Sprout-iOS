@@ -80,11 +80,6 @@ struct LoginView: View {
                             .foregroundColor(backgroundColor)
                             .frame(maxWidth: .infinity, minHeight: 48)
                         }
-                        .alert("Error", isPresented: $isShowingAlert) {
-                            Button("Try Again", role: .cancel) {}
-                        } message: {
-                            Text(verbatim: alertMessage)
-                        }
                         .buttonStyle(PlainButtonStyle())
                         .background(textColor)
                         .disabled(!formIsValid)
@@ -113,10 +108,13 @@ struct LoginView: View {
                 }
                 
             }
-            
+            .alert("Error", isPresented: $isShowingAlert) {
+                Button("Try Again", role: .cancel) {}
+            } message: {
+                Text(verbatim: alertMessage)
+            }
         }
         .tint(textColor)
-        
     }
      
         private var backgroundColor: Color {
