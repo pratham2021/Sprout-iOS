@@ -9,11 +9,18 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @EnvironmentObject var viewModel: AuthViewModel
+    
     var body: some View {
         Group {
-            MainView().transition(.opacity)
+            if viewModel.userSession != nil {
+                MainView().transition(.opacity)
+            }
+            else {
+                LoginView().transition(.opacity)
+            }
         }
-        .animation(.easeInOut(duration: 0.3), value: true)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.userSession != nil)
     }
 }
 

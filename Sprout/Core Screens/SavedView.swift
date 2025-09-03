@@ -11,6 +11,7 @@ struct SavedView: View {
     @Environment(\.modelContext) var context
     @Query(sort: \LocalPlant.dateSaved) var localPlants: [LocalPlant]
     
+    
     var body: some View {
         ZStack {
             backgroundColor.ignoresSafeArea()
