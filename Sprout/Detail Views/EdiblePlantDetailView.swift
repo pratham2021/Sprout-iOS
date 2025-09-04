@@ -7,6 +7,9 @@
 
 import SwiftUI
 import SwiftData
+import Firebase
+import FirebaseAuth
+import FirebaseCore
 
 struct EdiblePlantDetailView: View {
     
@@ -20,6 +23,9 @@ struct EdiblePlantDetailView: View {
     
     @State private var showAlert = false
     @State private var alertMessage = ""
+    @EnvironmentObject var viewModel: AuthViewModel
+    
+    var db = Firestore.firestore()
     
     var body: some View {
         ZStack {
@@ -44,14 +50,17 @@ struct EdiblePlantDetailView: View {
                     HStack(spacing: 15) {
                         Button {
                             
-//                            let plant = LocalPlant(name: plantToDisplayInDetail.commonName!, scientificName: plantToDisplayInDetail.scientificName, dateSaved: Date(), isVegetable: plantToDisplayInDetail.vegetable ?? false,
-//                                                   
-//                                                   plantImageUrl: plantToDisplayInDetail.imageUrl ?? fallbackImageName,
-//                                                   isEdible: plantToDisplayInDetail.mainSpecies.edible ?? false,
-//                                                   foliageTexture: plantToDisplayInDetail.mainSpecies.foliage.texture ?? "Unknown",
-//                                                   leafRetention: plantToDisplayInDetail.mainSpecies.foliage.leafRetention ?? nil)
+                            let currentDate = Date()
                             
-                            let plant = LocalPlant(name: plantToDisplayInDetail.commonName!, scientificName: plantToDisplayInDetail.scientificName, dateSaved: Date(), isVegetable: plantToDisplayInDetail.vegetable ?? false, plantImageUrl: plantToDisplayInDetail.imageUrl ?? fallbackImageName, isEdible: plantToDisplayInDetail.mainSpecies.edible ?? false, ediblePart: plantToDisplayInDetail.mainSpecies.ediblePart, duration: plantToDisplayInDetail.mainSpecies.duration,
+                            let plant = LocalPlant(
+                                name: plantToDisplayInDetail.commonName!,
+                                scientificName: plantToDisplayInDetail.scientificName,
+                                dateSaved: currentDate,
+                                isVegetable: plantToDisplayInDetail.vegetable ?? false,
+                                plantImageUrl: plantToDisplayInDetail.imageUrl ?? fallbackImageName,
+                                isEdible: plantToDisplayInDetail.mainSpecies.edible ?? false,
+                                ediblePart: plantToDisplayInDetail.mainSpecies.ediblePart,
+                                duration: plantToDisplayInDetail.mainSpecies.duration,
                                 
                                 flowerColor: plantToDisplayInDetail.mainSpecies.flower.color ?? [],
                                 hasConspicuousFlower: plantToDisplayInDetail.mainSpecies.flower.conspicuous ?? nil,
@@ -112,11 +121,90 @@ struct EdiblePlantDetailView: View {
                                soilNutriments: plantToDisplayInDetail.mainSpecies.growth.soilNutriments ?? nil,
                                soilSalinity: plantToDisplayInDetail.mainSpecies.growth.soilSalinity ?? nil,
                                soilTexture: plantToDisplayInDetail.mainSpecies.growth.soilTexture ?? nil,
-                               soilHumidity: plantToDisplayInDetail.mainSpecies.growth.soilHumidity ?? nil,
+                               soilHumidity: plantToDisplayInDetail.mainSpecies.growth.soilHumidity ?? nil
                             )
+                            
+                            let remotePlant = RemotePlant(
+                                name: plantToDisplayInDetail.commonName!,
+                                scientificName: plantToDisplayInDetail.scientificName,
+                                dateSaved: currentDate,
+                                isVegetable: plantToDisplayInDetail.vegetable ?? false,
+                                plantImageUrl: plantToDisplayInDetail.imageUrl ?? fallbackImageName,
+                                isEdible: plantToDisplayInDetail.mainSpecies.edible ?? false,
+                                ediblePart: plantToDisplayInDetail.mainSpecies.ediblePart,
+                                duration: plantToDisplayInDetail.mainSpecies.duration,
+                                
+                                flowerColor: plantToDisplayInDetail.mainSpecies.flower.color ?? [],
+                                hasConspicuousFlower: plantToDisplayInDetail.mainSpecies.flower.conspicuous ?? nil,
+                                
+                                foliageTexture: plantToDisplayInDetail.mainSpecies.foliage.texture ?? "Unknown",
+                                foliageColor: plantToDisplayInDetail.mainSpecies.foliage.color ?? [],
+                                leafRetention: plantToDisplayInDetail.mainSpecies.foliage.leafRetention ?? nil,
+                                
+                                isFruitConspicuous: plantToDisplayInDetail.mainSpecies.fruitOrSeed.conspicuous ?? nil,
+                                fruitColor: plantToDisplayInDetail.mainSpecies.fruitOrSeed.color ?? [],
+                                fruitShape: plantToDisplayInDetail.mainSpecies.fruitOrSeed.shape ?? "Unknown",
+                                fruitSeedPersistence: plantToDisplayInDetail.mainSpecies.fruitOrSeed.seedPersistence ?? nil,
+                                
+                                growthForm: plantToDisplayInDetail.mainSpecies.specifications.growthForm ?? "Unknown",
+                                growthHabit: plantToDisplayInDetail.mainSpecies.specifications.growthHabit ?? "Unknown",
+                                growthRate: plantToDisplayInDetail.mainSpecies.specifications.growthRate ?? "Unknown",
+                                                   
+                                averageHeight: plantToDisplayInDetail.mainSpecies.specifications.averageHeight.cm ?? nil,
+                                maximumHeight: plantToDisplayInDetail.mainSpecies.specifications.maximumHeight.cm ?? nil,
+                                                   
+                                nitrogenFixation: plantToDisplayInDetail.mainSpecies.specifications.nitrogenFixation ?? "Unknown",
+                                shapeAndOrientation: plantToDisplayInDetail.mainSpecies.specifications.shapeAndOrientation ?? "Unknown",
+                                toxicity: plantToDisplayInDetail.mainSpecies.specifications.shapeAndOrientation ?? "Unknown",
+                                
+                                growthDescription: plantToDisplayInDetail.mainSpecies.growth.description ?? "Unknown",
+                                sowingDescription: plantToDisplayInDetail.mainSpecies.growth.sowing ?? "Unknown",
+                                daysToHarvest: plantToDisplayInDetail.mainSpecies.growth.daysToHarvest ?? nil,
+                                phMaximum: plantToDisplayInDetail.mainSpecies.growth.phMaximum ?? nil,
+                                phMinimum: plantToDisplayInDetail.mainSpecies.growth.phMinimum ?? nil,
+                                light: plantToDisplayInDetail.mainSpecies.growth.light ?? nil,
+                                atmosphericHumidity: plantToDisplayInDetail.mainSpecies.growth.atmosphericHumidity ?? nil,
+                                                   
+                                growthMonths: plantToDisplayInDetail.mainSpecies.growth.growthMonths ?? [],
+                                bloomMonths: plantToDisplayInDetail.mainSpecies.growth.bloomMonths ?? [],
+                                fruitMonths: plantToDisplayInDetail.mainSpecies.growth.fruitMonths ?? [],
+                                                   
+                                rowSpacingCM: plantToDisplayInDetail.mainSpecies.growth.rowSpacing.cm ?? nil,
+                                rowSpacingMM: plantToDisplayInDetail.mainSpecies.growth.rowSpacing.mm ?? nil,
+                                                   
+                                spreadCM: plantToDisplayInDetail.mainSpecies.growth.spread.cm ?? nil,
+                                spreadMM: plantToDisplayInDetail.mainSpecies.growth.spread.mm ?? nil,
+                                
+                                minimumPrecipitationCM: plantToDisplayInDetail.mainSpecies.growth.minimumPrecipitation.cm ?? nil,
+                                minimumPrecipitationMM: plantToDisplayInDetail.mainSpecies.growth.minimumPrecipitation.mm ?? nil,
+                            
+                                maximumPrecipitationCM: plantToDisplayInDetail.mainSpecies.growth.maximumPrecipitation.cm ?? nil,
+                                maximumPrecipitationMM: plantToDisplayInDetail.mainSpecies.growth.maximumPrecipitation.mm ?? nil,
+                               
+                               minimumRootDepthCM: plantToDisplayInDetail.mainSpecies.growth.minimumRootDepth.cm ?? nil,
+                               minimumRootDepthMM: plantToDisplayInDetail.mainSpecies.growth.minimumRootDepth.mm ?? nil,
+                               
+                               minimumTempFahrenheit: plantToDisplayInDetail.mainSpecies.growth.minimumTemperature.degF ?? nil,
+                               minimumTempCelsius: plantToDisplayInDetail.mainSpecies.growth.minimumTemperature.degC ?? nil,
+                                          
+                               maximumTempFahrenheit: plantToDisplayInDetail.mainSpecies.growth.maximumTemperature.degF ?? nil,
+                               maximumTempCelsius: plantToDisplayInDetail.mainSpecies.growth.maximumTemperature.degC ?? nil,
+                                                   
+                               soilNutriments: plantToDisplayInDetail.mainSpecies.growth.soilNutriments ?? nil,
+                               soilSalinity: plantToDisplayInDetail.mainSpecies.growth.soilSalinity ?? nil,
+                               soilTexture: plantToDisplayInDetail.mainSpecies.growth.soilTexture ?? nil,
+                               soilHumidity: plantToDisplayInDetail.mainSpecies.growth.soilHumidity ?? nil
+                            )
+                            
+                            let userID = viewModel.currentUser?.id
                             
                             do {
                                 try savePlant(plant, to: context)
+                                
+                                if userID != nil && userID != "" {
+                                    try db.collection(userID!).addDocument(from: remotePlant)
+                                }
+                                
                                 
                                 alertMessage = "Plant saved successfully!"
                                 showAlert = true

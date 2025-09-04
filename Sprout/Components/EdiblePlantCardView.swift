@@ -22,6 +22,7 @@ struct EdiblePlantCardView: View {
     private let spacing: CGFloat = 15
     private let fallbackImageName = "golden-pothos"
     
+    
     var body: some View {
         VStack(spacing: spacing) {
             ediblePlantImage
@@ -68,7 +69,8 @@ struct EdiblePlantCardView: View {
     
     @ViewBuilder
     private var ediblePlantDetailView: some View {
-        if ediblePlant != nil && ediblePlantToDisplayInDetail != nil {
+        if ediblePlantToDisplayInDetail != nil {
+            // EdiblePlantDetailView(ediblePlant: ediblePlant, plantToDisplayInDetail: ediblePlantToDisplayInDetail!, showDetail: $showEdibleDetail)
             EdiblePlantDetailView(ediblePlant: ediblePlant, plantToDisplayInDetail: ediblePlantToDisplayInDetail!, showDetail: $showEdibleDetail)
         }
         else {

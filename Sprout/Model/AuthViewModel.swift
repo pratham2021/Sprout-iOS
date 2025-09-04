@@ -68,6 +68,8 @@ class AuthViewModel: ObservableObject {
                     
                     let userID = self.userSession!.uid
                     
+                    print(userID)
+                    
                     db.collection("users").document(userID).delete { error in
                         if error == nil {
                             DispatchQueue.main.async {

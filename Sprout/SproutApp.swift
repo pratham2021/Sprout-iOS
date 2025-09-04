@@ -15,6 +15,7 @@ import SwiftData
 struct SproutApp: App {
     
     @StateObject var viewModel = AuthViewModel()
+    @StateObject var remotePlantViewModel = RemotePlantViewModel()
     
     init() {
         FirebaseApp.configure()
@@ -24,6 +25,7 @@ struct SproutApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(viewModel)
+                .environmentObject(remotePlantViewModel)
         }
         .modelContainer(for: [LocalPlant.self])
         

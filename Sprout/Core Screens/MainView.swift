@@ -11,6 +11,7 @@ struct MainView: View {
     @State var plantsSpecies: [PlantSpecies] = [PlantSpecies]()
     @State var distributions: [Distribution] = [Distribution]()
     @State var ediblePlantsSpecies: [EdiblePlantSpecies] = [EdiblePlantSpecies]()
+//    @State var remotePlantsFromFirebase: [RemotePlant] = [RemotePlant]()
 
     var body: some View {
            TabView(selection: $selectedTab) {

@@ -108,6 +108,7 @@ struct PlantCardView: View {
     private var plantDetailView: some View {
         if let plantData = plantToDisplayInDetail, let image = plantImage {
             PlantCardDetailView(plantSpecies: plantData, showDetail: $showDetail)
+            
         } else {
             loadingView
         }

@@ -315,6 +315,12 @@ func fetchEdiblePlant(plantId: Int, completion: @escaping(PlantData?) -> Void) a
     task.resume()
 }
 
+func fetchRemotePlants(completion: @escaping([RemotePlant]) -> Void) async {
+    
+    
+    
+}
+
 
 extension String {
     func capitalizingFirstLetter() -> String {

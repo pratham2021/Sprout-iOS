@@ -10,15 +10,23 @@ struct SavedView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.modelContext) var context
     @Query(sort: \LocalPlant.dateSaved) var localPlants: [LocalPlant]
-    
+    @EnvironmentObject var remotePlantViewModel: RemotePlantViewModel
+    @EnvironmentObject var viewModel: AuthViewModel
     
     var body: some View {
         ZStack {
             backgroundColor.ignoresSafeArea()
             
             List {
-                ForEach(localPlants) { localPlant in
-                    plantRow(for: localPlant)
+                if !remotePlantViewModel.remotePlants.isEmpty {
+                    ForEach(remotePlantViewModel.remotePlants) { firebasePlant in
+                        remotePlantRow(for: firebasePlant)
+                    }
+                }
+                else if !localPlants.isEmpty {
+                    ForEach(localPlants) { localPlant in
+                        plantRow(for: localPlant)
+                    }
                 }
             }
             .scrollContentBackground(.hidden)
@@ -26,11 +34,32 @@ struct SavedView: View {
             .listStyle(.plain)
             .environment(\.editMode, .constant(.inactive))
             .overlay {
-                if localPlants.isEmpty {
+                if remotePlantViewModel.remotePlants.isEmpty {
                     emptyStateView
                 }
             }
         }
+        .task {
+            let userID = viewModel.currentUser?.id
+            
+            if userID != nil && userID! != "" {
+                remotePlantViewModel.getData(userID: userID!)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func remotePlantRow(for remotePlant: RemotePlant) -> some View {
+        RemoteSavedPlantCardView(savedPlant: remotePlant)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.vertical, 8)
+            .listRowInsets(EdgeInsets())
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
+            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                // Code to delete plant off the database
+                
+            }
     }
     
     @ViewBuilder
@@ -93,6 +122,6 @@ struct SavedView: View {
     }
 }
 
-#Preview {
-    SavedView().preferredColorScheme(.light)
-}
+//#Preview {
+//    SavedView().preferredColorScheme(.light)
+//}
