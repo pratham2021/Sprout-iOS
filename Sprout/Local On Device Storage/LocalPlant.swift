@@ -52,9 +52,9 @@ class LocalPlant {
     var light: Int?
     var atmosphericHumidity: Int?
     
-    let growthMonths: [String]? // The most active growth months of the species
-    let bloomMonths: [String]? // The months the species usually blooms
-    let fruitMonths: [String]? // The months the species usually produces fruits
+    var growthMonths: [String]? // The most active growth months of the species
+    var bloomMonths: [String]? // The months the species usually blooms
+    var fruitMonths: [String]? // The months the species usually produces fruits
     
     var rowSpacingCM: Int?
     var rowSpacingMM: Int?
