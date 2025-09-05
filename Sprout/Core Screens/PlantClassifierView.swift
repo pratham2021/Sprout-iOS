@@ -14,5 +14,5 @@ struct PlantClassifierView: View {
 }
 
 #Preview {
-    PlantDiseaseDetectionView()
+    PlantClassifierView()
 }
