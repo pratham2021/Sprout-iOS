@@ -106,7 +106,6 @@ struct SavedView: View {
         }, actions: {
             
         })
-        .offset(y: -60)
     }
     
     private var backgroundColor: Color {

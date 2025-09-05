@@ -23,7 +23,7 @@ struct MainView: View {
                }
                
                Tab("Plant Classifier", systemImage: "leaf.fill", value: 2) {
-                   PlantClassifierView()
+                   NewPlantClassifierView()
                }
                
                Tab("Settings", systemImage: "gear", value: 3) {
