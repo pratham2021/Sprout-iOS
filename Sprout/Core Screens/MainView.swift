@@ -11,7 +11,6 @@ struct MainView: View {
     @State var plantsSpecies: [PlantSpecies] = [PlantSpecies]()
     @State var distributions: [Distribution] = [Distribution]()
     @State var ediblePlantsSpecies: [EdiblePlantSpecies] = [EdiblePlantSpecies]()
-//    @State var remotePlantsFromFirebase: [RemotePlant] = [RemotePlant]()
 
     var body: some View {
            TabView(selection: $selectedTab) {
@@ -23,7 +22,11 @@ struct MainView: View {
                    SearchView(plants: plantsSpecies, distributions: distributions, ediblePlants: ediblePlantsSpecies)
                }
                
-               Tab("Settings", systemImage: "gear", value: 2) {
+               Tab("Plant Classifier", systemImage: "leaf.fill", value: 2) {
+                   PlantClassifierView()
+               }
+               
+               Tab("Settings", systemImage: "gear", value: 3) {
                    SettingsView()
                }
            }
