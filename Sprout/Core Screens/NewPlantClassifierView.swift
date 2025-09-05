@@ -12,6 +12,7 @@ import PhotosUI
 struct NewPlantClassifierView: View {
     
     @Environment(\.colorScheme) var colorScheme
+    
 //    Query(sort: \LocalPlantPrediction.name) var localPlantPredictions: [LocalPlantPrediction]
     @Environment(\.modelContext) private var modelContext
     @State var localPlantPredictions: [LocalPlantPrediction] = []
@@ -19,6 +20,7 @@ struct NewPlantClassifierView: View {
     @State private var photosPickerItem: PhotosPickerItem? // holds the selected photo item
     @State private var selectedImage: UIImage?
     @State private var showingCamera: Bool = false
+    @StateObject private var classifier = PlantClassifierService()    
 
     var body: some View {
         ZStack {
@@ -82,6 +84,12 @@ struct NewPlantClassifierView: View {
                         selectedImage = image
                     }
                 }
+                
+                guard let image = selectedImage else { return }
+
+                // Fire off an API call
+                
+                
                 
                 photosPickerItem = nil
             }

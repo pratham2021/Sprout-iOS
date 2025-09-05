@@ -57,6 +57,8 @@ class PlantClassifierService: ObservableObject {
             let (data, _) = try await URLSession.shared.data(for: request)
             
             // Parse response
+            print(data)
+            
             let classificationResponse = try JSONDecoder().decode(PlantClassificationResponse.self, from: data)
             
             if classificationResponse.predictions.count != 0 {
