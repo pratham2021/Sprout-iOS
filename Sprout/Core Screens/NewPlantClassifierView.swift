@@ -123,6 +123,9 @@ struct NewPlantClassifierView: View {
                     .listRowInsets(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        deleteButton(for: scannedPlant)
+                    }
             }
         }
         .contentMargins(.all, 0)
@@ -196,6 +199,26 @@ struct NewPlantClassifierView: View {
         }, actions: {
             
         })
+    }
+    
+    @ViewBuilder
+    private func deleteButton(for predictedPlant: ScannedPlant) -> some View {
+        Button(role: .destructive) {
+            
+            for prediction in predictedPlant.plantPredictions {
+                modelContext.delete(prediction)
+            }
+            
+            modelContext.delete(predictedPlant)
+            
+            do {
+                try modelContext.save()
+            } catch {
+                print("Failed to delete plant predictions: \(error)")
+            }
+        } label: {
+            Image(systemName: "trash.fill")
+        }
     }
     
     private var cardBackgroundColor: Color {
