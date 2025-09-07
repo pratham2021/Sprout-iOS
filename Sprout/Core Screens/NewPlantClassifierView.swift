@@ -41,7 +41,6 @@ struct NewPlantClassifierView: View {
             CameraView(image: $selectedImage).ignoresSafeArea(.all)
         }
         .onChange(of: photosPickerItem) { _, _ in
-            print("image selected")
             Task {
                 if let photosPickerItem, let data = try? await photosPickerItem.loadTransferable(type: Data.self) {
                     if let image = UIImage(data: data) {
@@ -63,7 +62,7 @@ struct NewPlantClassifierView: View {
                             var localPlantPredictions = [LocalPlantPrediction]()
                             
                             for prediction in plantPredictions {
-                                var localPlantPrediction = LocalPlantPrediction(scientificName: prediction.scientificName, probability: prediction.probability)
+                                let localPlantPrediction = LocalPlantPrediction(scientificName: prediction.scientificName, probability: prediction.probability)
                                 localPlantPredictions.append(localPlantPrediction)
                             }
                             
@@ -77,7 +76,6 @@ struct NewPlantClassifierView: View {
                             catch {
                                 
                             }
-                            
                         }
                         else {
                             isShowingAlert = true
@@ -86,7 +84,6 @@ struct NewPlantClassifierView: View {
                     }
                 }
             }
-            
             selectedImage = nil
         }
         .alert(alertMessage, isPresented: $isShowingAlert) {
