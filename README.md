@@ -5,3 +5,4 @@ You can even save the plants locally to your device to bookmark your favorites. 
 
 # Credits
 This project uses plant data from the [Trefle API](https://trefle.io). 🌱
+This project uses [RapidAPI Plant Classifier](https://rapidapi.com/iHeartAPIs/api/plant-classifier) for plant classification.
