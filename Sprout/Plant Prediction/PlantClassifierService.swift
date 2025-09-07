@@ -16,8 +16,6 @@ class PlantClassifierService: ObservableObject {
     private let rapidAPIHost = "plant-classifier.p.rapidapi.com"
     
     @Published var isLoading = false
-    // @Published var predictions: [PlantPrediction] = []
-    // @Published var errorMessage: String?
     @Published var rawResponse: String?
     
     // MARK: - Main Classification Method
@@ -27,7 +25,6 @@ class PlantClassifierService: ObservableObject {
         defer { isLoading = false }
         
         guard let imageData = image.jpegData(compressionQuality: 0.8) else {
-            // throw PlantClassifierError.imageConversionFailed
             completion([], "Failed to convert image into JPG")
             return
         }
@@ -39,23 +36,22 @@ class PlantClassifierService: ObservableObject {
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.timeoutInterval = 30.0
+        request.timeoutInterval = 10.0
         
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let boundary = "---011000010111000001101001"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         request.setValue(PLANT_PREDICTION_API_KEY, forHTTPHeaderField: "X-RapidAPI-Key")
         request.setValue(rapidAPIHost, forHTTPHeaderField: "X-RapidAPI-Host")
         
-        let base64String = imageData.base64EncodedString()
-        let requestBody = [
-            "image": "data:image/jpeg;base64,\(base64String)"
-        ]
+        var body = Data()
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+        body.append(imageData)
+        body.append("\r\n".data(using: .utf8)!)
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
         
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
-        } catch {
-            completion([], "Failed to create request body")
-            return
-        }
+        request.httpBody = body
         
         var errorString = "Invalid response"
         
@@ -64,21 +60,21 @@ class PlantClassifierService: ObservableObject {
             
             if let httpResponse = response as? HTTPURLResponse,
                !(200...299).contains(httpResponse.statusCode) {
-                completion([], errorString)
+                completion([], "HTTP Error: \(httpResponse.statusCode)")
                 return
             }
             
             errorString = "No data"
             
-            let classificationResponse = try JSONDecoder().decode(PlantClassificationResponse.self, from: data)
+            let classificationResponse = try JSONDecoder().decode([PlantPrediction].self, from: data)
             
-            guard !classificationResponse.predictions.isEmpty else {
+            guard !classificationResponse.isEmpty else {
                 completion([], errorString)
                 return
             }
             
             errorString = ""
-            completion(classificationResponse.predictions, errorString)
+            completion(classificationResponse, errorString)
             return
         }
         catch {

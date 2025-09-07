@@ -54,16 +54,10 @@ struct NewPlantClassifierView: View {
                 photosPickerItem = nil
             }
         }
-        .onChange(of: selectedImage) { _, newImage in
-            print("Image selected")
-            // Handle camera image selection
-            if let image = newImage {
-                // Fire off API call for camera image too
-                
+        .onChange(of: selectedImage) {
+            if let image = selectedImage {
                 Task {
                     await classifier.classifyPlant(image: image) { plantPredictions, errorMessage in
-                        
-                        print(errorMessage)
                         
                         if !plantPredictions.isEmpty {
                             var localPlantPredictions = [LocalPlantPrediction]()
@@ -92,6 +86,8 @@ struct NewPlantClassifierView: View {
                     }
                 }
             }
+            
+            selectedImage = nil
         }
         .alert(alertMessage, isPresented: $isShowingAlert) {
             Button("OK") {}
