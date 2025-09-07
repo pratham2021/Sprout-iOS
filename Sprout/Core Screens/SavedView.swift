@@ -4,6 +4,8 @@
 
 import SwiftUI
 import SwiftData
+import Firebase
+import FirebaseCore
 
 struct SavedView: View {
     
@@ -12,6 +14,7 @@ struct SavedView: View {
     @Query(sort: \LocalPlant.dateSaved) var localPlants: [LocalPlant]
     @EnvironmentObject var remotePlantViewModel: RemotePlantViewModel
     @EnvironmentObject var viewModel: AuthViewModel
+    @State var firebaseUserID: String = ""
     
     var body: some View {
         ZStack {
@@ -43,6 +46,7 @@ struct SavedView: View {
             let userID = viewModel.currentUser?.id
             
             if userID != nil && userID! != "" {
+                firebaseUserID = userID!
                 remotePlantViewModel.getData(userID: userID!)
             }
         }
@@ -58,8 +62,48 @@ struct SavedView: View {
             .listRowBackground(Color.clear)
             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                 // Code to delete plant off the database
-                
+               deleteRemotePlantButton(for: remotePlant)
             }
+    }
+    
+    @ViewBuilder
+    private func deleteRemotePlantButton(for remotePlant: RemotePlant) -> some View {
+        Button(role: .destructive) {
+            Task {
+                
+                let saidName = remotePlant.name
+                
+                let db = Firestore.firestore()
+                
+                db.collection(firebaseUserID).document(remotePlant.id).delete { _ in
+                    let itemsToDelete = localPlants.filter { $0.name == saidName }
+                    
+                    for item in itemsToDelete {
+                        context.delete(item)
+                    }
+                    
+                    do {
+                        try context.save()
+                    } catch {
+                        print("Failed to delete plant: \(error)")
+                    }
+                }
+                
+//                let itemsToDelete = localPlants.filter { $0.name == saidName }
+//                
+//                for item in itemsToDelete {
+//                    context.delete(item)
+//                }
+//                
+//                do {
+//                    try context.save()
+//                } catch {
+//                    print("Failed to delete plant: \(error)")
+//                }
+            }
+        } label: {
+            Image(systemName: "trash.fill")
+        }
     }
     
     @ViewBuilder

@@ -12,15 +12,17 @@ import PhotosUI
 struct NewPlantClassifierView: View {
     
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.modelContext) var modelContext
+    @Query var scannedPlants: [ScannedPlant]
     
-//    Query(sort: \LocalPlantPrediction.name) var localPlantPredictions: [LocalPlantPrediction]
-    @Environment(\.modelContext) private var modelContext
-    @State var localPlantPredictions: [LocalPlantPrediction] = []
+    // @State var localPlantPredictions: [LocalPlantPrediction] = []
     @State var showLibrary: Bool = false
     @State private var photosPickerItem: PhotosPickerItem? // holds the selected photo item
     @State private var selectedImage: UIImage?
     @State private var showingCamera: Bool = false
-    @StateObject private var classifier = PlantClassifierService()    
+    @StateObject private var classifier = PlantClassifierService()
+    @State var alertMessage: String = ""
+    @State var isShowingAlert: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -28,9 +30,10 @@ struct NewPlantClassifierView: View {
         }
         .background(backgroundColor.ignoresSafeArea())
         .fullScreenCover(isPresented: $showingCamera) {
-            CameraView(image: $selectedImage)
+            CameraView(image: $selectedImage).ignoresSafeArea(.all)
         }
         .onChange(of: photosPickerItem) { _, _ in
+            print("image selected")
             Task {
                 if let photosPickerItem, let data = try? await photosPickerItem.loadTransferable(type: Data.self) {
                     if let image = UIImage(data: data) {
@@ -39,23 +42,69 @@ struct NewPlantClassifierView: View {
                 }
                 
                 guard let image = selectedImage else { return }
-
-                // Fire off an API call
-                
-                
                 
                 photosPickerItem = nil
             }
         }
         .onChange(of: selectedImage) { _, newImage in
+            print("Image selected")
             // Handle camera image selection
             if let image = newImage {
                 // Fire off API call for camera image too
+                
                 Task {
-                    // Your API call logic here
+                    await classifier.classifyPlant(image: image) { plantPredictions, errorMessage in
+                        
+                        print(errorMessage)
+                        
+                        if !plantPredictions.isEmpty {
+                            var localPlantPredictions = [LocalPlantPrediction]()
+                            
+                            for prediction in plantPredictions {
+                                var localPlantPrediction = LocalPlantPrediction(scientificName: prediction.scientificName, probability: prediction.probability)
+                                localPlantPredictions.append(localPlantPrediction)
+                            }
+                            
+                            let scannedPlant = ScannedPlant(imageData: image.pngData()!, plantPredictions: localPlantPredictions)
+                            
+                            modelContext.insert(scannedPlant)
+                            
+                            do {
+                                try modelContext.save()
+                            }
+                            catch {
+                                
+                            }
+                            
+                        }
+                        else {
+                            isShowingAlert = true
+                            alertMessage = errorMessage
+                        }
+                    }
                 }
             }
         }
+        .alert(alertMessage, isPresented: $isShowingAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            if alertMessage == "Failed to convert image into JPG" {
+                Text("There was an error converting the image into a JPG file to send to the API.")
+            }
+            else if alertMessage == "Invalid URL" {
+                Text("There was an error with the API endpoint.")
+            }
+            else if alertMessage == "Failed to create request body" {
+                Text("There was an error creating request body to send to the API.")
+            }
+            else if alertMessage == "Invalid response" {
+                Text("There was an error getting a response from the API")
+            }
+            else if alertMessage == "No data" {
+                Text("There was an error reading the data from the API")
+            }
+        }
+        .tint(alertTextColor)
         
     }
     
@@ -65,52 +114,21 @@ struct NewPlantClassifierView: View {
             List {
                 
             }
-            .scrollDisabled(localPlantPredictions.isEmpty)
+            .scrollDisabled(scannedPlants.count == 0)
             .scrollContentBackground(.hidden)
             .background(backgroundColor)
             .listStyle(.plain)
             .environment(\.editMode, .constant(.inactive))
             .overlay {
-                if localPlantPredictions.isEmpty {
+                if (scannedPlants.count == 0) {
                     emptyStateView
                 }
             }
         }
         .padding()
-//        .navigationTitle {
-//            Text("Plant Predictions")
-//                .foregroundColor(textColor)
-//                .font(.title)
-//                .fontWeight(.bold)
-//                .textCase(nil)
-//        }
         .background(backgroundColor)
         .navigationTitle("Plant Predictions")
         .navigationBarTitleDisplayMode(.large)
-//        .onAppear {
-//            let appearance = UINavigationBarAppearance()
-//            appearance.configureWithOpaqueBackground()
-//            appearance.backgroundColor = UIColor(backgroundColor)
-//            appearance.shadowColor = .clear
-//            
-//            // Set the title colors
-//            appearance.largeTitleTextAttributes = [
-//                .foregroundColor: UIColor(textColor),
-//                .font: UIFont.systemFont(ofSize: 34, weight: .bold)
-//            ]
-//            appearance.titleTextAttributes = [
-//                .foregroundColor: UIColor(textColor),
-//                .font: UIFont.systemFont(ofSize: 17, weight: .bold)
-//            ]
-//            
-//            // Apply to all navigation bars in this view's hierarchy
-//            UINavigationBar.appearance().standardAppearance = appearance
-//            UINavigationBar.appearance().compactAppearance = appearance
-//            UINavigationBar.appearance().scrollEdgeAppearance = appearance
-//            
-//            // Force the navigation bar to use our custom appearance
-//            UINavigationBar.appearance().tintColor = UIColor(textColor)
-//        }
         .onAppear {
             updateNavigationAppearance()
         }
@@ -173,6 +191,12 @@ struct NewPlantClassifierView: View {
             : Color(red: 0.2, green: 0.15, blue: 0.1)
     }
     
+    private var alertTextColor: Color {
+        colorScheme == .dark
+            ? Color.white
+            : Color(red: 0.2, green: 0.15, blue: 0.1)
+    }
+    
     private func updateNavigationAppearance() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -226,6 +250,6 @@ struct NewPlantClassifierView: View {
     }
 }
 
- #Preview {
-    NewPlantClassifierView()
- }
+// #Preview {
+//    NewPlantClassifierView()
+// }

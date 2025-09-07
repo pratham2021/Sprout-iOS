@@ -41,208 +41,8 @@ struct PlantCardDetailView: View {
                     
                     verticallyScrollableView
                     
-                    HStack(spacing: 15) {
-                        Button {
-                            let currentDate = Date()
-                            
-                            let plant = LocalPlant(
-                                name: plantSpecies.commonName!,
-                                scientificName: plantSpecies.scientificName,
-                                dateSaved: currentDate,
-                                isVegetable: plantSpecies.vegetable ?? false,
-                                plantImageUrl: plantSpecies.imageUrl ?? fallbackImageName,
-                                isEdible: plantSpecies.mainSpecies.edible ?? false,
-                                ediblePart: plantSpecies.mainSpecies.ediblePart,
-                                duration: plantSpecies.mainSpecies.duration,
-                                
-                                flowerColor: plantSpecies.mainSpecies.flower.color ?? [],
-                                hasConspicuousFlower: plantSpecies.mainSpecies.flower.conspicuous ?? nil,
-                                
-                                foliageTexture: plantSpecies.mainSpecies.foliage.texture ?? "Unknown",
-                                foliageColor: plantSpecies.mainSpecies.foliage.color ?? [],
-                                leafRetention: plantSpecies.mainSpecies.foliage.leafRetention ?? nil,
-                                
-                                isFruitConspicuous: plantSpecies.mainSpecies.fruitOrSeed.conspicuous ?? nil,
-                                fruitColor: plantSpecies.mainSpecies.fruitOrSeed.color ?? [],
-                                fruitShape: plantSpecies.mainSpecies.fruitOrSeed.shape ?? "Unknown",
-                                fruitSeedPersistence: plantSpecies.mainSpecies.fruitOrSeed.seedPersistence ?? nil,
-                                
-                                growthForm: plantSpecies.mainSpecies.specifications.growthForm ?? "Unknown",
-                                growthHabit: plantSpecies.mainSpecies.specifications.growthHabit ?? "Unknown",
-                                growthRate: plantSpecies.mainSpecies.specifications.growthRate ?? "Unknown",
-                                                   
-                                averageHeight: plantSpecies.mainSpecies.specifications.averageHeight.cm ?? nil,
-                                maximumHeight: plantSpecies.mainSpecies.specifications.maximumHeight.cm ?? nil,
-                                                   
-                                nitrogenFixation: plantSpecies.mainSpecies.specifications.nitrogenFixation ?? "Unknown",
-                                shapeAndOrientation: plantSpecies.mainSpecies.specifications.shapeAndOrientation ?? "Unknown",
-                                toxicity: plantSpecies.mainSpecies.specifications.shapeAndOrientation ?? "Unknown",
-                                
-                                growthDescription: plantSpecies.mainSpecies.growth.description ?? "Unknown",
-                                sowingDescription: plantSpecies.mainSpecies.growth.sowing ?? "Unknown",
-                                daysToHarvest: plantSpecies.mainSpecies.growth.daysToHarvest ?? nil,
-                                phMaximum: plantSpecies.mainSpecies.growth.phMaximum ?? nil,
-                                phMinimum: plantSpecies.mainSpecies.growth.phMinimum ?? nil,
-                                light: plantSpecies.mainSpecies.growth.light ?? nil,
-                                atmosphericHumidity: plantSpecies.mainSpecies.growth.atmosphericHumidity ?? nil,
-                                                   
-                               growthMonths: plantSpecies.mainSpecies.growth.growthMonths ?? [],
-                               bloomMonths: plantSpecies.mainSpecies.growth.bloomMonths ?? [],
-                               fruitMonths: plantSpecies.mainSpecies.growth.fruitMonths ?? [],
-                                                   
-                                rowSpacingCM: plantSpecies.mainSpecies.growth.rowSpacing.cm ?? nil,
-                                rowSpacingMM: plantSpecies.mainSpecies.growth.rowSpacing.mm ?? nil,
-                                                   
-                                spreadCM: plantSpecies.mainSpecies.growth.spread.cm ?? nil,
-                                spreadMM: plantSpecies.mainSpecies.growth.spread.mm ?? nil,
-                                
-                                minimumPrecipitationCM: plantSpecies.mainSpecies.growth.minimumPrecipitation.cm ?? nil,
-                                minimumPrecipitationMM: plantSpecies.mainSpecies.growth.minimumPrecipitation.mm ?? nil,
-                            
-                                maximumPrecipitationCM: plantSpecies.mainSpecies.growth.maximumPrecipitation.cm ?? nil,
-                                maximumPrecipitationMM: plantSpecies.mainSpecies.growth.maximumPrecipitation.mm ?? nil,
-                               
-                               minimumRootDepthCM: plantSpecies.mainSpecies.growth.minimumRootDepth.cm ?? nil,
-                               minimumRootDepthMM: plantSpecies.mainSpecies.growth.minimumRootDepth.mm ?? nil,
-                               
-                               minimumTempFahrenheit: plantSpecies.mainSpecies.growth.minimumTemperature.degF ?? nil,
-                               minimumTempCelsius: plantSpecies.mainSpecies.growth.minimumTemperature.degC ?? nil,
-                                          
-                               maximumTempFahrenheit: plantSpecies.mainSpecies.growth.maximumTemperature.degF ?? nil,
-                               maximumTempCelsius: plantSpecies.mainSpecies.growth.maximumTemperature.degC ?? nil,
-                                                   
-                               soilNutriments: plantSpecies.mainSpecies.growth.soilNutriments ?? nil,
-                               soilSalinity: plantSpecies.mainSpecies.growth.soilSalinity ?? nil,
-                               soilTexture: plantSpecies.mainSpecies.growth.soilTexture ?? nil,
-                               soilHumidity: plantSpecies.mainSpecies.growth.soilHumidity ?? nil
-                            )
-                            
-                            let remotePlant = RemotePlant(
-                                name: plantSpecies.commonName!,
-                                scientificName: plantSpecies.scientificName,
-                                dateSaved: currentDate,
-                                isVegetable: plantSpecies.vegetable ?? false,
-                                plantImageUrl: plantSpecies.imageUrl ?? fallbackImageName,
-                                isEdible: plantSpecies.mainSpecies.edible ?? false,
-                                ediblePart: plantSpecies.mainSpecies.ediblePart,
-                                duration: plantSpecies.mainSpecies.duration,
-                                
-                                flowerColor: plantSpecies.mainSpecies.flower.color ?? [],
-                                hasConspicuousFlower: plantSpecies.mainSpecies.flower.conspicuous ?? nil,
-                                
-                                foliageTexture: plantSpecies.mainSpecies.foliage.texture ?? "Unknown",
-                                foliageColor: plantSpecies.mainSpecies.foliage.color ?? [],
-                                leafRetention: plantSpecies.mainSpecies.foliage.leafRetention ?? nil,
-                                
-                                isFruitConspicuous: plantSpecies.mainSpecies.fruitOrSeed.conspicuous ?? nil,
-                                fruitColor: plantSpecies.mainSpecies.fruitOrSeed.color ?? [],
-                                fruitShape: plantSpecies.mainSpecies.fruitOrSeed.shape ?? "Unknown",
-                                fruitSeedPersistence: plantSpecies.mainSpecies.fruitOrSeed.seedPersistence ?? nil,
-                                
-                                growthForm: plantSpecies.mainSpecies.specifications.growthForm ?? "Unknown",
-                                growthHabit: plantSpecies.mainSpecies.specifications.growthHabit ?? "Unknown",
-                                growthRate: plantSpecies.mainSpecies.specifications.growthRate ?? "Unknown",
-                                                   
-                                averageHeight: plantSpecies.mainSpecies.specifications.averageHeight.cm ?? nil,
-                                maximumHeight: plantSpecies.mainSpecies.specifications.maximumHeight.cm ?? nil,
-                                                   
-                                nitrogenFixation: plantSpecies.mainSpecies.specifications.nitrogenFixation ?? "Unknown",
-                                shapeAndOrientation: plantSpecies.mainSpecies.specifications.shapeAndOrientation ?? "Unknown",
-                                toxicity: plantSpecies.mainSpecies.specifications.shapeAndOrientation ?? "Unknown",
-                                
-                                growthDescription: plantSpecies.mainSpecies.growth.description ?? "Unknown",
-                                sowingDescription: plantSpecies.mainSpecies.growth.sowing ?? "Unknown",
-                                daysToHarvest: plantSpecies.mainSpecies.growth.daysToHarvest ?? nil,
-                                phMaximum: plantSpecies.mainSpecies.growth.phMaximum ?? nil,
-                                phMinimum: plantSpecies.mainSpecies.growth.phMinimum ?? nil,
-                                light: plantSpecies.mainSpecies.growth.light ?? nil,
-                                atmosphericHumidity: plantSpecies.mainSpecies.growth.atmosphericHumidity ?? nil,
-                                                   
-                                growthMonths: plantSpecies.mainSpecies.growth.growthMonths ?? [],
-                                bloomMonths: plantSpecies.mainSpecies.growth.bloomMonths ?? [],
-                                fruitMonths: plantSpecies.mainSpecies.growth.fruitMonths ?? [],
-                                                   
-                                rowSpacingCM: plantSpecies.mainSpecies.growth.rowSpacing.cm ?? nil,
-                                rowSpacingMM: plantSpecies.mainSpecies.growth.rowSpacing.mm ?? nil,
-                                                   
-                                spreadCM: plantSpecies.mainSpecies.growth.spread.cm ?? nil,
-                                spreadMM: plantSpecies.mainSpecies.growth.spread.mm ?? nil,
-                                
-                                minimumPrecipitationCM: plantSpecies.mainSpecies.growth.minimumPrecipitation.cm ?? nil,
-                                minimumPrecipitationMM: plantSpecies.mainSpecies.growth.minimumPrecipitation.mm ?? nil,
-                            
-                                maximumPrecipitationCM: plantSpecies.mainSpecies.growth.maximumPrecipitation.cm ?? nil,
-                                maximumPrecipitationMM: plantSpecies.mainSpecies.growth.maximumPrecipitation.mm ?? nil,
-                               
-                                minimumRootDepthCM: plantSpecies.mainSpecies.growth.minimumRootDepth.cm ?? nil,
-                                minimumRootDepthMM: plantSpecies.mainSpecies.growth.minimumRootDepth.mm ?? nil,
-                               
-                                minimumTempFahrenheit: plantSpecies.mainSpecies.growth.minimumTemperature.degF ?? nil,
-                                minimumTempCelsius: plantSpecies.mainSpecies.growth.minimumTemperature.degC ?? nil,
-                                          
-                                maximumTempFahrenheit: plantSpecies.mainSpecies.growth.maximumTemperature.degF ?? nil,
-                                maximumTempCelsius: plantSpecies.mainSpecies.growth.maximumTemperature.degC ?? nil,
-                                                   
-                                soilNutriments: plantSpecies.mainSpecies.growth.soilNutriments ?? nil,
-                                soilSalinity: plantSpecies.mainSpecies.growth.soilSalinity ?? nil,
-                                soilTexture: plantSpecies.mainSpecies.growth.soilTexture ?? nil,
-                                soilHumidity: plantSpecies.mainSpecies.growth.soilHumidity ?? nil
-                            )
-                            
-                            let userID = viewModel.currentUser?.id
-                            
-                            do {
-                                try savePlant(plant, to: context)
-                                
-                                if userID != nil && userID != "" {
-                                    try db.collection(userID!).addDocument(from: remotePlant)
-                                }
-                                
-                                alertMessage = "Plant saved successfully!"
-                                showAlert = true
-                            }
-                            catch PlantSaveError.duplicateName(let plant_name) {
-                                alertMessage = "A plant named '\(plant_name)' already exists"
-                                showAlert = true
-                            }
-                            catch {
-                                alertMessage = "Failed to save: \(error.localizedDescription)"
-                                showAlert = true
-                            }
-                        } label: {
-                            Text("Save")
-                                .foregroundColor(cardBackgroundColor)
-                                .font(.system(size: 16, weight: .medium))
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 12)
-                                .frame(maxWidth: .infinity, minHeight: 44)
-                                .background(buttonBackgroundColor)
-                                .cornerRadius(15)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        .alert("Save Result", isPresented: $showAlert) {
-                            Button("OK") {}
-                        } message: {
-                            Text(alertMessage)
-                        }
-                        
-                        
-                        Button {
-                            showDetail = false
-                        }
-                        label: {
-                            Text("Dismiss")
-                                .foregroundColor(cardBackgroundColor)
-                                .font(.system(size: 16, weight: .medium))
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 12)
-                                .frame(maxWidth: .infinity, minHeight: 44)
-                                .background(textColor)
-                                .cornerRadius(15)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
-                    .fixedSize(horizontal: false, vertical: true)
+                    horizontalButtonView
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 30)
@@ -271,6 +71,217 @@ struct PlantCardDetailView: View {
     }
     
     // MARK: - Separate Views
+    @ViewBuilder
+    private var horizontalButtonView: some View {
+        HStack(spacing: 15) {
+            Button {
+                let userID = viewModel.currentUser?.id
+                
+                let currentDate = Date()
+                
+                let localPlant = LocalPlant(
+                    name: plantSpecies.commonName!,
+                    scientificName: plantSpecies.scientificName,
+                    dateSaved: currentDate,
+                    isVegetable: plantSpecies.vegetable ?? false,
+                    plantImageUrl: plantSpecies.imageUrl ?? fallbackImageName,
+                    isEdible: plantSpecies.mainSpecies.edible ?? false,
+                    ediblePart: plantSpecies.mainSpecies.ediblePart,
+                    duration: plantSpecies.mainSpecies.duration,
+                    
+                    flowerColor: plantSpecies.mainSpecies.flower.color ?? [],
+                    hasConspicuousFlower: plantSpecies.mainSpecies.flower.conspicuous ?? nil,
+                    
+                    foliageTexture: plantSpecies.mainSpecies.foliage.texture ?? "Unknown",
+                    foliageColor: plantSpecies.mainSpecies.foliage.color ?? [],
+                    leafRetention: plantSpecies.mainSpecies.foliage.leafRetention ?? nil,
+                    
+                    isFruitConspicuous: plantSpecies.mainSpecies.fruitOrSeed.conspicuous ?? nil,
+                    fruitColor: plantSpecies.mainSpecies.fruitOrSeed.color ?? [],
+                    fruitShape: plantSpecies.mainSpecies.fruitOrSeed.shape ?? "Unknown",
+                    fruitSeedPersistence: plantSpecies.mainSpecies.fruitOrSeed.seedPersistence ?? nil,
+                    
+                    growthForm: plantSpecies.mainSpecies.specifications.growthForm ?? "Unknown",
+                    growthHabit: plantSpecies.mainSpecies.specifications.growthHabit ?? "Unknown",
+                    growthRate: plantSpecies.mainSpecies.specifications.growthRate ?? "Unknown",
+                                       
+                    averageHeight: plantSpecies.mainSpecies.specifications.averageHeight.cm ?? nil,
+                    maximumHeight: plantSpecies.mainSpecies.specifications.maximumHeight.cm ?? nil,
+                                       
+                    nitrogenFixation: plantSpecies.mainSpecies.specifications.nitrogenFixation ?? "Unknown",
+                    shapeAndOrientation: plantSpecies.mainSpecies.specifications.shapeAndOrientation ?? "Unknown",
+                    toxicity: plantSpecies.mainSpecies.specifications.shapeAndOrientation ?? "Unknown",
+                    
+                    growthDescription: plantSpecies.mainSpecies.growth.description ?? "Unknown",
+                    sowingDescription: plantSpecies.mainSpecies.growth.sowing ?? "Unknown",
+                    daysToHarvest: plantSpecies.mainSpecies.growth.daysToHarvest ?? nil,
+                    phMaximum: plantSpecies.mainSpecies.growth.phMaximum ?? nil,
+                    phMinimum: plantSpecies.mainSpecies.growth.phMinimum ?? nil,
+                    light: plantSpecies.mainSpecies.growth.light ?? nil,
+                    atmosphericHumidity: plantSpecies.mainSpecies.growth.atmosphericHumidity ?? nil,
+                                       
+                    growthMonths: plantSpecies.mainSpecies.growth.growthMonths ?? [],
+                    bloomMonths: plantSpecies.mainSpecies.growth.bloomMonths ?? [],
+                    fruitMonths: plantSpecies.mainSpecies.growth.fruitMonths ?? [],
+                                       
+                    rowSpacingCM: plantSpecies.mainSpecies.growth.rowSpacing.cm ?? nil,
+                    rowSpacingMM: plantSpecies.mainSpecies.growth.rowSpacing.mm ?? nil,
+                                       
+                    spreadCM: plantSpecies.mainSpecies.growth.spread.cm ?? nil,
+                    spreadMM: plantSpecies.mainSpecies.growth.spread.mm ?? nil,
+                    
+                    minimumPrecipitationCM: plantSpecies.mainSpecies.growth.minimumPrecipitation.cm ?? nil,
+                    minimumPrecipitationMM: plantSpecies.mainSpecies.growth.minimumPrecipitation.mm ?? nil,
+                
+                    maximumPrecipitationCM: plantSpecies.mainSpecies.growth.maximumPrecipitation.cm ?? nil,
+                    maximumPrecipitationMM: plantSpecies.mainSpecies.growth.maximumPrecipitation.mm ?? nil,
+                   
+                   minimumRootDepthCM: plantSpecies.mainSpecies.growth.minimumRootDepth.cm ?? nil,
+                   minimumRootDepthMM: plantSpecies.mainSpecies.growth.minimumRootDepth.mm ?? nil,
+                   
+                   minimumTempFahrenheit: plantSpecies.mainSpecies.growth.minimumTemperature.degF ?? nil,
+                   minimumTempCelsius: plantSpecies.mainSpecies.growth.minimumTemperature.degC ?? nil,
+                              
+                   maximumTempFahrenheit: plantSpecies.mainSpecies.growth.maximumTemperature.degF ?? nil,
+                   maximumTempCelsius: plantSpecies.mainSpecies.growth.maximumTemperature.degC ?? nil,
+                                       
+                   soilNutriments: plantSpecies.mainSpecies.growth.soilNutriments ?? nil,
+                   soilSalinity: plantSpecies.mainSpecies.growth.soilSalinity ?? nil,
+                   soilTexture: plantSpecies.mainSpecies.growth.soilTexture ?? nil,
+                   soilHumidity: plantSpecies.mainSpecies.growth.soilHumidity ?? nil
+                )
+                
+                do {
+                    try savePlant(localPlant, to: context)
+                    
+                    if userID != nil && userID != "" {
+                        // try db.collection(userID!).document(remotePlant.id).setData(remotePlant)
+                        
+                        let documentID = UUID().uuidString
+                        
+                        try db.collection(userID!).document(documentID).setData(
+                            [
+                             "id": documentID,
+                             "name": localPlant.name,
+                             "scientificName": localPlant.scientificName,
+                             "dateSaved": localPlant.dateSaved,
+                             "isVegetable": localPlant.isVegetable,
+                             "plantImageUrl": localPlant.plantImageUrl,
+                             "isEdible": localPlant.isEdible,
+                             "ediblePart": localPlant.ediblePart,
+                             "duration": localPlant.duration,
+                             
+                             "flowerColor": localPlant.flowerColor,
+                             "hasConspicuousFlower": localPlant.hasConspicuousFlower,
+                             
+                             "foliageTexture": localPlant.foliageTexture,
+                             "foliageColor": localPlant.foliageColor,
+                             "leafRetention": localPlant.leafRetention,
+                             
+                             "isFruitConspicuous": localPlant.isFruitConspicuous,
+                             "fruitColor": localPlant.fruitColor,
+                             "fruitShape": localPlant.fruitShape,
+                             "fruitSeedPersistence": localPlant.fruitSeedPersistence,
+                             
+                             "growthForm": localPlant.growthForm,
+                             "growthHabit": localPlant.growthHabit,
+                             "growthRate": localPlant.growthRate,
+                             
+                             "averageHeight": localPlant.averageHeight,
+                             "maximumHeight": localPlant.maximumHeight,
+                             
+                             "nitrogenFixation": localPlant.nitrogenFixation,
+                             "shapeAndOrientation": localPlant.shapeAndOrientation,
+                             "toxicity": localPlant.toxicity,
+                             
+                             "growthDescription": localPlant.growthDescription,
+                             "sowingDescription": localPlant.sowingDescription,
+                             "daysToHarvest": localPlant.daysToHarvest,
+                             "phMaximum": localPlant.phMaximum,
+                             "phMinimum": localPlant.phMinimum,
+                             "light": localPlant.light,
+                             "atmosphericHumidity": localPlant.atmosphericHumidity,
+                                                
+                             "growthMonths": localPlant.growthMonths,
+                             "bloomMonths": localPlant.bloomMonths,
+                             "fruitMonths": localPlant.fruitMonths,
+                                                
+                             "rowSpacingCM": localPlant.rowSpacingCM,
+                             "rowSpacingMM": localPlant.rowSpacingMM,
+                                                
+                             "spreadCM": localPlant.spreadCM,
+                             "spreadMM": localPlant.spreadMM,
+                             
+                             "minimumPrecipitationCM": localPlant.minimumPrecipitationCM,
+                             "minimumPrecipitationMM": localPlant.minimumPrecipitationMM,
+                         
+                             "maximumPrecipitationCM": localPlant.maximumPrecipitationCM,
+                             "maximumPrecipitationMM": localPlant.maximumPrecipitationMM,
+                            
+                             "minimumRootDepthCM": localPlant.minimumRootDepthCM,
+                             "minimumRootDepthMM": localPlant.minimumRootDepthMM,
+                            
+                             "minimumTempFahrenheit": localPlant.minimumTempFahrenheit,
+                             "minimumTempCelsius": localPlant.minimumTempCelsius,
+                                       
+                             "maximumTempFahrenheit": localPlant.maximumTempFahrenheit,
+                             "maximumTempCelsius": localPlant.maximumTempCelsius,
+                                                
+                             "soilNutriments": localPlant.soilNutriments,
+                             "soilSalinity": localPlant.soilSalinity,
+                             "soilTexture": localPlant.soilTexture,
+                             "soilHumidity": localPlant.soilHumidity
+                            ]
+                        )
+                    }
+                    
+                    alertMessage = "Plant saved successfully!"
+                    showAlert = true
+                }
+                catch PlantSaveError.duplicateName(let plant_name) {
+                    alertMessage = "A plant named '\(plant_name)' already exists"
+                    showAlert = true
+                }
+                catch {
+                    alertMessage = "Failed to save: \(error.localizedDescription)"
+                    showAlert = true
+                }
+            } label: {
+                Text("Save")
+                    .foregroundColor(cardBackgroundColor)
+                    .font(.system(size: 16, weight: .medium))
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .background(buttonBackgroundColor)
+                    .cornerRadius(15)
+            }
+            .buttonStyle(PlainButtonStyle())
+            .alert("Save Result", isPresented: $showAlert) {
+                Button("OK") {}
+            } message: {
+                Text(alertMessage)
+            }
+            
+            
+            Button {
+                showDetail = false
+            }
+            label: {
+                Text("Dismiss")
+                    .foregroundColor(cardBackgroundColor)
+                    .font(.system(size: 16, weight: .medium))
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .background(textColor)
+                    .cornerRadius(15)
+            }
+            .buttonStyle(PlainButtonStyle())
+        }
+        
+    }
+    
     @ViewBuilder
     private var commonNamesView: some View {
         if plantSpecies.mainSpecies.commonNames.count > 0 {

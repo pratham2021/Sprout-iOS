@@ -39,6 +39,7 @@ class RemotePlantViewModel: ObservableObject {
     
     private func createRemotePlant(from data: [String: Any]) -> RemotePlant {
         return RemotePlant(
+            id: data["id"] as? String ?? "",
             name: data["name"] as? String ?? "",
             scientificName: (data["scientificName"] as? String)!,
             dateSaved: (data["dateSaved"] as? Timestamp)?.dateValue() ?? Date(),
@@ -91,7 +92,7 @@ class RemotePlantViewModel: ObservableObject {
             soilNutriments: data["soilNutriments"] as? Int,
             soilSalinity: data["soilSalinity"] as? Int,
             soilTexture: data["soilTexture"] as? Int,
-            soilHumidity: data["soilHumidity"] as? Int
+            soilHumidity: data["soilHumidity"] as? Int,
         )
     }
     

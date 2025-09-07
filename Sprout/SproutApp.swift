@@ -27,7 +27,6 @@ struct SproutApp: App {
                 .environmentObject(viewModel)
                 .environmentObject(remotePlantViewModel)
         }
-        .modelContainer(for: [LocalPlant.self, LocalPlantPrediction.self])
-        
+        .modelContainer(for: [LocalPlant.self, ScannedPlant.self, LocalPlantPrediction.self])
     }
 }
