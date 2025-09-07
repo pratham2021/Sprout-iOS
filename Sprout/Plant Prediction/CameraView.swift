@@ -11,10 +11,11 @@ import UIKit
 
 struct CameraView: UIViewControllerRepresentable {
     @Binding var image: UIImage? // bind to the parent view's state
-    @Environment(\.presentationMode) var presentationMode // Dismiss the view controller done
+    @Environment(\.presentationMode) var presentationMode // Dismiss the view controller
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController() // Create the Camera picker
+        picker.allowsEditing = true
         picker.delegate = context.coordinator // Set the coordinator as delegate
         picker.sourceType = .camera
         return picker
@@ -37,12 +38,9 @@ struct CameraView: UIViewControllerRepresentable {
         }
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-            if let image = info[.originalImage] as? UIImage {
+            if let image = info[.editedImage] as? UIImage {
                 parent.image = image // pass the selected image to the parent
             }
-            
-            // Generate prediction and then dismiss
-            
             
             parent.presentationMode.wrappedValue.dismiss() // dismiss the picker
         }
@@ -51,7 +49,6 @@ struct CameraView: UIViewControllerRepresentable {
             
             parent.presentationMode.wrappedValue.dismiss() // Dismiss on cancel
         }
-        
     }
     
 }

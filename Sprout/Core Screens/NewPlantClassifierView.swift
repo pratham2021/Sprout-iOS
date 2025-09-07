@@ -14,15 +14,15 @@ struct NewPlantClassifierView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.modelContext) var modelContext
     @Query var scannedPlants: [ScannedPlant]
-    
-    // @State var localPlantPredictions: [LocalPlantPrediction] = []
     @State var showLibrary: Bool = false
-    @State private var photosPickerItem: PhotosPickerItem? // holds the selected photo item
+    @State private var photosPickerItem: PhotosPickerItem?
     @State private var selectedImage: UIImage?
     @State private var showingCamera: Bool = false
     @StateObject private var classifier = PlantClassifierService()
     @State var alertMessage: String = ""
     @State var isShowingAlert: Bool = false
+    @State var alertBody: String = ""
+    @State private var showCamera = false
 
     var body: some View {
         NavigationStack {
@@ -87,7 +87,9 @@ struct NewPlantClassifierView: View {
             selectedImage = nil
         }
         .alert(alertMessage, isPresented: $isShowingAlert) {
-            Button("OK") {}
+            Button("OK") {
+                alertBody = ""
+            }
         } message: {
             if alertMessage == "Failed to convert image into JPG" {
                 Text("There was an error converting the image into a JPG file to send to the API.")
@@ -104,6 +106,9 @@ struct NewPlantClassifierView: View {
             else if alertMessage == "No data" {
                 Text("There was an error reading the data from the API")
             }
+            else if alertMessage != "" {
+                Text(alertBody)
+            }
         }
         .tint(alertTextColor)
         
@@ -111,22 +116,28 @@ struct NewPlantClassifierView: View {
     
     @ViewBuilder
     private var mainStack: some View {
-        VStack {
-            List {
-                
-            }
-            .scrollDisabled(scannedPlants.count == 0)
-            .scrollContentBackground(.hidden)
-            .background(backgroundColor)
-            .listStyle(.plain)
-            .environment(\.editMode, .constant(.inactive))
-            .overlay {
-                if (scannedPlants.count == 0) {
-                    emptyStateView
-                }
+        
+        List {
+            ForEach(scannedPlants) { scannedPlant in
+                PlantPredictionListRow(scannedPlant: scannedPlant)
+                    .listRowInsets(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
             }
         }
-        .padding()
+        .contentMargins(.all, 0)
+        .listRowSpacing(0)
+        .scrollDisabled(scannedPlants.count == 0)
+        .scrollContentBackground(.hidden)
+        .background(backgroundColor)
+        .listStyle(.plain)
+        .environment(\.editMode, .constant(.inactive))
+        .environment(\.defaultMinListRowHeight, 0)
+        .overlay {
+            if (scannedPlants.count == 0) {
+                emptyStateView
+            }
+        }
         .background(backgroundColor)
         .navigationTitle("Plant Predictions")
         .navigationBarTitleDisplayMode(.large)
@@ -140,7 +151,14 @@ struct NewPlantClassifierView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
-                    showingCamera = true
+                    if let error = CameraPermission.checkPermissions() {
+                        alertMessage = error.errorDescription ?? ""
+                        alertBody = error.recoverySuggestion ?? ""
+                        isShowingAlert = true
+                    }
+                    else {
+                        showingCamera = true
+                    }
                 }, label: {
                     Image(systemName: "camera")
                         .symbolRenderingMode(.monochrome)
@@ -178,6 +196,12 @@ struct NewPlantClassifierView: View {
         }, actions: {
             
         })
+    }
+    
+    private var cardBackgroundColor: Color {
+        colorScheme == .light
+            ? Color(red: 250/255, green: 187/255, blue: 139/255)
+            : Color(red: 244/255, green: 218/255, blue: 198/255)
     }
     
     private var backgroundColor: Color {

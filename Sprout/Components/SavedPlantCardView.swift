@@ -72,7 +72,6 @@ struct SavedPlantCardView: View {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
-        
         let dateString = formatter.string(from: date)
         return dateString
     }
