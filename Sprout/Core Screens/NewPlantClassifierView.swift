@@ -26,7 +26,15 @@ struct NewPlantClassifierView: View {
 
     var body: some View {
         NavigationStack {
-            mainStack
+            ZStack {
+                mainStack
+                
+                if classifier.isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: textColor))
+                        .scaleEffect(2)
+                }
+            }
         }
         .background(backgroundColor.ignoresSafeArea())
         .fullScreenCover(isPresented: $showingCamera) {
@@ -86,7 +94,7 @@ struct NewPlantClassifierView: View {
             }
         }
         .alert(alertMessage, isPresented: $isShowingAlert) {
-            Button("OK", role: .cancel) {}
+            Button("OK") {}
         } message: {
             if alertMessage == "Failed to convert image into JPG" {
                 Text("There was an error converting the image into a JPG file to send to the API.")
