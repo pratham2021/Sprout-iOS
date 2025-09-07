@@ -9,14 +9,20 @@ import Foundation
 import SwiftUI
 
 struct PlantPredictionRow: View {
+
+    @State var scannedPlant: ScannedPlant
     
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(scannedPl)
+                    .font(.body)
+                    .fontWeight(.medium)
+            }
+        }
     }
     
-//    let rank: Int
-//    let prediction: PlantPrediction
+
 //    
 //    var body: some View {
 //        HStack {
