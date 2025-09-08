@@ -110,7 +110,7 @@ struct NewPlantClassifierView: View {
                 Text(alertBody)
             }
         }
-        .tint(alertTextColor)
+        .tint(textColor)
         
     }
     
@@ -204,7 +204,6 @@ struct NewPlantClassifierView: View {
     @ViewBuilder
     private func deleteButton(for predictedPlant: ScannedPlant) -> some View {
         Button(role: .destructive) {
-            
             for prediction in predictedPlant.plantPredictions {
                 modelContext.delete(prediction)
             }
@@ -219,6 +218,12 @@ struct NewPlantClassifierView: View {
         } label: {
             Image(systemName: "trash.fill")
         }
+    }
+    
+    var tabTintColor: Color {
+        colorScheme == .dark
+        ? Color(red: 92/255, green: 157/255, blue: 82/255)
+        : Color(red: 48/255, green: 91/255, blue: 38/255)
     }
     
     private var cardBackgroundColor: Color {

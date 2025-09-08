@@ -11,18 +11,29 @@ import UIKit
 @MainActor
 class PlantClassifierService: ObservableObject {
     
-    // Replace with your actual RapidAPI key
-    let rapidAPIKey = PLANT_PREDICTION_API_KEY
+    private var _rapidAPIKey: String?
     private let rapidAPIHost = "plant-classifier.p.rapidapi.com"
     
     @Published var isLoading = false
-    @Published var rawResponse: String?
+    
+    private var rapidAPIKey: String {
+        get async {
+            if let key = _rapidAPIKey {
+                return key
+            }
+            let key = await PLANT_PREDICTION_API_KEY
+            _rapidAPIKey = key
+            return key
+        }
+    }
     
     // MARK: - Main Classification Method
     func classifyPlant(image: UIImage, completion: @escaping ([PlantPrediction], String) -> Void) async {
         isLoading = true
         
         defer { isLoading = false }
+        
+        let apiKey = await rapidAPIKey
         
         guard let imageData = image.jpegData(compressionQuality: 0.8) else {
             completion([], "Failed to convert image into JPG")
@@ -40,7 +51,7 @@ class PlantClassifierService: ObservableObject {
         
         let boundary = "---011000010111000001101001"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        request.setValue(PLANT_PREDICTION_API_KEY, forHTTPHeaderField: "X-RapidAPI-Key")
+        request.setValue(apiKey, forHTTPHeaderField: "X-RapidAPI-Key")
         request.setValue(rapidAPIHost, forHTTPHeaderField: "X-RapidAPI-Host")
         
         var body = Data()
