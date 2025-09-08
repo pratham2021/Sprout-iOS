@@ -4,4 +4,5 @@ Are you not sure where to get your idea of growing your next plant? Do you want 
 You can even save the plants locally to your device to bookmark your favorites. You are on your way to growing your next plant!
 
 # Credits
-This project uses plant data from the [Trefle API](https://trefle.io). 🌱
+This project uses plant data from the [Trefle API](https://trefle.io). 🌱<br>
+This project uses [RapidAPI Plant Classifier](https://rapidapi.com/iHeartAPIs/api/plant-classifier) for plant classification. 🌿
