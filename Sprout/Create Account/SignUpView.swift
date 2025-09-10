@@ -202,7 +202,7 @@ struct SignUpView: View {
         : Color(red: 0.2, green: 0.15, blue: 0.1)
     }
 }
-        
+// MARK: - Authentication Form Protocol
 extension SignUpView: AuthenticationFormProtocol {
     var formIsValid: Bool {
         return !email.isEmpty

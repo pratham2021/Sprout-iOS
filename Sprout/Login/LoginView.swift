@@ -41,7 +41,6 @@ struct LoginView: View {
                         .padding(.top, 12)
                         
                         Button {
-                            
                             if email.trimmingCharacters(in: .whitespacesAndNewlines) == "" || password.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
                                 
                                 isShowingAlert = true
@@ -130,15 +129,16 @@ struct LoginView: View {
         
         
 }
-    
+
+// MARK: - Authentication Form Protocol
 extension LoginView: AuthenticationFormProtocol {
-        var formIsValid: Bool {
-            return !email.isEmpty
-            && email.contains("@")
-            && !password.isEmpty
-            && password.count > 5
-        }
+    var formIsValid: Bool {
+        return !email.isEmpty
+        && email.contains("@")
+        && !password.isEmpty
+        && password.count > 5
     }
+}
 
 #Preview {
     LoginView()
