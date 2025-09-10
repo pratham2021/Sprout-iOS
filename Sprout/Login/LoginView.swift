@@ -66,7 +66,7 @@ struct LoginView: View {
                             
                             Task {
                                 do {
-                                    try await viewModel.signIn(withEmail: email.trimmingCharacters(in: .whitespacesAndNewlines), password: password.trimmingCharacters(in: .whitespacesAndNewlines))
+                                    try await viewModel.logIn(withEmail: email.trimmingCharacters(in: .whitespacesAndNewlines), password: password.trimmingCharacters(in: .whitespacesAndNewlines))
                                 }
                                 catch {
                                     isShowingAlert = true

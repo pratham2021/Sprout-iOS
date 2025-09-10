@@ -136,7 +136,7 @@ struct SignUpView: View {
                         
                         Task {
                             do {
-                                try await viewModel.createUser(withEmail: email.trimmingCharacters(in: .whitespacesAndNewlines), password: password.trimmingCharacters(in: .whitespacesAndNewlines), fullName: firstName.trimmingCharacters(in: .whitespacesAndNewlines) + " " + lastName.trimmingCharacters(in: .whitespacesAndNewlines))
+                                try await viewModel.createAccount(withEmail: email.trimmingCharacters(in: .whitespacesAndNewlines), password: password.trimmingCharacters(in: .whitespacesAndNewlines), fullName: firstName.trimmingCharacters(in: .whitespacesAndNewlines) + " " + lastName.trimmingCharacters(in: .whitespacesAndNewlines))
                             }
                             catch {
                                 isShowingAlert = true

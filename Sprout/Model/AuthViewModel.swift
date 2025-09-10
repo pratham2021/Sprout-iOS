@@ -25,13 +25,13 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func signIn(withEmail email: String, password: String) async throws {
+    func logIn(withEmail email: String, password: String) async throws {
         let result = try await Auth.auth().signIn(withEmail: email, password: password)
         self.userSession = result.user
         await fetchUser()
     }
     
-    func createUser(withEmail email: String, password: String, fullName: String) async throws {
+    func createAccount(withEmail email: String, password: String, fullName: String) async throws {
         let result = try await Auth.auth().createUser(withEmail: email, password: password)
         self.userSession = result.user
         let user = User(id: result.user.uid, fullName: fullName, email: email)
@@ -42,7 +42,7 @@ class AuthViewModel: ObservableObject {
     
     func signOut() {
         do {
-            try Auth.auth().signOut() // sign out the user on backend
+            try Auth.auth().signOut() // sign out the user from Firebase backend
             self.userSession = nil // wipes out user session and takes us back to login screen
             self.currentUser = nil // wipes out the user stored locally on the device
         } catch {
