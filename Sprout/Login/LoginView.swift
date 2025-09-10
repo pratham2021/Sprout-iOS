@@ -102,8 +102,6 @@ struct LoginView: View {
                             .foregroundColor(textColor)
                         }
                         .buttonStyle(PlainButtonStyle())
-                        
-                        
                     }
                 }
                 

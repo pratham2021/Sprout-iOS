@@ -37,7 +37,7 @@ struct InputView: View {
             .textFieldStyle(.plain)
             .padding(.horizontal)
             
-            Rectangle().frame(width: .infinity, height: 1).foregroundColor(textColor).padding(.horizontal, 16)
+            Rectangle().frame(height: 1).foregroundColor(textColor).padding(.horizontal, 16)
         }
     }
     

@@ -88,18 +88,6 @@ struct SavedView: View {
                         print("Failed to delete plant: \(error)")
                     }
                 }
-                
-//                let itemsToDelete = localPlants.filter { $0.name == saidName }
-//                
-//                for item in itemsToDelete {
-//                    context.delete(item)
-//                }
-//                
-//                do {
-//                    try context.save()
-//                } catch {
-//                    print("Failed to delete plant: \(error)")
-//                }
             }
         } label: {
             Image(systemName: "trash.fill")

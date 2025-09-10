@@ -66,7 +66,6 @@ struct RemoteSavedPlantCardView: View {
     }
     
     func formatDate(date: Date) -> String {
-        let date = Date()
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .none

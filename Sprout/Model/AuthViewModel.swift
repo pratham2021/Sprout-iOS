@@ -55,34 +55,19 @@ class AuthViewModel: ObservableObject {
     }
     
     func deleteAccount() {
-        print("Delete")
-        
-        do {
-            if self.userSession == nil || self.currentUser == nil {
-                return
-            }
+        try Auth.auth().currentUser?.delete { error in
+            let db = Firestore.firestore()
             
-            try Auth.auth().currentUser?.delete { error in
+            let userID = self.userSession!.uid
+            
+            db.collection("users").document(userID).delete { error in
                 if error == nil {
-                    let db = Firestore.firestore()
-                    
-                    let userID = self.userSession!.uid
-                    
-                    print(userID)
-                    
-                    db.collection("users").document(userID).delete { error in
-                        if error == nil {
-                            DispatchQueue.main.async {
-                                self.userSession = nil
-                                self.currentUser = nil
-                            }
-                        }
+                    DispatchQueue.main.async {
+                        self.userSession = nil
+                        self.currentUser = nil
                     }
                 }
             }
-        }
-        catch {
-            print("Error deleting user")
         }
     }
     
