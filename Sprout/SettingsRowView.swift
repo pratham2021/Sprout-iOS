@@ -19,7 +19,7 @@ struct SettingsRowView: View {
                 .imageScale(.small)
                 .font(.title)
                 .foregroundColor(tintColor)
-                
+            
             Text(title)
                 .font(.subheadline)
                 .foregroundColor(tintColor)
@@ -27,6 +27,6 @@ struct SettingsRowView: View {
     }
 }
 
-#Preview {
-    SettingsRowView(imageName: "gear", title: "Version", tintColor: Color(.systemGray))
-}
+//#Preview {
+//    SettingsRowView(imageName: "gear", title: "Version", tintColor: Color(.systemGray))
+//}

@@ -15,7 +15,6 @@ struct User: Identifiable, Codable {
             formatter.style = .abbreviated
             return formatter.string(from: components)
         }
-        
         return ""
     }
 }

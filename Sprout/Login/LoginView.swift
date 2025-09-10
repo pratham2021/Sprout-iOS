@@ -53,7 +53,9 @@ struct LoginView: View {
                                 }
                                 
                                 if password.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
-                                    errorString += "\n"
+                                    if errorString != "" {
+                                        errorString += "\n"
+                                    }
                                     errorString += "Password field can't be blank."
                                 }
                                 
@@ -65,8 +67,6 @@ struct LoginView: View {
                             Task {
                                 do {
                                     try await viewModel.signIn(withEmail: email.trimmingCharacters(in: .whitespacesAndNewlines), password: password.trimmingCharacters(in: .whitespacesAndNewlines))
-                                    
-                                    isShowingAlert = false
                                 }
                                 catch {
                                     isShowingAlert = true
@@ -79,6 +79,7 @@ struct LoginView: View {
                             }
                             .foregroundColor(backgroundColor)
                             .frame(maxWidth: .infinity, minHeight: 48)
+                            // .frame(width: UIScreen.main.bounds.width - 32, weight: 48)
                         }
                         .buttonStyle(PlainButtonStyle())
                         .background(textColor)
@@ -93,8 +94,7 @@ struct LoginView: View {
                         NavigationLink {
                             SignUpView().navigationBarBackButtonHidden(true)
                         } label: {
-                            // this is what the navigation link will look like
-                            HStack(spacing: 3) {
+                            HStack(spacing: 3) { // this is what the navigation link will look like
                                 Text("Don't have an account?")
                                 Text("Create Account").fontWeight(.bold)
                             }
@@ -102,6 +102,7 @@ struct LoginView: View {
                             .foregroundColor(textColor)
                         }
                         .buttonStyle(PlainButtonStyle())
+                        
                     }
                 }
                 
@@ -139,6 +140,6 @@ extension LoginView: AuthenticationFormProtocol {
         }
     }
 
-//#Preview {
-//    LoginView()
-//}
+#Preview {
+    LoginView()
+}

@@ -11,10 +11,12 @@ struct ContentView: View {
     var body: some View {
         Group {
             if viewModel.userSession != nil {
-                MainView().transition(.opacity)
+                MainView()
+                    .transition(.opacity)
             }
             else {
-                LoginView().transition(.opacity)
+                LoginView()
+                    .transition(.opacity)
             }
         }
         .animation(.easeInOut(duration: 0.3), value: viewModel.userSession != nil)

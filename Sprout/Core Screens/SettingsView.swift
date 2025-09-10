@@ -21,12 +21,7 @@ struct SettingsView: View {
                 backgroundColor.ignoresSafeArea()
                 
                 List {
-
-                    
-                    Section(header: Text(firstSectionTitle.prefix(1).uppercased() + firstSectionTitle.dropFirst().lowercased())
-                                        .foregroundColor(textColor)
-                                        .font(.headline)
-                    ) {
+                    Section(header: Text(firstSectionTitle.prefix(1).uppercased() + firstSectionTitle.dropFirst().lowercased()).foregroundColor(textColor).font(.headline)) {
                         HStack {
                             Text("\(user.initials)")
                                 .font(.title)
@@ -52,10 +47,7 @@ struct SettingsView: View {
                     .listRowBackground(sectionColor)
                     .cornerRadius(15)
                     
-                    Section(header: Text(secondSectionTitle.prefix(1).uppercased() + secondSectionTitle.dropFirst().lowercased())
-                                        .foregroundColor(textColor)
-                                        .font(.headline)
-                    ) {
+                    Section(header: Text(secondSectionTitle.prefix(1).uppercased() + secondSectionTitle.dropFirst().lowercased()).foregroundColor(textColor).font(.headline)) {
                         Button {
                             viewModel.signOut()
                         } label: {
@@ -70,10 +62,10 @@ struct SettingsView: View {
                     }
                     .listRowBackground(sectionColor)
                     .cornerRadius(15)
+                    
                 }
                 .listStyle(.insetGrouped)
                 .scrollContentBackground(.hidden)
-                
             }
         }
         else {
@@ -132,7 +124,6 @@ struct SettingsView: View {
                 }
                 .listStyle(.insetGrouped)
                 .scrollContentBackground(.hidden)
-                
             }
         }
     }

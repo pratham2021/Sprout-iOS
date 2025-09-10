@@ -13,11 +13,13 @@ struct SignUpView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
+    
     @State private var firstName: String = ""
     @State private var lastName: String = ""
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var confirmedPassword: String = ""
+    
     @EnvironmentObject var viewModel: AuthViewModel
     @State private var isShowingAlert = false
     @State private var alertMessage = ""
@@ -78,30 +80,42 @@ struct SignUpView: View {
                             }
                             
                             if lastName.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
-                                errorString += "\n"
+                                if errorString != "" {
+                                    errorString += "\n"
+                                }
                                 errorString += "Last Name field can't be blank."
                             }
                             
                             if email.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
-                                errorString += "\n"
+                                if errorString != "" {
+                                    errorString += "\n"
+                                }
                                 errorString += "Email Field can't be blank."
                             }
                             
                             if password.trimmingCharacters(in: .whitespacesAndNewlines) == "" && confirmedPassword.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
-                                errorString += "\n"
+                                if errorString != "" {
+                                    errorString += "\n"
+                                }
                                 errorString += "Password fields can't be blank."
                             }
                             else if password.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
-                                errorString += "\n"
+                                if errorString != "" {
+                                    errorString += "\n"
+                                }
                                 errorString += "Password field can't be blank."
                             }
                             else if confirmedPassword.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
-                                errorString += "\n"
+                                if errorString != "" {
+                                    errorString += "\n"
+                                }
                                 errorString += "Confirm Password field can't be blank."
                             }
                             
                             if password.trimmingCharacters(in: .whitespacesAndNewlines) != confirmedPassword.trimmingCharacters(in: .whitespacesAndNewlines) {
-                                errorString += "\n"
+                                if errorString != "" {
+                                    errorString += "\n"
+                                }
                                 errorString += "Password fields must match."
                             }
                             
@@ -112,7 +126,9 @@ struct SignUpView: View {
                         
                         if password.trimmingCharacters(in: .whitespacesAndNewlines) != confirmedPassword.trimmingCharacters(in: .whitespacesAndNewlines) {
                             isShowingAlert = true
-                            errorString += "\n"
+                            if errorString != "" {
+                                errorString += "\n"
+                            }
                             errorString += "Password fields must match."
                             alertMessage = errorString
                             return
@@ -129,11 +145,12 @@ struct SignUpView: View {
                             }
                         }
                     } label: {
-                        Text("Create Account")
-                            .fontWeight(.semibold)
-                            .foregroundColor(backgroundColor)
-                            .frame(height: 48)
-                            .frame(maxWidth: .infinity)
+                        HStack {
+                            Text("Create Account").fontWeight(.semibold)
+                        }
+                        .foregroundColor(backgroundColor)
+                        .frame(height: 48)
+                        .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(PlainButtonStyle())
                     .background(textColor)

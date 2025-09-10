@@ -23,19 +23,22 @@ struct InputView: View {
                 .font(.footnote)
                 .padding(.horizontal, 16)
             
-            VStack(spacing: 0) {
-                if isSecureField {
-                    SecureField("", text: $text, prompt: Text(placeholder).foregroundColor(textColor))
-                        .font(.system(size: 14))
-                } else {
-                    TextField("", text: $text, prompt: Text(placeholder).foregroundColor(textColor))
-                        .font(.system(size: 14))
-                }
+            
+            if isSecureField {
+                SecureField("", text: $text, prompt: Text(placeholder).foregroundColor(textColor))
+                    .font(.system(size: 14))
+                    .tint(textColor)
+                    .foregroundColor(textColor)
+                    .textFieldStyle(.plain)
+                    .padding(.horizontal)
+            } else {
+                TextField("", text: $text, prompt: Text(placeholder).foregroundColor(textColor))
+                    .font(.system(size: 14))
+                    .tint(textColor)
+                    .foregroundColor(textColor)
+                    .textFieldStyle(.plain)
+                    .padding(.horizontal)
             }
-            .tint(textColor)
-            .foregroundColor(textColor)
-            .textFieldStyle(.plain)
-            .padding(.horizontal)
             
             Rectangle().frame(height: 1).foregroundColor(textColor).padding(.horizontal, 16)
         }

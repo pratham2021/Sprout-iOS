@@ -1,9 +1,6 @@
-//
 //  AuthViewModel.swift
 //  Sprout
-//
 //  Created by Pratham  Hebbar on 9/3/25.
-//
 
 import Foundation
 import Firebase
@@ -43,7 +40,6 @@ class AuthViewModel: ObservableObject {
         await fetchUser()
     }
     
-    
     func signOut() {
         do {
             try Auth.auth().signOut() // sign out the user on backend
@@ -80,5 +76,4 @@ class AuthViewModel: ObservableObject {
         
         self.currentUser = try? snapshot.data(as: User.self)
     }
-    
 }
