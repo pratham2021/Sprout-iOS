@@ -135,6 +135,8 @@ struct SettingsView: View {
     func deleteLocalPlantData() {
         do {
             try context.delete(model: LocalPlant.self) // Delete locally saved plants off device
+            try context.delete(model: ScannedPlant.self)
+            try context.delete(model: LocalPlantPrediction.self)
             
             try context.save()
         }
