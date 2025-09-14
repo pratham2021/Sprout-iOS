@@ -50,8 +50,6 @@ class AuthViewModel: ObservableObject {
             print("Error signing out the user")
         }
         
-        // Delete everything stored locally on the device
-        
     }
     
     func deleteAccount() {

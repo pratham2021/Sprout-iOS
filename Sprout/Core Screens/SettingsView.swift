@@ -51,14 +51,14 @@ struct SettingsView: View {
                     
                     Section(header: Text(secondSectionTitle.prefix(1).uppercased() + secondSectionTitle.dropFirst().lowercased()).foregroundColor(textColor).font(.headline)) {
                         Button {
-                            deleteAllData()
+                            deleteLocalPlantData()
                             viewModel.signOut()
                         } label: {
                             SettingsRowView(imageName: "arrow.left.square.fill", title: "Sign Out", tintColor: textColor)
                         }
                         
                         Button {
-                            deleteAllData()
+                            deleteLocalPlantData()
                             viewModel.deleteAccount()
                         } label: {
                             SettingsRowView(imageName: "minus.circle.fill", title: "Delete Account", tintColor: textColor)
@@ -132,11 +132,9 @@ struct SettingsView: View {
         }
     }
     
-    func deleteAllData() {
+    func deleteLocalPlantData() {
         do {
             try context.delete(model: LocalPlant.self) // Delete locally saved plants off device
-            try context.delete(model: LocalPlantPrediction.self)
-            try context.delete(model: ScannedPlant.self)
             
             try context.save()
         }

@@ -21,25 +21,14 @@ struct SavedView: View {
             backgroundColor.ignoresSafeArea()
             
             List {
-//                if !remotePlantViewModel.remotePlants.isEmpty {
-//                    ForEach(remotePlantViewModel.remotePlants) { firebasePlant in
-//                        remotePlantRow(for: firebasePlant)
-//                    }
-//                }
-//                else if !localPlants.isEmpty {
-//                    ForEach(localPlants) { localPlant in
-//                        plantRow(for: localPlant)
-//                    }
-//                }
-                
-                if !localPlants.isEmpty {
-                    ForEach(localPlants) { localPlant in
-                        plantRow(for: localPlant)
-                    }
-                }
-                else if !remotePlantViewModel.remotePlants.isEmpty {
+                if !remotePlantViewModel.remotePlants.isEmpty {
                     ForEach(remotePlantViewModel.remotePlants) { firebasePlant in
                         remotePlantRow(for: firebasePlant)
+                    }
+                }
+                else if !localPlants.isEmpty {
+                    ForEach(localPlants) { localPlant in
+                        plantRow(for: localPlant)
                     }
                 }
             }
