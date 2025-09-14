@@ -6,6 +6,7 @@ import Foundation
 import Firebase
 import FirebaseAuth
 import FirebaseFirestore
+import SwiftData
 
 protocol AuthenticationFormProtocol {
     var formIsValid: Bool { get }
@@ -48,9 +49,15 @@ class AuthViewModel: ObservableObject {
         } catch {
             print("Error signing out the user")
         }
+        
+        // Delete everything stored locally on the device
+        
     }
     
     func deleteAccount() {
+        
+        var collectionID = self.userSession!.uid
+        
         try Auth.auth().currentUser?.delete { error in
             let db = Firestore.firestore()
             
@@ -65,11 +72,43 @@ class AuthViewModel: ObservableObject {
                 }
             }
         }
+        
+        deleteAllDocuments(in: collectionID)
     }
     
     func fetchUser() async {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else { return }
         self.currentUser = try? snapshot.data(as: User.self)
+    }
+    
+    func deleteAllDocuments(in collectionName: String) {
+        let db = Firestore.firestore()
+        let collection = db.collection(collectionName)
+        
+        // Get all documents
+        collection.getDocuments { snapshot, error in
+            guard let documents = snapshot?.documents else {
+                print("Error fetching documents")
+                return
+            }
+            
+            let batch = db.batch()
+            
+            for document in documents {
+                batch.deleteDocument(document.reference)
+            }
+            
+            // Commit the batch
+            batch.commit { error in
+                if let error = error {
+                    print("Error deleting documents")
+                }
+                else {
+                    print("All documents deleted successfully")
+                }
+            }
+            
+        }
     }
 }
