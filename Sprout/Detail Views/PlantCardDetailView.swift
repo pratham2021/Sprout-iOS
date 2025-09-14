@@ -19,6 +19,7 @@ struct PlantCardDetailView: View {
     
     @State private var showAlert = false
     @State private var alertMessage = ""
+    @State private var alertTitle = ""
     @EnvironmentObject var viewModel: AuthViewModel
     var db = Firestore.firestore()
     
@@ -235,14 +236,17 @@ struct PlantCardDetailView: View {
                         )
                     }
                     
+                    alertTitle = "Success"
                     alertMessage = "Plant saved successfully!"
                     showAlert = true
                 }
                 catch PlantSaveError.duplicateName(let plant_name) {
+                    alertTitle = "Error"
                     alertMessage = "A plant named '\(plant_name)' already exists"
                     showAlert = true
                 }
                 catch {
+                    alertTitle = "Success"
                     alertMessage = "Failed to save: \(error.localizedDescription)"
                     showAlert = true
                 }
@@ -257,7 +261,7 @@ struct PlantCardDetailView: View {
                     .cornerRadius(15)
             }
             .buttonStyle(PlainButtonStyle())
-            .alert("Save Result", isPresented: $showAlert) {
+            .alert(alertTitle, isPresented: $showAlert) {
                 Button("OK") {}
             } message: {
                 Text(alertMessage)
