@@ -37,7 +37,7 @@ struct SavedView: View {
             .listStyle(.plain)
             .environment(\.editMode, .constant(.inactive))
             .overlay {
-                if localPlants.isEmpty {
+                if localPlants.isEmpty && remotePlantViewModel.remotePlants.isEmpty {
                     emptyStateView
                 }
             }
